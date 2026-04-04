@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>نظرة — لوحة إدارة المصادر</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0D1B2A;--navy2:#162236;--navy3:#1e2d42;
+  --gold:#E9C46A;--red:#C1121F;--green:#2d9e5f;
+  --blue:#2563eb;--amber:#f59e0b;--gray:#64748b;
+  --bg:#f1f5f9;--card:#fff;--border:#e2e8f0;
+  --text:#1e293b;--muted:#64748b;
+  --tier-gold:#E9C46A;--tier-silver:#94a3b8;
+  --tier-bronze:#cd7c2f;--tier-caution:#f59e0b;--tier-blocked:#ef4444;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+/* NAV */
+.topnav{
+  background:var(--navy);padding:0 24px;height:60px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:200;box-shadow:0 2px 12px #0007
+}
+.nav-logo{
+  font-size:1.5rem;font-weight:900;color:var(--gold);
+  text-decoration:none;letter-spacing:1px
+}
+.nav-logo span{font-size:.75rem;color:#94a3b8;font-weight:400;margin-right:8px}
+.nav-links{display:flex;gap:8px;align-items:center}
+.nav-btn{
+  background:rgba(255,255,255,.08);border:none;color:#e2e8f0;
+  padding:6px 14px;border-radius:6px;font-family:'Cairo',sans-serif;
+  font-size:.85rem;cursor:pointer;text-decoration:none;
+  transition:background .2s
+}
+.nav-btn:hover{background:rgba(255,255,255,.15)}
+.nav-btn.active{background:var(--gold);color:var(--navy);font-weight:700}
+.nav-btn.back{background:var(--red);color:#fff}
+
+/* LAYOUT */
+.page{max-width:1400px;margin:0 auto;padding:24px 20px}
+
+/* STATS ROW */
+.stats-row{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-bottom:28px}
+.stat-card{
+  background:var(--card);border-radius:12px;padding:18px;
+  border:1px solid var(--border);text-align:center;
+  box-shadow:0 1px 4px #0001
+}
+.stat-card .val{font-size:2rem;font-weight:900;line-height:1}
+.stat-card .lbl{font-size:.78rem;color:var(--muted);margin-top:4px}
+.stat-card.gold .val{color:var(--tier-gold)}
+.stat-card.silver .val{color:var(--tier-silver)}
+.stat-card.bronze .val{color:var(--tier-bronze)}
+.stat-card.caution .val{color:var(--tier-caution)}
+.stat-card.blocked .val{color:var(--tier-blocked)}
+.stat-card.total .val{color:var(--blue)}
+
+/* TOOLBAR */
+.toolbar{
+  background:var(--card);border-radius:12px;padding:16px 20px;
+  border:1px solid var(--border);margin-bottom:20px;
+  display:flex;gap:12px;align-items:center;flex-wrap:wrap
+}
+.toolbar input[type=text]{
+  flex:1;min-width:200px;padding:9px 14px;border-radius:8px;
+  border:1px solid var(--border);font-family:'Cairo',sans-serif;
+  font-size:.9rem;outline:none;background:#f8fafc
+}
+.toolbar input[type=text]:focus{border-color:var(--blue)}
+.filter-select{
+  padding:9px 14px;border-radius:8px;border:1px solid var(--border);
+  font-family:'Cairo',sans-serif;font-size:.88rem;
+  background:#f8fafc;outline:none;cursor:pointer
+}
+.btn{
+  padding:9px 20px;border-radius:8px;border:none;font-family:'Cairo',sans-serif;
+  font-size:.9rem;font-weight:700;cursor:pointer;transition:all .2s;
+  white-space:nowrap
+}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:#1d4ed8}
+.btn-success{background:var(--green);color:#fff}
+.btn-success:hover{background:#25835a}
+.btn-danger{background:var(--red);color:#fff}
+.btn-danger:hover{background:#9e0e17}
+.btn-sm{padding:5px 12px;font-size:.8rem}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text)}
+.btn-outline:hover{background:var(--bg)}
+
+/* TABLE */
+.table-wrap{
+  background:var(--card);border-radius:12px;
+  border:1px solid var(--border);overflow:hidden;
+  box-shadow:0 1px 4px #0001
+}
+.table-head{
+  padding:14px 20px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between
+}
+.table-head h2{font-size:1rem;font-weight:700;color:var(--navy)}
+.result-count{font-size:.82rem;color:var(--muted)}
+table{width:100%;border-collapse:collapse}
+th{
+  background:#f8fafc;padding:11px 14px;text-align:right;
+  font-size:.82rem;color:var(--muted);font-weight:600;
+  border-bottom:1px solid var(--border)
+}
+td{
+  padding:12px 14px;border-bottom:1px solid #f1f5f9;
+  font-size:.88rem;vertical-align:middle
+}
+tr:hover td{background:#fafcff}
+tr:last-child td{border-bottom:none}
+
+/* TIER BADGE */
+.tier-badge{
+  display:inline-block;padding:3px 10px;border-radius:20px;
+  font-size:.75rem;font-weight:700
+}
+.tier-gold{background:#fef9e7;color:#b7791f;border:1px solid #E9C46A}
+.tier-silver{background:#f1f5f9;color:#475569;border:1px solid #94a3b8}
+.tier-bronze{background:#fef3e7;color:#92400e;border:1px solid #cd7c2f}
+.tier-caution{background:#fffbeb;color:#92400e;border:1px solid #f59e0b}
+.tier-blocked{background:#fef2f2;color:#991b1b;border:1px solid #ef4444}
+
+/* STATUS TOGGLE */
+.toggle{position:relative;display:inline-block;width:42px;height:24px}
+.toggle input{opacity:0;width:0;height:0}
+.slider{
+  position:absolute;inset:0;background:#cbd5e1;border-radius:24px;
+  cursor:pointer;transition:.3s
+}
+.slider:before{
+  content:'';position:absolute;height:18px;width:18px;
+  right:3px;bottom:3px;background:#fff;border-radius:50%;
+  transition:.3s
+}
+input:checked+.slider{background:var(--green)}
+input:checked+.slider:before{transform:translateX(-18px)}
+
+/* ACTION BTNS */
+.action-btns{display:flex;gap:6px;justify-content:flex-end}
+
+/* MODAL */
+.overlay{
+  display:none;position:fixed;inset:0;background:#0009;
+  z-index:500;align-items:center;justify-content:center
+}
+.overlay.open{display:flex}
+.modal{
+  background:var(--card);border-radius:16px;padding:28px;
+  width:min(600px,95vw);max-height:90vh;overflow-y:auto;
+  box-shadow:0 20px 60px #0005;animation:fadeUp .25s ease
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.modal-head{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:22px;padding-bottom:14px;border-bottom:2px solid var(--border)
+}
+.modal-head h3{font-size:1.1rem;font-weight:700;color:var(--navy)}
+.close-btn{
+  background:none;border:none;font-size:1.4rem;cursor:pointer;
+  color:var(--muted);line-height:1;padding:2px 6px
+}
+.close-btn:hover{color:var(--red)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-grid .full{grid-column:1/-1}
+.form-group label{
+  display:block;font-size:.82rem;font-weight:600;
+  color:var(--muted);margin-bottom:6px
+}
+.form-group input,
+.form-group select,
+.form-group textarea{
+  width:100%;padding:9px 12px;border-radius:8px;
+  border:1px solid var(--border);font-family:'Cairo',sans-serif;
+  font-size:.9rem;outline:none;background:#f8fafc;
+  transition:border .2s
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{border-color:var(--blue);background:#fff}
+.form-group textarea{resize:vertical;min-height:70px}
+.modal-footer{
+  display:flex;gap:10px;justify-content:flex-start;
+  margin-top:22px;padding-top:16px;border-top:1px solid var(--border)
+}
+
+/* SOURCE DETAIL MODAL */
+.detail-row{display:flex;gap:6px;align-items:center;margin-bottom:10px;font-size:.9rem}
+.detail-row .key{color:var(--muted);min-width:120px;font-size:.82rem}
+.detail-row .val{font-weight:600}
+.trust-bar-wrap{background:#e2e8f0;border-radius:4px;height:8px;flex:1;overflow:hidden}
+.trust-bar{height:100%;border-radius:4px;background:var(--green);transition:width .5s}
+
+/* SECTION TABS */
+.tab-bar{display:flex;gap:4px;margin-bottom:20px;flex-wrap:wrap}
+.tab-btn{
+  padding:8px 18px;border-radius:8px;border:1px solid var(--border);
+  background:var(--card);color:var(--muted);font-family:'Cairo',sans-serif;
+  font-size:.88rem;font-weight:600;cursor:pointer;transition:all .2s
+}
+.tab-btn.active{background:var(--navy);color:var(--gold);border-color:var(--navy)}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* QUICK-ADD SOURCES */
+.suggested-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.suggest-card{
+  background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:14px;display:flex;flex-direction:column;gap:8px;
+  transition:box-shadow .2s
+}
+.suggest-card:hover{box-shadow:0 4px 14px #0001c}
+.suggest-card .s-name{font-weight:700;font-size:.95rem}
+.suggest-card .s-meta{font-size:.78rem;color:var(--muted)}
+.suggest-card .s-actions{display:flex;gap:6px;margin-top:4px}
+
+/* CATEGORY TAG */
+.cat-tag{
+  display:inline-block;padding:2px 8px;border-radius:4px;
+  font-size:.72rem;font-weight:600;background:#eff6ff;color:#1d4ed8
+}
+
+/* FOOTER */
+.admin-footer{
+  text-align:center;padding:24px;color:var(--muted);
+  font-size:.8rem;margin-top:32px
+}
+
+/* CONFIRM DIALOG */
+.confirm-box{
+  background:var(--card);border-radius:14px;padding:28px;
+  width:min(420px,90vw);text-align:center;
+  box-shadow:0 20px 60px #0005
+}
+.confirm-box h4{font-size:1.05rem;font-weight:700;margin-bottom:10px}
+.confirm-box p{font-size:.88rem;color:var(--muted);margin-bottom:22px}
+.confirm-actions{display:flex;gap:10px;justify-content:center}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .stats-row{grid-template-columns:repeat(3,1fr)}
+  .form-grid{grid-template-columns:1fr}
+  .form-grid .full{grid-column:1}
+}
+@media(max-width:600px){
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+  .toolbar{flex-direction:column;align-items:stretch}
+  .toolbar input[type=text]{min-width:unset}
+  th:nth-child(4),td:nth-child(4),
+  th:nth-child(5),td:nth-child(5){display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <a href="nazra_news.html" class="nav-logo">نظرة <span>لوحة الإدارة</span></a>
+  <div class="nav-links">
+    <button class="nav-btn active" onclick="showTab('sources')">📋 المصادر</button>
+    <button class="nav-btn" onclick="showTab('suggest')">➕ اضف مصادر</button>
+    <button class="nav-btn" onclick="showTab('settings')">⚙️ الإعدادات</button>
+    <a href="nazra_news.html" class="nav-btn back">← الموقع الرئيسي</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- STATS -->
+  <div class="stats-row" id="statsRow"></div>
+
+  <!-- TABS -->
+  <div class="tab-bar">
+    <button class="tab-btn active" id="tab-sources" onclick="showTab('sources')">📋 إدارة المصادر</button>
+    <button class="tab-btn" id="tab-suggest" onclick="showTab('suggest')">➕ مصادر مقترحة</button>
+    <button class="tab-btn" id="tab-settings" onclick="showTab('settings')">⚙️ إعدادات النظام</button>
+  </div>
+
+  <!-- TAB: SOURCES -->
+  <div class="tab-content active" id="tab-content-sources">
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+      <input type="text" id="searchInput" placeholder="🔍 ابحث عن مصدر..." oninput="renderTable()">
+      <select class="filter-select" id="filterTier" onchange="renderTable()">
+        <option value="">كل المستويات</option>
+        <option value="gold">🥇 ذهبي</option>
+        <option value="silver">🥈 فضي</option>
+        <option value="bronze">🥉 برونزي</option>
+        <option value="caution">⚠️ تحذير</option>
+        <option value="blocked">🚫 محظور</option>
+      </select>
+      <select class="filter-select" id="filterCat" onchange="renderTable()">
+        <option value="">كل الفئات</option>
+        <option value="عام">عام</option>
+        <option value="سياسة">سياسة</option>
+        <option value="اقتصاد">اقتصاد</option>
+        <option value="رياضة">رياضة</option>
+        <option value="تكنولوجيا">تكنولوجيا</option>
+        <option value="صحة">صحة</option>
+        <option value="إقليمي">إقليمي</option>
+        <option value="دولي">دولي</option>
+      </select>
+      <select class="filter-select" id="filterStatus" onchange="renderTable()">
+        <option value="">كل الحالات</option>
+        <option value="active">✅ نشط</option>
+        <option value="inactive">⏸ موقوف</option>
+      </select>
+      <button class="btn btn-success" onclick="openAdd()">＋ إضافة مصدر</button>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-wrap">
+      <div class="table-head">
+        <h2>قائمة المصادر</h2>
+        <span class="result-count" id="resultCount"></span>
+      </div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead>
+            <tr>
+              <th>المصدر</th>
+              <th>المستوى</th>
+              <th>الفئة</th>
+              <th>البلد</th>
+              <th>درجة الثقة</th>
+              <th>الحالة</th>
+              <th>الإجراءات</th>
+            </tr>
+          </thead>
+          <tbody id="sourcesTbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: SUGGESTED SOURCES -->
+  <div class="tab-content" id="tab-content-suggest">
+    <div class="toolbar" style="margin-bottom:20px">
+      <input type="text" id="suggestSearch" placeholder="🔍 ابحث في المصادر المقترحة..." oninput="renderSuggested()">
+      <select class="filter-select" id="suggestRegion" onchange="renderSuggested()">
+        <option value="">كل المناطق</option>
+        <option value="مصر">مصر</option>
+        <option value="خليج">خليج</option>
+        <option value="شام">شام</option>
+        <option value="دولي">دولي</option>
+        <option value="غرب">غربي</option>
+      </select>
+    </div>
+    <div class="suggested-grid" id="suggestedGrid"></div>
+  </div>
+
+  <!-- TAB: SETTINGS -->
+  <div class="tab-content" id="tab-content-settings">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div class="table-wrap" style="padding:24px">
+        <h3 style="font-size:1rem;font-weight:700;margin-bottom:18px;color:var(--navy)">⏱ إعدادات التحديث</h3>
+        <div class="form-group" style="margin-bottom:14px">
+          <label>مدة التحديث التلقائي (ثانية)</label>
+          <input type="number" id="sRefresh" value="60" min="10" max="600">
+        </div>
+        <div class="form-group" style="margin-bottom:14px">
+          <label>الحد الأقصى للأخبار في الصفحة الرئيسية</label>
+          <input type="number" id="sMaxNews" value="20" min="5" max="100">
+        </div>
+        <div class="form-group" style="margin-bottom:14px">
+          <label>الحد الأدنى لدرجة الثقة لعرض الخبر (%)</label>
+          <input type="number" id="sMinTrust" value="40" min="0" max="100">
+        </div>
+        <button class="btn btn-primary" onclick="saveSettings()">💾 حفظ الإعدادات</button>
+      </div>
+      <div class="table-wrap" style="padding:24px">
+        <h3 style="font-size:1rem;font-weight:700;margin-bottom:18px;color:var(--navy)">🔐 إعدادات الأمان</h3>
+        <div class="form-group" style="margin-bottom:14px">
+          <label>عدد المقالات للموافقة التلقائية (0 = يدوي)</label>
+          <input type="number" id="sAutoApprove" value="0" min="0">
+        </div>
+        <div class="form-group" style="margin-bottom:14px">
+          <label>وضع الوسائط</label>
+          <select id="sMediaMode">
+            <option value="auto">تلقائي (يُعرض فوراً)</option>
+            <option value="review">مراجعة قبل النشر</option>
+            <option value="off">إيقاف الوسائط</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom:14px">
+          <label>حالة التحقق الافتراضية للمصادر الجديدة</label>
+          <select id="sDefaultTier">
+            <option value="silver">فضي</option>
+            <option value="bronze">برونزي</option>
+            <option value="caution">تحذير</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" onclick="saveSettings()">💾 حفظ الإعدادات</button>
+      </div>
+    </div>
+    <div class="table-wrap" style="padding:24px;margin-top:20px">
+      <h3 style="font-size:1rem;font-weight:700;margin-bottom:18px;color:var(--navy)">📊 إحصاءات النظام</h3>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px" id="sysStats"></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="admin-footer">نظرة © 2026 — منصة الذكاء الإخباري | لوحة إدارة المصادر</div>
+
+<!-- ADD/EDIT MODAL -->
+<div class="overlay" id="editOverlay" onclick="closeEdit(event)">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="editTitle">إضافة مصدر جديد</h3>
+      <button class="close-btn" onclick="closeEditDirect()">×</button>
+    </div>
+    <div class="form-grid">
+      <div class="form-group full">
+        <label>اسم المصدر *</label>
+        <input type="text" id="fName" placeholder="مثال: رويترز عربي">
+      </div>
+      <div class="form-group">
+        <label>الرابط الرسمي *</label>
+        <input type="url" id="fUrl" placeholder="https://...">
+      </div>
+      <div class="form-group">
+        <label>رابط RSS / API</label>
+        <input type="url" id="fRss" placeholder="https://.../rss">
+      </div>
+      <div class="form-group">
+        <label>المستوى *</label>
+        <select id="fTier">
+          <option value="gold">🥇 ذهبي</option>
+          <option value="silver">🥈 فضي</option>
+          <option value="bronze">🥉 برونزي</option>
+          <option value="caution">⚠️ تحذير</option>
+          <option value="blocked">🚫 محظور</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>الفئة</label>
+        <select id="fCat">
+          <option>عام</option>
+          <option>سياسة</option>
+          <option>اقتصاد</option>
+          <option>رياضة</option>
+          <option>تكنولوجيا</option>
+          <option>صحة</option>
+          <option>إقليمي</option>
+          <option>دولي</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>البلد / المنطقة</label>
+        <input type="text" id="fCountry" placeholder="مصر، السعودية، دولي...">
+      </div>
+      <div class="form-group">
+        <label>درجة الثقة (0-100)</label>
+        <input type="number" id="fTrust" min="0" max="100" value="70">
+      </div>
+      <div class="form-group full">
+        <label>ملاحظات</label>
+        <textarea id="fNotes" placeholder="ملاحظات عن هذا المصدر..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-success" onclick="saveSource()">💾 حفظ</button>
+      <button class="btn btn-outline" onclick="closeEditDirect()">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div class="overlay" id="confirmOverlay" onclick="closeConfirm(event)">
+  <div class="confirm-box">
+    <h4 id="confirmTitle">تأكيد الحذف</h4>
+    <p id="confirmMsg">هل أنت متأكد من حذف هذا المصدر؟</p>
+    <div class="confirm-actions">
+      <button class="btn btn-danger" id="confirmOkBtn">تأكيد</button>
+      <button class="btn btn-outline" onclick="closeConfirmDirect()">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── DATA ───────────────────────────────────────────────
+let SOURCES = [
+  {id:1,name:'رويترز عربي',url:'https://arabic.reuters.com',rss:'https://arabic.reuters.com/rssFeed/worldNews',tier:'gold',cat:'عام',country:'دولي',trust:95,active:true,notes:'وكالة دولية رائدة'},
+  {id:2,name:'الجزيرة',url:'https://www.aljazeera.net',rss:'https://www.aljazeera.net/xml/rss2.0.xml',tier:'gold',cat:'سياسة',country:'قطر',trust:88,active:true,notes:''},
+  {id:3,name:'BBC عربي',url:'https://www.bbc.com/arabic',rss:'https://feeds.bbci.co.uk/arabic/rss.xml',tier:'gold',cat:'عام',country:'دولي',trust:93,active:true,notes:''},
+  {id:4,name:'فرانس 24 عربي',url:'https://www.france24.com/ar',rss:'https://www.france24.com/ar/rss',tier:'gold',cat:'عام',country:'دولي',trust:90,active:true,notes:''},
+  {id:5,name:'الأهرام',url:'https://www.ahram.org.eg',rss:'',tier:'silver',cat:'عام',country:'مصر',trust:78,active:true,notes:'جريدة مصرية رسمية'},
+  {id:6,name:'اليوم السابع',url:'https://www.youm7.com',rss:'https://www.youm7.com/rss',tier:'silver',cat:'عام',country:'مصر',trust:72,active:true,notes:''},
+  {id:7,name:'المصري اليوم',url:'https://www.almasryalyoum.com',rss:'',tier:'silver',cat:'عام',country:'مصر',trust:75,active:true,notes:''},
+  {id:8,name:'وكالة أنباء الشرق الأوسط',url:'https://www.mena.org.eg',rss:'',tier:'gold',cat:'سياسة',country:'مصر',trust:85,active:true,notes:'وكالة الأنباء الرسمية المصرية'},
+  {id:9,name:'العربية',url:'https://www.alarabiya.net',rss:'https://www.alarabiya.net/tools/rss',tier:'gold',cat:'سياسة',country:'السعودية',trust:82,active:true,notes:''},
+  {id:10,name:'سكاي نيوز عربية',url:'https://www.skynewsarabia.com',rss:'',tier:'silver',cat:'عام',country:'الإمارات',trust:79,active:true,notes:''},
+  {id:11,name:'رصيف 22',url:'https://raseef22.net',rss:'',tier:'bronze',cat:'سياسة',country:'إقليمي',trust:65,active:true,notes:'وسائل إعلام مستقلة'},
+  {id:12,name:'إيران إنترناشيونال',url:'https://www.iranintl.com/ar',rss:'',tier:'caution',cat:'إقليمي',country:'إيران',trust:55,active:true,notes:'مراجعة دقيقة للمحتوى الإيراني'},
+  {id:13,name:'قناة الميادين',url:'https://www.almayadeen.net',rss:'',tier:'caution',cat:'سياسة',country:'لبنان',trust:45,active:false,notes:'محتوى موالٍ لإيران'},
+  {id:14,name:'صفا',url:'https://safa.ps',rss:'',tier:'caution',cat:'إقليمي',country:'فلسطين',trust:50,active:true,notes:''},
+  {id:15,name:'مواقع مجهولة',url:'',rss:'',tier:'blocked',cat:'عام',country:'غير معروف',trust:5,active:false,notes:'مصادر وهمية ومحظورة'},
+];
+
+let editingId = null;
+let nextId = 16;
+
+const TIERS = {
+  gold:  {label:'ذهبي',  icon:'🥇', cls:'tier-gold'},
+  silver:{label:'فضي',   icon:'🥈', cls:'tier-silver'},
+  bronze:{label:'برونزي',icon:'🥉', cls:'tier-bronze'},
+  caution:{label:'تحذير',icon:'⚠️', cls:'tier-caution'},
+  blocked:{label:'محظور',icon:'🚫', cls:'tier-blocked'},
+};
+
+const SUGGESTED = [
+  {name:'نيويورك تايمز عربي',url:'https://www.nytimes.com/section/world/middleeast',tier:'gold',cat:'دولي',country:'دولي',trust:90},
+  {name:'الغارديان (عربي)',url:'https://www.theguardian.com/world/middleeast',tier:'gold',cat:'دولي',country:'غربي',trust:88},
+  {name:'وول ستريت جورنال',url:'https://www.wsj.com',tier:'gold',cat:'اقتصاد',country:'دولي',trust:87},
+  {name:'أسوشيتد برس',url:'https://apnews.com',tier:'gold',cat:'عام',country:'دولي',trust:94},
+  {name:'DW عربي',url:'https://www.dw.com/ar',tier:'gold',cat:'عام',country:'دولي',trust:89},
+  {name:'الشرق الأوسط',url:'https://aawsat.com',tier:'silver',cat:'سياسة',country:'السعودية',trust:76},
+  {name:'القدس العربي',url:'https://www.alquds.co.uk',tier:'silver',cat:'سياسة',country:'دولي',trust:70},
+  {name:'عرب 48',url:'https://www.arab48.com',tier:'bronze',cat:'إقليمي',country:'فلسطين',trust:63},
+  {name:'موقع 24',url:'https://www.24.ae',tier:'silver',cat:'عام',country:'الإمارات',trust:74},
+  {name:'بلومبرغ عربي',url:'https://www.bloomberg.com/middleeast',tier:'gold',cat:'اقتصاد',country:'دولي',trust:92},
+  {name:'المنار',url:'https://almanar.com.lb',tier:'caution',cat:'سياسة',country:'لبنان',trust:35},
+  {name:'تلفزيون سوريا',url:'https://syriatv.org',tier:'bronze',cat:'إقليمي',country:'شام',trust:60},
+  {name:'صحيفة الوطن (مصر)',url:'https://www.elwatannews.com',tier:'silver',cat:'عام',country:'مصر',trust:71},
+  {name:'بوابة أخبار اليوم',url:'https://akhbarelyom.com',tier:'silver',cat:'عام',country:'مصر',trust:69},
+  {name:'عربي 21',url:'https://arabi21.com',tier:'bronze',cat:'سياسة',country:'دولي',trust:58},
+  {name:'وكالة خبر',url:'https://khabar.agency',tier:'bronze',cat:'إقليمي',country:'خليج',trust:62},
+  {name:'الدستور (مصر)',url:'https://www.dostor.org',tier:'silver',cat:'عام',country:'مصر',trust:67},
+  {name:'مدى مصر',url:'https://www.madamasr.com/ar',tier:'bronze',cat:'سياسة',country:'مصر',trust:64},
+  {name:'العين الإخبارية',url:'https://al-ain.com',tier:'silver',cat:'عام',country:'الإمارات',trust:73},
+  {name:'الحرة',url:'https://www.alhurra.com',tier:'silver',cat:'سياسة',country:'دولي',trust:76},
+];
+
+// ─── STATS ──────────────────────────────────────────────
+function buildStats(){
+  const counts = {total:SOURCES.length, gold:0, silver:0, bronze:0, caution:0, blocked:0};
+  SOURCES.forEach(s=>{if(counts[s.tier]!==undefined) counts[s.tier]++});
+  const sr = document.getElementById('statsRow');
+  sr.innerHTML = `
+    <div class="stat-card total"><div class="val">${counts.total}</div><div class="lbl">إجمالي المصادر</div></div>
+    <div class="stat-card gold"><div class="val">${counts.gold}</div><div class="lbl">🥇 ذهبي</div></div>
+    <div class="stat-card silver"><div class="val">${counts.silver}</div><div class="lbl">🥈 فضي</div></div>
+    <div class="stat-card bronze"><div class="val">${counts.bronze}</div><div class="lbl">🥉 برونزي</div></div>
+    <div class="stat-card caution"><div class="val">${counts.caution}</div><div class="lbl">⚠️ تحذير</div></div>
+    <div class="stat-card blocked"><div class="val">${counts.blocked}</div><div class="lbl">🚫 محظور</div></div>
+  `;
+  // sys stats
+  const ss = document.getElementById('sysStats');
+  if(ss){
+    const active = SOURCES.filter(s=>s.active).length;
+    ss.innerHTML = `
+      <div class="stat-card total"><div class="val">${active}</div><div class="lbl">مصادر نشطة</div></div>
+      <div class="stat-card"><div class="val">${SOURCES.length-active}</div><div class="lbl">مصادر موقوفة</div></div>
+      <div class="stat-card gold"><div class="val">${SOURCES.filter(s=>s.rss).length}</div><div class="lbl">مع RSS</div></div>
+      <div class="stat-card silver"><div class="val">${Math.round(SOURCES.reduce((a,s)=>a+s.trust,0)/SOURCES.length)}%</div><div class="lbl">متوسط الثقة</div></div>
+    `;
+  }
+}
+
+// ─── TABLE ──────────────────────────────────────────────
+function getFiltered(){
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const tier = document.getElementById('filterTier').value;
+  const cat = document.getElementById('filterCat').value;
+  const status = document.getElementById('filterStatus').value;
+  return SOURCES.filter(s=>{
+    const matchQ = !q || s.name.toLowerCase().includes(q) || s.country.toLowerCase().includes(q) || s.url.toLowerCase().includes(q);
+    const matchTier = !tier || s.tier===tier;
+    const matchCat = !cat || s.cat===cat;
+    const matchStatus = !status || (status==='active'?s.active:!s.active);
+    return matchQ&&matchTier&&matchCat&&matchStatus;
+  });
+}
+
+function renderTable(){
+  const data = getFiltered();
+  document.getElementById('resultCount').textContent = `${data.length} مصدر`;
+  const tbody = document.getElementById('sourcesTbody');
+  tbody.innerHTML = data.map(s=>{
+    const t = TIERS[s.tier];
+    const barColor = s.trust>=80?'var(--green)':s.trust>=60?'var(--amber)':'var(--red)';
+    return `<tr>
+      <td>
+        <div style="font-weight:700">${s.name}</div>
+        ${s.url?`<div style="font-size:.75rem;color:var(--muted)"><a href="${s.url}" target="_blank" style="color:var(--blue);text-decoration:none">${s.url.replace('https://','')}</a></div>`:''}
+        ${s.rss?`<div style="font-size:.72rem;color:#10b981">✓ RSS</div>`:''}
+      </td>
+      <td><span class="tier-badge ${t.cls}">${t.icon} ${t.label}</span></td>
+      <td><span class="cat-tag">${s.cat}</span></td>
+      <td>${s.country}</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="trust-bar-wrap" style="width:70px"><div class="trust-bar" style="width:${s.trust}%;background:${barColor}"></div></div>
+          <span style="font-size:.8rem;font-weight:700;color:${barColor}">${s.trust}%</span>
+        </div>
+      </td>
+      <td>
+        <label class="toggle">
+          <input type="checkbox" ${s.active?'checked':''} onchange="toggleSource(${s.id},this.checked)">
+          <span class="slider"></span>
+        </label>
+      </td>
+      <td>
+        <div class="action-btns">
+          <button class="btn btn-sm btn-primary" onclick="openEdit(${s.id})">✏️ تعديل</button>
+          <button class="btn btn-sm btn-danger" onclick="confirmDelete(${s.id})">🗑</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// ─── TOGGLE ─────────────────────────────────────────────
+function toggleSource(id, val){
+  const s = SOURCES.find(x=>x.id===id);
+  if(s){ s.active=val; buildStats(); }
+}
+
+// ─── ADD/EDIT ────────────────────────────────────────────
+function openAdd(){
+  editingId=null;
+  document.getElementById('editTitle').textContent='إضافة مصدر جديد';
+  ['fName','fUrl','fRss','fNotes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('fTier').value='silver';
+  document.getElementById('fCat').value='عام';
+  document.getElementById('fCountry').value='';
+  document.getElementById('fTrust').value='70';
+  document.getElementById('editOverlay').classList.add('open');
+}
+
+function openEdit(id){
+  const s = SOURCES.find(x=>x.id===id);
+  if(!s) return;
+  editingId=id;
+  document.getElementById('editTitle').textContent='تعديل المصدر';
+  document.getElementById('fName').value=s.name;
+  document.getElementById('fUrl').value=s.url;
+  document.getElementById('fRss').value=s.rss||'';
+  document.getElementById('fTier').value=s.tier;
+  document.getElementById('fCat').value=s.cat;
+  document.getElementById('fCountry').value=s.country;
+  document.getElementById('fTrust').value=s.trust;
+  document.getElementById('fNotes').value=s.notes||'';
+  document.getElementById('editOverlay').classList.add('open');
+}
+
+function closeEdit(e){ if(e.target===e.currentTarget) closeEditDirect(); }
+function closeEditDirect(){ document.getElementById('editOverlay').classList.remove('open'); }
+
+function saveSource(){
+  const name = document.getElementById('fName').value.trim();
+  if(!name){ alert('يرجى إدخال اسم المصدر'); return; }
+  const src = {
+    name, url:document.getElementById('fUrl').value.trim(),
+    rss:document.getElementById('fRss').value.trim(),
+    tier:document.getElementById('fTier').value,
+    cat:document.getElementById('fCat').value,
+    country:document.getElementById('fCountry').value.trim()||'دولي',
+    trust:parseInt(document.getElementById('fTrust').value)||70,
+    notes:document.getElementById('fNotes').value.trim(),
+    active:true
+  };
+  if(editingId){
+    const idx = SOURCES.findIndex(x=>x.id===editingId);
+    if(idx>=0){ SOURCES[idx]={...SOURCES[idx],...src}; }
+  } else {
+    SOURCES.push({id:nextId++,...src});
+  }
+  closeEditDirect();
+  buildStats(); renderTable();
+}
+
+// ─── DELETE ──────────────────────────────────────────────
+let deletingId = null;
+function confirmDelete(id){
+  deletingId=id;
+  const s = SOURCES.find(x=>x.id===id);
+  document.getElementById('confirmMsg').textContent=`هل أنت متأكد من حذف المصدر "${s?.name}"؟`;
+  document.getElementById('confirmOkBtn').onclick=doDelete;
+  document.getElementById('confirmOverlay').classList.add('open');
+}
+function doDelete(){
+  SOURCES=SOURCES.filter(x=>x.id!==deletingId);
+  closeConfirmDirect(); buildStats(); renderTable();
+}
+function closeConfirm(e){ if(e.target===e.currentTarget) closeConfirmDirect(); }
+function closeConfirmDirect(){ document.getElementById('confirmOverlay').classList.remove('open'); }
+
+// ─── SUGGESTED ───────────────────────────────────────────
+function renderSuggested(){
+  const q = (document.getElementById('suggestSearch').value||'').toLowerCase();
+  const region = document.getElementById('suggestRegion').value;
+  const filtered = SUGGESTED.filter(s=>{
+    const exists = SOURCES.some(x=>x.url===s.url);
+    const matchQ = !q || s.name.toLowerCase().includes(q) || s.country.toLowerCase().includes(q);
+    const matchR = !region || s.country.includes(region);
+    return !exists && matchQ && matchR;
+  });
+  const grid = document.getElementById('suggestedGrid');
+  if(!filtered.length){
+    grid.innerHTML='<p style="color:var(--muted);padding:20px">لا توجد مصادر مقترحة جديدة</p>';
+    return;
+  }
+  const t = TIERS;
+  grid.innerHTML = filtered.map((s,i)=>`
+    <div class="suggest-card">
+      <div class="s-name">${s.name}</div>
+      <div class="s-meta">
+        <span class="tier-badge ${t[s.tier].cls}">${t[s.tier].icon} ${t[s.tier].label}</span>
+        <span class="cat-tag" style="margin-right:4px">${s.cat}</span>
+      </div>
+      <div class="s-meta">🌍 ${s.country} &nbsp;|&nbsp; ثقة: ${s.trust}%</div>
+      <div class="s-meta"><a href="${s.url}" target="_blank" style="color:var(--blue);font-size:.78rem">${s.url.replace('https://','')}</a></div>
+      <div class="s-actions">
+        <button class="btn btn-sm btn-success" onclick="addSuggested(${i})">➕ إضافة</button>
+      </div>
+    </div>
+  `).join('');
+  window._filteredSuggested = filtered;
+}
+
+function addSuggested(idx){
+  const s = window._filteredSuggested[idx];
+  SOURCES.push({id:nextId++,...s,rss:'',notes:'مضاف من المصادر المقترحة',active:true});
+  buildStats(); renderTable(); renderSuggested();
+}
+
+// ─── TABS ────────────────────────────────────────────────
+function showTab(name){
+  document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el=>el.classList.remove('active'));
+  const navBtns = document.querySelectorAll('.nav-links .nav-btn');
+  navBtns.forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-content-'+name).classList.add('active');
+  const tabBtn = document.getElementById('tab-'+name);
+  if(tabBtn) tabBtn.classList.add('active');
+  if(name==='suggest') renderSuggested();
+  if(name==='settings'){ buildStats(); }
+}
+
+// ─── SETTINGS ────────────────────────────────────────────
+function saveSettings(){
+  alert('✅ تم حفظ الإعدادات بنجاح!');
+}
+
+// ─── INIT ────────────────────────────────────────────────
+buildStats();
+renderTable();
+</script>
+</body>
+</html>
