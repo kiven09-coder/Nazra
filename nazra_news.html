@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>نظرة — منصة الذكاء الإخباري</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -18,10 +18,10 @@ img{max-width:100%;display:block}
 .breaking-banner{background:var(--red);color:#fff;display:flex;align-items:center;gap:12px;padding:10px 24px;position:sticky;top:0;z-index:1000;font-size:14px;font-weight:600}
 .bb-label{background:#fff;color:var(--red);padding:3px 10px;border-radius:4px;font-size:12px;font-weight:800;white-space:nowrap}
 .bb-dot{width:8px;height:8px;border-radius:50%;background:#fff;animation:pulse 1.2s infinite;flex-shrink:0}
-.bb-text{flex:1}
+.bb-text{flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 .bb-link{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);color:#fff;padding:4px 14px;border-radius:4px;font-size:12px;white-space:nowrap;transition:.2s}
 .bb-link:hover{background:rgba(255,255,255,.35)}
-.bb-close{background:none;border:none;color:rgba(255,255,255,.7);font-size:18px;padding:0 4px;line-height:1}
+.bb-close{background:none;border:none;color:rgba(255,255,255,.7);font-size:18px;padding:0 4px;line-height:1;flex-shrink:0}
 
 /* TICKER */
 .ticker-bar{background:var(--navy);color:rgba(255,255,255,.85);display:flex;align-items:center;overflow:hidden;font-size:13px;border-bottom:1px solid rgba(255,255,255,.08)}
@@ -30,24 +30,34 @@ img{max-width:100%;display:block}
 .ticker-item{padding:0 28px;border-inline-start:1px solid rgba(255,255,255,.15);white-space:nowrap}
 
 /* NAV */
-nav{background:var(--navy);position:sticky;top:44px;z-index:900;box-shadow:0 2px 16px rgba(0,0,0,.25)}
-.nav-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;padding:0 24px}
-.nav-logo{display:flex;align-items:baseline;gap:8px;padding:12px 32px 12px 0;margin-inline-end:32px;border-inline-end:1px solid rgba(255,255,255,.12)}
-.logo-ar{font-size:28px;font-weight:900;color:#fff;letter-spacing:-1px;line-height:1}
+nav.main-nav{background:var(--navy);position:sticky;top:44px;z-index:900;box-shadow:0 2px 16px rgba(0,0,0,.25)}
+.nav-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;padding:0 24px;gap:8px}
+.nav-logo{display:flex;align-items:baseline;gap:6px;padding:12px 24px 12px 0;margin-inline-end:16px;border-inline-end:1px solid rgba(255,255,255,.12);flex-shrink:0}
+.logo-ar{font-size:26px;font-weight:900;color:#fff;letter-spacing:-1px;line-height:1}
 .logo-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);margin-bottom:4px}
-.logo-en{font-size:11px;color:rgba(255,255,255,.45);letter-spacing:1px}
-.nav-links{display:flex;align-items:center;gap:2px;flex:1}
-.nav-link{color:rgba(255,255,255,.75);font-size:14px;font-weight:600;padding:16px;border-bottom:3px solid transparent;transition:.2s;white-space:nowrap}
+.logo-en{font-size:10px;color:rgba(255,255,255,.45);letter-spacing:1px}
+.nav-links{display:flex;align-items:center;gap:2px;flex:1;overflow:hidden}
+.nav-link{color:rgba(255,255,255,.75);font-size:14px;font-weight:600;padding:16px 12px;border-bottom:3px solid transparent;transition:.2s;white-space:nowrap}
 .nav-link:hover{color:#fff;border-bottom-color:rgba(255,255,255,.3)}
 .nav-link.active{color:#fff;border-bottom-color:var(--gold)}
-.live-dot{display:inline-block;width:6px;height:6px;background:var(--red-light);border-radius:50%;margin-inline-start:5px;animation:pulse 1.2s infinite;vertical-align:middle;margin-bottom:2px}
-.nav-actions{display:flex;align-items:center;gap:10px;margin-inline-start:auto}
-.nav-search{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:#fff;border-radius:6px;padding:7px 14px;font-size:13px;font-family:var(--font);width:180px;transition:.2s}
+.live-dot{display:inline-block;width:6px;height:6px;background:var(--red-light);border-radius:50%;margin-inline-start:4px;animation:pulse 1.2s infinite;vertical-align:middle}
+.nav-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.nav-search{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:#fff;border-radius:6px;padding:7px 12px;font-size:13px;font-family:var(--font);width:160px;transition:.2s}
 .nav-search::placeholder{color:rgba(255,255,255,.4)}
 .nav-search:focus{outline:none;background:rgba(255,255,255,.15);border-color:var(--gold)}
-.btn-login{background:var(--gold);color:var(--navy);border:none;border-radius:6px;padding:8px 18px;font-size:13px;font-weight:700;transition:.2s}
-.btn-admin{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:6px;padding:8px 18px;font-size:13px;font-weight:600;transition:.2s}
+.btn-admin{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:6px;padding:8px 14px;font-size:13px;font-weight:600;transition:.2s;white-space:nowrap}
 .btn-admin:hover{background:rgba(255,255,255,.2)}
+.hamburger{display:none;background:none;border:none;color:#fff;font-size:22px;padding:4px 8px;line-height:1}
+
+/* CATEGORY BAR */
+.cat-bar{background:#fff;border-bottom:2px solid var(--border);position:sticky;top:104px;z-index:850;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.cat-bar-inner{max-width:1280px;margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:4px;overflow-x:auto;scrollbar-width:none}
+.cat-bar-inner::-webkit-scrollbar{display:none}
+.cat-btn{background:none;border:none;font-family:var(--font);font-size:14px;font-weight:700;color:var(--mid);padding:12px 18px;border-bottom:3px solid transparent;margin-bottom:-2px;transition:.2s;white-space:nowrap;cursor:pointer}
+.cat-btn:hover{color:var(--navy)}
+.cat-btn.active{color:var(--navy);border-bottom-color:var(--gold)}
+.cat-count{background:var(--light-bg);border:1px solid var(--border);border-radius:10px;font-size:10px;padding:1px 6px;font-weight:700;color:var(--mid);margin-inline-start:4px}
+.cat-btn.active .cat-count{background:var(--gold);border-color:var(--gold);color:var(--navy)}
 
 /* LAYOUT */
 .container{max-width:1280px;margin:0 auto;padding:0 24px}
@@ -83,10 +93,10 @@ nav{background:var(--navy);position:sticky;top:44px;z-index:900;box-shadow:0 2px
 .src-links-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
 
 /* HERO */
-.hero-grid{display:grid;grid-template-columns:1fr 390px;grid-template-rows:auto auto;gap:16px;margin-top:24px}
+.hero-grid{display:grid;grid-template-columns:1fr 370px;grid-template-rows:auto auto;gap:16px;margin-top:20px}
 .hero-main{grid-row:1/3;background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;transition:.25s;cursor:pointer}
 .hero-main:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
-.hero-img{height:300px;position:relative;overflow:hidden;background:var(--navy)}
+.hero-img{height:280px;position:relative;overflow:hidden;background:var(--navy)}
 .hero-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
 .hero-main:hover .hero-img img{transform:scale(1.04)}
 .hero-img .img-overlay{position:absolute;bottom:0;left:0;right:0;height:65%;background:linear-gradient(to top,rgba(0,0,0,.75),transparent)}
@@ -94,10 +104,10 @@ nav{background:var(--navy);position:sticky;top:44px;z-index:900;box-shadow:0 2px
 .hero-img .img-time{position:absolute;bottom:16px;right:16px;color:rgba(255,255,255,.8);font-size:12px}
 .hero-body{padding:20px;flex:1;display:flex;flex-direction:column;gap:12px}
 .hero-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.hero-title{font-size:21px;font-weight:800;color:var(--navy);line-height:1.45}
+.hero-title{font-size:20px;font-weight:800;color:var(--navy);line-height:1.45}
 .hero-summary{font-size:14px;color:var(--mid);line-height:1.75;flex:1}
 .hero-footer{display:flex;align-items:center;gap:10px;padding-top:12px;border-top:1px solid var(--border);flex-wrap:wrap}
-.btn-event{margin-inline-start:auto;background:var(--navy);color:#fff;border:none;border-radius:6px;padding:8px 18px;font-size:13px;font-weight:600;transition:.2s;font-family:var(--font)}
+.btn-event{margin-inline-start:auto;background:var(--navy);color:#fff;border:none;border-radius:6px;padding:8px 16px;font-size:13px;font-weight:600;transition:.2s;font-family:var(--font)}
 .btn-event:hover{background:var(--navy-mid)}
 
 /* SIDE CARD */
@@ -123,18 +133,49 @@ nav{background:var(--navy);position:sticky;top:44px;z-index:900;box-shadow:0 2px
 .eg-card-title{font-size:13px;font-weight:700;color:var(--navy);line-height:1.4;margin-bottom:8px}
 .eg-card-footer{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 
+/* VERIFICATION SYSTEM */
+.verify-section{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.verify-header{background:var(--navy);padding:14px 20px;display:flex;align-items:center;gap:12px}
+.verify-title{color:#fff;font-size:15px;font-weight:800}
+.verify-badge{background:var(--gold);color:var(--navy);border-radius:4px;padding:3px 10px;font-size:11px;font-weight:800}
+.verify-body{padding:20px}
+.verify-item{border:1px solid var(--border);border-radius:8px;margin-bottom:12px;overflow:hidden;cursor:pointer;transition:.2s}
+.verify-item:hover{border-color:var(--blue);box-shadow:var(--shadow)}
+.verify-item:last-child{margin-bottom:0}
+.verify-item-head{padding:12px 16px;display:flex;align-items:center;gap:10px}
+.vi-title{font-size:14px;font-weight:700;color:var(--navy);flex:1;line-height:1.4}
+.vi-conf{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.vi-conf-bar{width:80px;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.vi-conf-fill{height:100%;border-radius:3px;transition:width 1s ease}
+.vi-conf-num{font-size:12px;font-weight:800;white-space:nowrap}
+.verify-tl{padding:0 16px 14px;display:flex;flex-direction:column;gap:0}
+.vtl-item{display:flex;gap:12px;position:relative;padding:8px 0}
+.vtl-item:not(:last-child)::after{content:"";position:absolute;right:12px;top:30px;width:2px;height:calc(100% - 10px);background:var(--border)}
+.vtl-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0;border:2px solid #fff;box-shadow:0 0 0 1px var(--border);margin-top:3px;z-index:1}
+.vtl-dot.single{background:var(--gray)}
+.vtl-dot.two{background:var(--amber)}
+.vtl-dot.three{background:#3b82f6}
+.vtl-dot.confirmed{background:var(--green)}
+.vtl-content{flex:1}
+.vtl-time{font-size:10px;color:var(--mid);margin-bottom:2px}
+.vtl-text{font-size:12px;color:var(--slate);line-height:1.5}
+.vtl-sources{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px}
+.vtl-src-chip{background:var(--light-bg);border:1px solid var(--border);border-radius:3px;padding:1px 7px;font-size:10px;font-weight:600;color:var(--mid)}
+.vtl-src-chip.gold{background:#FFF8E1;border-color:#E9C46A;color:#92400e}
+.vtl-src-chip.confirmed{background:#e8f5e9;border-color:var(--green);color:var(--green)}
+
 /* IRAN SECTION */
 .iran-section{background:var(--navy);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-md)}
-.iran-header{display:flex;align-items:center;gap:14px;padding:16px 20px;border-bottom:1px solid rgba(255,255,255,.1)}
+.iran-header{display:flex;align-items:center;gap:14px;padding:16px 20px;border-bottom:1px solid rgba(255,255,255,.1);flex-wrap:wrap}
 .iran-title{color:#fff;font-size:16px;font-weight:800}
 .iran-live{display:flex;align-items:center;gap:6px;background:rgba(193,18,31,.8);border:1px solid rgba(255,255,255,.2);color:#fff;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700}
 .iran-tabs{display:flex;gap:0;margin-inline-start:auto}
-.iran-tab{background:none;border:none;color:rgba(255,255,255,.5);font-size:12px;font-weight:600;padding:6px 14px;border-radius:4px;transition:.2s;font-family:var(--font);cursor:pointer}
+.iran-tab{background:none;border:none;color:rgba(255,255,255,.5);font-size:12px;font-weight:600;padding:6px 12px;border-radius:4px;transition:.2s;font-family:var(--font);cursor:pointer}
 .iran-tab.active,.iran-tab:hover{background:rgba(255,255,255,.12);color:#fff}
-.iran-body{display:grid;grid-template-columns:1fr 310px}
+.iran-body{display:grid;grid-template-columns:1fr 300px}
 .iran-update{display:flex;gap:12px;padding:14px 20px;border-bottom:1px solid rgba(255,255,255,.06);cursor:pointer;transition:.15s;align-items:flex-start}
 .iran-update:hover{background:rgba(255,255,255,.04)}
-.iran-update-time{color:rgba(255,255,255,.35);font-size:11px;white-space:nowrap;padding-top:3px;min-width:50px}
+.iran-update-time{color:rgba(255,255,255,.35);font-size:11px;white-space:nowrap;padding-top:3px;min-width:46px}
 .iran-update-body{flex:1}
 .iran-update-title{color:rgba(255,255,255,.9);font-size:13px;font-weight:600;line-height:1.5;margin-bottom:5px}
 .iran-update-src{color:rgba(255,255,255,.35);font-size:11px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
@@ -194,7 +235,7 @@ nav{background:var(--navy);position:sticky;top:44px;z-index:900;box-shadow:0 2px
 .sa-tier.silver{background:var(--gray-light);color:var(--gray)}
 
 /* TRENDING */
-.trending-bar{background:#fff;border-radius:var(--radius);padding:16px 20px;box-shadow:var(--shadow);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.trending-bar{background:#fff;border-radius:var(--radius);padding:14px 20px;box-shadow:var(--shadow);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .trending-label{font-size:12px;font-weight:800;color:var(--mid);white-space:nowrap}
 .tag{display:inline-flex;align-items:center;gap:4px;background:var(--light-bg);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:600;color:var(--slate);cursor:pointer;transition:.2s}
 .tag:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
@@ -207,9 +248,11 @@ nav{background:var(--navy);position:sticky;top:44px;z-index:900;box-shadow:0 2px
 .video-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
 .video-embed-wrap{position:relative;padding-top:56.25%;background:#000;overflow:hidden}
 .video-embed-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
+.video-fallback{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--navy);color:rgba(255,255,255,.7);font-size:13px;gap:10px;text-align:center;padding:16px}
+.video-fallback a{background:var(--red);color:#fff;padding:8px 20px;border-radius:6px;font-weight:700;font-size:13px;text-decoration:none}
 .video-card-body{padding:12px}
 .video-card-title{font-size:13px;font-weight:700;color:var(--navy);line-height:1.4;margin-bottom:6px}
-.video-card-meta{font-size:11px;color:var(--mid);display:flex;align-items:center;gap:8px}
+.video-card-meta{font-size:11px;color:var(--mid);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .video-source-badge{background:var(--red);color:#fff;padding:2px 7px;border-radius:3px;font-size:10px;font-weight:800}
 
 /* KNOW BLOCK */
@@ -237,7 +280,7 @@ nav{background:var(--navy);position:sticky;top:44px;z-index:900;box-shadow:0 2px
 .modal-close:hover{background:rgba(0,0,0,.7)}
 .modal-body{padding:24px;overflow-y:auto;max-height:72vh}
 .modal-meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
-.modal-title{font-size:21px;font-weight:900;color:var(--navy);line-height:1.4;margin-bottom:12px}
+.modal-title{font-size:20px;font-weight:900;color:var(--navy);line-height:1.4;margin-bottom:12px}
 .modal-summary{font-size:14px;color:var(--mid);line-height:1.8;margin-bottom:14px}
 .ai-label{display:inline-flex;align-items:center;gap:4px;background:#e3f2fd;border:1px solid #90CAF9;color:var(--blue);border-radius:4px;padding:2px 8px;font-size:10px;font-weight:700}
 .modal-section-title{font-size:13px;font-weight:800;color:var(--navy);margin:14px 0 10px;display:flex;align-items:center;gap:8px}
@@ -271,7 +314,7 @@ nav{background:var(--navy);position:sticky;top:44px;z-index:900;box-shadow:0 2px
 .tl-src{font-size:11px;color:var(--mid);margin-top:2px}
 
 /* AUTO-REFRESH FAB */
-.refresh-fab{position:fixed;bottom:32px;left:32px;z-index:1500;display:flex;align-items:center;gap:10px;background:var(--navy);border:2px solid rgba(255,255,255,.15);border-radius:50px;padding:10px 18px 10px 14px;box-shadow:0 6px 24px rgba(0,0,0,.3);cursor:pointer;color:#fff;font-family:var(--font);font-size:13px;font-weight:700;transition:.25s;user-select:none}
+.refresh-fab{position:fixed;bottom:24px;left:24px;z-index:1500;display:flex;align-items:center;gap:10px;background:var(--navy);border:2px solid rgba(255,255,255,.15);border-radius:50px;padding:10px 18px 10px 14px;box-shadow:0 6px 24px rgba(0,0,0,.3);cursor:pointer;color:#fff;font-family:var(--font);font-size:13px;font-weight:700;transition:.25s;user-select:none}
 .refresh-fab:hover{background:var(--navy-mid);border-color:var(--gold)}
 .refresh-fab.paused{border-color:var(--gold)}
 .rf-ring{position:relative;width:32px;height:32px;flex-shrink:0}
@@ -285,11 +328,18 @@ nav{background:var(--navy);position:sticky;top:44px;z-index:900;box-shadow:0 2px
 .rf-pause-btn:hover{background:rgba(255,255,255,.25);color:#fff}
 
 /* LAST UPDATE BAR */
-.last-update-bar{background:#fff;border-radius:6px;padding:8px 16px;box-shadow:var(--shadow);display:flex;align-items:center;gap:8px;font-size:12px;color:var(--mid);margin-top:16px}
+.last-update-bar{background:#fff;border-radius:6px;padding:8px 16px;box-shadow:var(--shadow);display:flex;align-items:center;gap:8px;font-size:12px;color:var(--mid);margin-top:16px;flex-wrap:wrap}
 .lu-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
 .lu-time{font-weight:700;color:var(--navy)}
 .lu-refresh-btn{margin-inline-start:auto;background:var(--navy);color:#fff;border:none;border-radius:4px;padding:4px 12px;font-size:11px;font-weight:700;font-family:var(--font);cursor:pointer;transition:.2s;display:flex;align-items:center;gap:5px}
 .lu-refresh-btn:hover{background:var(--navy-mid)}
+
+/* MOBILE NAV MENU */
+.mobile-menu{display:none;background:var(--navy);padding:12px 24px;flex-direction:column;gap:4px;border-top:1px solid rgba(255,255,255,.1)}
+.mobile-menu.open{display:flex}
+.mobile-menu .nav-link{border-bottom:none;padding:10px 4px;border-top:1px solid rgba(255,255,255,.06)}
+.mobile-search{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:6px;padding:9px 14px;font-family:var(--font);font-size:14px;margin-top:4px}
+.mobile-search::placeholder{color:rgba(255,255,255,.4)}
 
 /* FOOTER */
 footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding:40px 0 20px}
@@ -301,10 +351,14 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
 .footer-links{list-style:none;display:flex;flex-direction:column;gap:8px}
 .footer-links a{font-size:13px;color:rgba(255,255,255,.55);transition:.15s}
 .footer-links a:hover{color:#fff}
-.footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding-top:20px;display:flex;justify-content:space-between;align-items:center;font-size:12px}
-.trust-badges{display:flex;gap:10px}
+.footer-contact-item{display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,.55);margin-bottom:8px}
+.footer-contact-item a{color:var(--gold);transition:.2s}
+.footer-contact-item a:hover{color:var(--gold-light)}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding-top:20px;display:flex;justify-content:space-between;align-items:center;font-size:12px;flex-wrap:wrap;gap:12px}
+.trust-badges{display:flex;gap:10px;flex-wrap:wrap}
 .trust-badge{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:4px;padding:4px 10px;font-size:10px;font-weight:600;color:rgba(255,255,255,.5)}
 
+/* ANIMATIONS */
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
 @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 @keyframes scaleIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
@@ -312,6 +366,54 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
 ::-webkit-scrollbar{width:6px;height:6px}
 ::-webkit-scrollbar-track{background:var(--light-bg)}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+/* ═══════════ RESPONSIVE ═══════════ */
+@media(max-width:1100px){
+  .hero-grid{grid-template-columns:1fr 320px}
+  .egypt-strip{grid-template-columns:repeat(2,1fr)}
+  .two-col{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .iran-body{grid-template-columns:1fr}
+  .iran-sidebar{border-inline-start:none;border-top:1px solid rgba(255,255,255,.08);display:grid;grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:768px){
+  .breaking-banner{padding:8px 14px;gap:8px;font-size:13px}
+  .bb-link{display:none}
+  nav.main-nav{top:40px}
+  .cat-bar{top:96px}
+  .nav-inner{padding:0 14px}
+  .nav-links{display:none}
+  .nav-search{display:none}
+  .hamburger{display:block}
+  .hero-grid{grid-template-columns:1fr;grid-template-rows:auto}
+  .hero-main{grid-row:auto}
+  .hero-img{height:220px}
+  .hero-title{font-size:17px}
+  .side-card{flex-direction:column}
+  .side-card-img{width:100%;height:150px}
+  .egypt-strip{grid-template-columns:1fr 1fr}
+  .econ-cards{grid-template-columns:1fr 1fr}
+  .video-grid{grid-template-columns:1fr}
+  .two-col{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr}
+  .know-block{grid-template-columns:1fr}
+  .iran-sidebar{grid-template-columns:1fr}
+  .refresh-fab .rf-label{display:none}
+  .refresh-fab{padding:10px 12px}
+  .container{padding:0 14px}
+  .cat-btn{padding:10px 12px;font-size:13px}
+  .modal-overlay{padding:14px 10px}
+  .modal-body{max-height:80vh;padding:16px}
+  .modal-title{font-size:16px}
+}
+@media(max-width:480px){
+  .egypt-strip{grid-template-columns:1fr}
+  .econ-cards{grid-template-columns:1fr}
+  .breaking-banner{font-size:12px}
+  .hero-title{font-size:15px}
+  .iran-sidebar{grid-template-columns:1fr}
+  .verify-section .verify-body{padding:12px}
+}
 </style>
 </head>
 <body>
@@ -321,7 +423,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
   <span class="bb-dot"></span>
   <span class="bb-label">⚡ عاجل</span>
   <span class="bb-text">إيران تعلن حالة التأهب القصوى في المنشآت النووية عقب تقارير عن عمليات عسكرية غير مسبوقة في محيط إصفهان</span>
-  <a href="https://www.bbc.com/arabic/middleeast" target="_blank" class="bb-link">اقرأ التقرير ←</a>
+  <a href="https://arabic.reuters.com" target="_blank" class="bb-link">اقرأ التقرير ←</a>
   <button class="bb-close" onclick="document.getElementById('bb').style.display='none'">✕</button>
 </div>
 
@@ -346,45 +448,70 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
   </div>
 </div>
 
-<!-- NAV -->
-<nav>
+<!-- MAIN NAV -->
+<nav class="main-nav">
   <div class="nav-inner">
     <a href="#" class="nav-logo"><span class="logo-ar">نظرة</span><span class="logo-dot"></span><span class="logo-en">NAZRA INTEL</span></a>
-    <div class="nav-links">
-      <a href="#" class="nav-link active">الرئيسية</a>
+    <div class="nav-links" id="navLinks">
+      <a href="#top" class="nav-link active">الرئيسية</a>
       <a href="#egypt" class="nav-link">مصر</a>
       <a href="#region" class="nav-link">المنطقة</a>
       <a href="#iran" class="nav-link">إيران <span class="live-dot"></span></a>
       <a href="#economy" class="nav-link">الاقتصاد</a>
       <a href="#videos" class="nav-link">فيديو</a>
-      <a href="#" class="nav-link">الموجز</a>
+      <a href="#about" class="nav-link">عن نظرة</a>
     </div>
     <div class="nav-actions">
-      <input type="text" class="nav-search" placeholder="🔍  ابحث عن حدث...">
+      <input type="text" class="nav-search" placeholder="🔍 ابحث عن حدث..." id="siteSearch" oninput="filterBySearch(this.value)">
       <a href="nazra_admin.html" class="btn-admin">⚙️ الإدارة</a>
-      <button class="btn-login">دخول</button>
+      <button class="hamburger" onclick="toggleMenu()" aria-label="القائمة">☰</button>
     </div>
+  </div>
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#top" class="nav-link" onclick="toggleMenu()">الرئيسية</a>
+    <a href="#egypt" class="nav-link" onclick="toggleMenu()">مصر</a>
+    <a href="#region" class="nav-link" onclick="toggleMenu()">المنطقة</a>
+    <a href="#iran" class="nav-link" onclick="toggleMenu()">إيران</a>
+    <a href="#economy" class="nav-link" onclick="toggleMenu()">الاقتصاد</a>
+    <a href="#videos" class="nav-link" onclick="toggleMenu()">فيديو</a>
+    <a href="#about" class="nav-link" onclick="toggleMenu()">عن نظرة</a>
+    <a href="nazra_admin.html" class="nav-link">⚙️ الإدارة</a>
+    <input type="text" class="mobile-search" placeholder="🔍 ابحث..." oninput="filterBySearch(this.value)">
   </div>
 </nav>
 
+<!-- CATEGORY BAR -->
+<div class="cat-bar">
+  <div class="cat-bar-inner">
+    <button class="cat-btn active" onclick="filterCat('all',this)">⭐ أهم الأخبار <span class="cat-count">12</span></button>
+    <button class="cat-btn" onclick="filterCat('world',this)">🌍 عالمية <span class="cat-count">8</span></button>
+    <button class="cat-btn" onclick="filterCat('mideast',this)">🕌 شرق أوسط <span class="cat-count">9</span></button>
+    <button class="cat-btn" onclick="filterCat('local',this)">🇪🇬 محلية <span class="cat-count">6</span></button>
+    <button class="cat-btn" onclick="filterCat('economy',this)">📈 اقتصاد <span class="cat-count">4</span></button>
+    <button class="cat-btn" onclick="filterCat('verify',this)">✅ التحقق <span class="cat-count">3</span></button>
+  </div>
+</div>
+
 <main>
-<div class="container">
+<div class="container" id="top">
 
   <!-- LAST UPDATE BAR -->
   <div class="last-update-bar">
     <span class="lu-dot"></span>
     <span>آخر تحديث:</span>
     <span class="lu-time" id="luTime">—</span>
+    <span style="margin-inline-start:auto;font-size:11px;color:var(--mid)">القاهرة · UTC+2</span>
     <button class="lu-refresh-btn" id="luBtn" onclick="doRefresh()">
       <span id="luIcon">↻</span> تحديث الآن
     </button>
   </div>
 
   <!-- HERO GRID -->
-  <div class="hero-grid">
+  <div class="hero-grid" id="heroSection" data-cat="all mideast world">
     <div class="hero-main" onclick="openModal('iran-strike')">
       <div class="hero-img">
-        <img src="https://picsum.photos/seed/iranmil2026/900/400" alt="أزمة إيران">
+        <img src="https://picsum.photos/seed/iranmil2026/900/400" alt="أزمة إيران" loading="lazy">
         <div class="img-overlay"></div>
         <span class="img-cat">أمن وصراعات</span>
         <span class="img-time">🕐 منذ 23 دقيقة</span>
@@ -396,10 +523,10 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
           <div class="conf-meter" style="flex:1;max-width:140px"><div class="conf-bar"><div class="conf-fill high" style="width:91%"></div></div><span class="conf-num">91/100</span></div>
         </div>
         <h1 class="hero-title">عمليات عسكرية قرب منشأة إصفهان النووية وطهران تُفعّل بروتوكولات الطوارئ الشاملة</h1>
-        <p class="hero-summary">أفادت مصادر متعددة موثوقة بوقوع انفجارات في محيط المنشأة النووية بإصفهان فجر الأحد. وتشير تقارير أولية إلى تدخل قوات متعددة الجنسية، فيما لم تُصدر طهران حتى اللحظة بياناً رسمياً شاملاً.</p>
+        <p class="hero-summary">أفادت مصادر متعددة موثوقة بوقوع انفجارات في محيط المنشأة النووية بإصفهان فجر الأحد. تشير التقارير إلى تدخل قوات متعددة الجنسية، والوكالة الدولية للطاقة الذرية أعلنت تفعيل بروتوكول الطوارئ.</p>
         <div class="src-links-row">
-          <a href="https://www.bbc.com/arabic/middleeast" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 بي بي سي عربي</a>
-          <a href="https://www.reuters.com/world/middle-east/" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 رويترز</a>
+          <a href="https://www.bbc.com/arabic/middleeast" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 بي بي سي</a>
+          <a href="https://arabic.reuters.com" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 رويترز</a>
           <a href="https://www.aljazeera.net" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 الجزيرة</a>
           <a href="https://www.france24.com/ar" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 فرانس 24</a>
         </div>
@@ -411,12 +538,11 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
         </div>
       </div>
     </div>
-
     <div class="side-card" onclick="openModal('egypt-economy')">
-      <div class="side-card-img"><img src="https://picsum.photos/seed/cbeegypt26/400/300" alt="البنك المركزي"></div>
+      <div class="side-card-img"><img src="https://picsum.photos/seed/cbeegypt26/400/300" alt="البنك المركزي" loading="lazy"></div>
       <div class="side-card-body">
         <div class="side-card-meta"><span class="badge badge-confirmed" style="font-size:10px">✓ مؤكد</span><span class="src-count" style="font-size:10px">📰 8</span></div>
-        <div class="side-card-title">مصر ترفع سعر الفائدة 150 نقطة أساس وسط ضغوط التضخم وتراجع الجنيه</div>
+        <div class="side-card-title">مصر ترفع سعر الفائدة 150 نقطة أساس وسط ضغوط التضخم</div>
         <div class="side-card-time">🕐 منذ ساعة · الاقتصاد</div>
         <div class="src-links-row">
           <a href="https://www.cbe.org.eg" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 CBE</a>
@@ -424,9 +550,8 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
         </div>
       </div>
     </div>
-
     <div class="side-card" onclick="openModal('gaza-ceasefire')">
-      <div class="side-card-img"><img src="https://picsum.photos/seed/gazadip26/400/300" alt="مفاوضات غزة"></div>
+      <div class="side-card-img"><img src="https://picsum.photos/seed/gazadip26/400/300" alt="مفاوضات غزة" loading="lazy"></div>
       <div class="side-card-body">
         <div class="side-card-meta"><span class="badge badge-developing"><span class="pulse"></span>يتطور</span><span class="src-count" style="font-size:10px">📰 11</span></div>
         <div class="side-card-title">مفاوضات الهدنة في غزة تدخل مرحلة حاسمة وواشنطن تُرسل مبعوثاً خاصاً</div>
@@ -442,45 +567,181 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
   <!-- TRENDING -->
   <div class="trending-bar section-gap">
     <span class="trending-label">🔥 الأكثر تداولاً</span>
-    <a href="#" class="tag">إيران <span class="tag-count">284</span></a>
-    <a href="#" class="tag">إصفهان <span class="tag-count">198</span></a>
-    <a href="#" class="tag">الجنيه المصري <span class="tag-count">156</span></a>
-    <a href="#" class="tag">غزة <span class="tag-count">134</span></a>
-    <a href="#" class="tag">البنك المركزي <span class="tag-count">112</span></a>
-    <a href="#" class="tag">السعودية <span class="tag-count">89</span></a>
-    <a href="#" class="tag">النفط <span class="tag-count">61</span></a>
+    <a href="#iran" class="tag">إيران <span class="tag-count">284</span></a>
+    <a href="#iran" class="tag">إصفهان <span class="tag-count">198</span></a>
+    <a href="#egypt" class="tag">الجنيه المصري <span class="tag-count">156</span></a>
+    <a href="#region" class="tag">غزة <span class="tag-count">134</span></a>
+    <a href="#economy" class="tag">البنك المركزي <span class="tag-count">112</span></a>
+    <a href="#economy" class="tag">السعودية <span class="tag-count">89</span></a>
+    <a href="#economy" class="tag">النفط <span class="tag-count">61</span></a>
   </div>
 
   <!-- EGYPT -->
-  <div id="egypt" class="section-gap">
-    <div class="sec-header"><div class="sec-line"></div><span class="sec-title">🇪🇬 مصر اليوم</span><a href="#" class="sec-more">عرض الكل ←</a></div>
+  <div id="egypt" class="section-gap" data-cat="local">
+    <div class="sec-header"><div class="sec-line"></div><span class="sec-title">🇪🇬 مصر اليوم</span><a href="https://www.ahram.org.eg" target="_blank" class="sec-more">أهرام أونلاين ←</a></div>
     <div class="egypt-strip">
       <div class="eg-card" onclick="openModal('egypt-economy')">
-        <div class="eg-card-img"><img src="https://picsum.photos/seed/cbeegypt/600/300" alt="البنك المركزي"></div>
+        <div class="eg-card-img"><img src="https://picsum.photos/seed/cbeegypt/600/300" alt="البنك المركزي" loading="lazy"></div>
         <div class="eg-card-body"><div class="eg-card-cat">الاقتصاد</div><div class="eg-card-title">رفع الفائدة 150 نقطة أساس وتوقعات بمزيد من الارتفاعات</div>
         <div class="eg-card-footer"><span class="badge badge-confirmed" style="font-size:10px">✓ مؤكد</span><a href="https://www.cbe.org.eg" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 CBE</a></div></div>
       </div>
       <div class="eg-card">
-        <div class="eg-card-img"><img src="https://picsum.photos/seed/parliament26/600/300" alt="البرلمان"></div>
+        <div class="eg-card-img"><img src="https://picsum.photos/seed/parliament26/600/300" alt="البرلمان" loading="lazy"></div>
         <div class="eg-card-body"><div class="eg-card-cat">السياسة</div><div class="eg-card-title">البرلمان يُقر قانون الضريبة على القيمة المضافة بتعديلات جوهرية</div>
         <div class="eg-card-footer"><span class="badge badge-confirmed" style="font-size:10px">✓ مؤكد</span><a href="https://www.ahram.org.eg" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 الأهرام</a></div></div>
       </div>
       <div class="eg-card">
-        <div class="eg-card-img"><img src="https://picsum.photos/seed/nuclear26/600/300" alt="الضبعة"></div>
+        <div class="eg-card-img"><img src="https://picsum.photos/seed/nuclear26/600/300" alt="الضبعة" loading="lazy"></div>
         <div class="eg-card-body"><div class="eg-card-cat">البنية التحتية</div><div class="eg-card-title">مصر تُعلن توقف انقطاعات الكهرباء بعد تشغيل الضبعة النووية جزئياً</div>
         <div class="eg-card-footer"><span class="badge badge-likely" style="font-size:10px">~ محتمل</span><a href="https://www.masrawy.com" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 مصراوي</a></div></div>
       </div>
       <div class="eg-card">
-        <div class="eg-card-img"><img src="https://picsum.photos/seed/nile2026/600/300" alt="سد النهضة"></div>
+        <div class="eg-card-img"><img src="https://picsum.photos/seed/nile2026/600/300" alt="سد النهضة" loading="lazy"></div>
         <div class="eg-card-body"><div class="eg-card-cat">المياه والأمن القومي</div><div class="eg-card-title">جولة مفاوضات جديدة حول سد النهضة في أديس أبابا الأسبوع القادم</div>
-        <div class="eg-card-footer"><span class="badge badge-developing"><span class="pulse"></span>يتطور</span><a href="https://english.ahram.org.eg" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 الأهرام</a></div></div>
+        <div class="eg-card-footer"><span class="badge badge-developing"><span class="pulse"></span>يتطور</span><a href="https://www.ahram.org.eg" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 الأهرام</a></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VERIFICATION SYSTEM -->
+  <div id="region" class="section-gap" data-cat="verify mideast world">
+    <div class="sec-header"><div class="sec-line"></div><span class="sec-title">✅ مسار التحقق من الأخبار</span><a href="#" class="sec-more">كيف نتحقق؟ ←</a></div>
+    <div class="verify-section">
+      <div class="verify-header">
+        <span class="verify-title">🔍 تسلسل التحقق — كيف يتحول الخبر من إشاعة إلى مؤكد</span>
+        <span class="verify-badge">AI + تحرير بشري</span>
+      </div>
+      <div class="verify-body">
+
+        <!-- VERIFY ITEM 1 -->
+        <div class="verify-item">
+          <div class="verify-item-head" onclick="toggleVerify(this)">
+            <span class="badge badge-confirmed" style="flex-shrink:0">✓ مؤكد 17 مصدراً</span>
+            <span class="vi-title">عمليات عسكرية قرب إصفهان — من التسريبات إلى التأكيد الدولي</span>
+            <div class="vi-conf">
+              <div class="vi-conf-bar"><div class="vi-conf-fill" style="width:91%;background:var(--green)"></div></div>
+              <span class="vi-conf-num" style="color:var(--green)">91%</span>
+            </div>
+          </div>
+          <div class="verify-tl" id="vt0" style="display:none">
+            <div class="vtl-item">
+              <div class="vtl-dot single"></div>
+              <div class="vtl-content">
+                <div class="vtl-time">03:12 · المصدر الأول</div>
+                <div class="vtl-text">تسريبات على تيليغرام عن صوت انفجارات في محيط إصفهان — <strong>غير مؤكد بعد</strong></div>
+                <div class="vtl-sources"><span class="vtl-src-chip">قنوات مجهولة</span></div>
+              </div>
+            </div>
+            <div class="vtl-item">
+              <div class="vtl-dot two"></div>
+              <div class="vtl-content">
+                <div class="vtl-time">03:34 · مصدران مستقلان</div>
+                <div class="vtl-text">FlightRadar يُسجّل إغلاق مجال جوي — صحفيان ميدانيان يؤكدان سماع أصوات</div>
+                <div class="vtl-sources"><span class="vtl-src-chip gold">FlightRadar24</span><span class="vtl-src-chip">صحفيون محليون</span></div>
+              </div>
+            </div>
+            <div class="vtl-item">
+              <div class="vtl-dot three"></div>
+              <div class="vtl-content">
+                <div class="vtl-time">04:10 · ثلاثة مصادر ذهبية</div>
+                <div class="vtl-text">رويترز وبي بي سي وفرانس برس ينشرون تقارير مستقلة بصور أقمار اصطناعية</div>
+                <div class="vtl-sources"><span class="vtl-src-chip gold">رويترز</span><span class="vtl-src-chip gold">بي بي سي</span><span class="vtl-src-chip gold">فرانس برس</span></div>
+              </div>
+            </div>
+            <div class="vtl-item">
+              <div class="vtl-dot confirmed"></div>
+              <div class="vtl-content">
+                <div class="vtl-time">05:45 · تأكيد دولي رسمي ✓</div>
+                <div class="vtl-text">الوكالة الدولية للطاقة الذرية تُصدر بياناً رسمياً وتُفعّل بروتوكول الطوارئ — <strong>مؤكد من 17 مصدراً</strong></div>
+                <div class="vtl-sources"><span class="vtl-src-chip confirmed">IAEA رسمي</span><span class="vtl-src-chip confirmed">AP</span><span class="vtl-src-chip confirmed">+14 مصدراً</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- VERIFY ITEM 2 -->
+        <div class="verify-item">
+          <div class="verify-item-head" onclick="toggleVerify(this)">
+            <span class="badge badge-confirmed" style="flex-shrink:0">✓ مؤكد 8 مصادر</span>
+            <span class="vi-title">رفع الفائدة المصرية — من التسريبات لبيان البنك المركزي</span>
+            <div class="vi-conf">
+              <div class="vi-conf-bar"><div class="vi-conf-fill" style="width:88%;background:var(--green)"></div></div>
+              <span class="vi-conf-num" style="color:var(--green)">88%</span>
+            </div>
+          </div>
+          <div class="verify-tl" id="vt1" style="display:none">
+            <div class="vtl-item">
+              <div class="vtl-dot single"></div>
+              <div class="vtl-content">
+                <div class="vtl-time">11:30 · مصدر واحد</div>
+                <div class="vtl-text">تسريب من مصدر مصرفي مجهول عن اجتماع طارئ للبنك المركزي</div>
+                <div class="vtl-sources"><span class="vtl-src-chip">مصدر مصرفي</span></div>
+              </div>
+            </div>
+            <div class="vtl-item">
+              <div class="vtl-dot two"></div>
+              <div class="vtl-content">
+                <div class="vtl-time">12:15 · صحفيان اقتصاديان</div>
+                <div class="vtl-text">اليوم السابع والمصري اليوم يؤكدان انعقاد اجتماع استثنائي</div>
+                <div class="vtl-sources"><span class="vtl-src-chip gold">اليوم السابع</span><span class="vtl-src-chip">المصري اليوم</span></div>
+              </div>
+            </div>
+            <div class="vtl-item">
+              <div class="vtl-dot confirmed"></div>
+              <div class="vtl-content">
+                <div class="vtl-time">13:00 · بيان رسمي ✓</div>
+                <div class="vtl-text">البنك المركزي المصري يُصدر بيانه الرسمي برفع الفائدة 150 نقطة أساس</div>
+                <div class="vtl-sources"><span class="vtl-src-chip confirmed">CBE رسمي</span><span class="vtl-src-chip confirmed">رويترز</span><span class="vtl-src-chip confirmed">+6</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- VERIFY ITEM 3 -->
+        <div class="verify-item">
+          <div class="verify-item-head" onclick="toggleVerify(this)">
+            <span class="badge badge-developing" style="flex-shrink:0"><span class="pulse"></span>يتطور — 11 مصدراً</span>
+            <span class="vi-title">مفاوضات هدنة غزة — لا يزال الوضع ضبابياً</span>
+            <div class="vi-conf">
+              <div class="vi-conf-bar"><div class="vi-conf-fill" style="width:62%;background:var(--blue)"></div></div>
+              <span class="vi-conf-num" style="color:var(--blue)">62%</span>
+            </div>
+          </div>
+          <div class="verify-tl" id="vt2" style="display:none">
+            <div class="vtl-item">
+              <div class="vtl-dot single"></div>
+              <div class="vtl-content">
+                <div class="vtl-time">16:00 · تقارير أولية</div>
+                <div class="vtl-text">تقارير عن استئناف المفاوضات في القاهرة — مصادر غير رسمية</div>
+                <div class="vtl-sources"><span class="vtl-src-chip">مصادر إعلامية</span></div>
+              </div>
+            </div>
+            <div class="vtl-item">
+              <div class="vtl-dot two"></div>
+              <div class="vtl-content">
+                <div class="vtl-time">17:30 · ثلاثة مصادر</div>
+                <div class="vtl-text">الجزيرة وAP ومصراوي يؤكدون وصول وفود — التفاصيل غير واضحة بعد</div>
+                <div class="vtl-sources"><span class="vtl-src-chip gold">الجزيرة</span><span class="vtl-src-chip gold">AP</span><span class="vtl-src-chip">مصراوي</span></div>
+              </div>
+            </div>
+            <div class="vtl-item">
+              <div class="vtl-dot three" style="background:var(--blue)"></div>
+              <div class="vtl-content">
+                <div class="vtl-time">19:00 · لا يزال يتطور ⏳</div>
+                <div class="vtl-text">11 مصدراً تتابع — نقاط الخلاف الجوهرية لم تُحسم بعد. التحديث مستمر</div>
+                <div class="vtl-sources"><span class="vtl-src-chip" style="background:#e3f2fd;border-color:var(--blue);color:var(--blue)">⏳ قيد المتابعة</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
 
   <!-- IRAN LIVE -->
-  <div id="iran" class="section-gap">
-    <div class="sec-header"><div class="sec-line"></div><span class="sec-title">التغطية المباشرة — إيران والمنطقة</span><a href="#" class="sec-more">التسلسل الزمني الكامل ←</a></div>
+  <div id="iran" class="section-gap" data-cat="mideast world">
+    <div class="sec-header"><div class="sec-line"></div><span class="sec-title">التغطية المباشرة — إيران والمنطقة</span><a href="https://www.aljazeera.net" target="_blank" class="sec-more">الجزيرة مباشر ←</a></div>
     <div class="iran-section">
       <div class="iran-header">
         <span class="iran-live">● مباشر</span>
@@ -493,11 +754,11 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
       </div>
       <div class="iran-body">
         <div>
-          <div class="iran-update"><span class="iran-update-time">19:34</span><div class="iran-update-body"><div class="iran-update-title"><span class="badge badge-confirmed" style="font-size:10px;margin-inline-end:6px">✓</span>الوكالة الدولية للطاقة الذرية تُقرر إرسال فريق طوارئ لمراقبة الوضع في إصفهان</div><div class="iran-update-src">رويترز · فرانس برس · بي بي سي<a href="https://www.reuters.com/world/middle-east/" target="_blank" class="iran-src-link">🔗 رويترز</a><a href="https://www.iaea.org" target="_blank" class="iran-src-link">🔗 IAEA</a></div></div></div>
+          <div class="iran-update"><span class="iran-update-time">19:34</span><div class="iran-update-body"><div class="iran-update-title"><span class="badge badge-confirmed" style="font-size:10px;margin-inline-end:6px">✓</span>الوكالة الدولية للطاقة الذرية تُقرر إرسال فريق طوارئ لمراقبة الوضع في إصفهان</div><div class="iran-update-src">رويترز · فرانس برس · بي بي سي<a href="https://arabic.reuters.com" target="_blank" class="iran-src-link">🔗 رويترز</a><a href="https://www.iaea.org" target="_blank" class="iran-src-link">🔗 IAEA</a></div></div></div>
           <div class="iran-update"><span class="iran-update-time">19:18</span><div class="iran-update-body"><div class="iran-update-title"><span class="badge badge-confirmed" style="font-size:10px;margin-inline-end:6px">✓</span>أسعار النفط ترتفع 4.2٪ مسجلةً أعلى مستوى منذ ديسمبر 2025</div><div class="iran-update-src">رويترز · بلومبرغ<a href="https://www.bloomberg.com/energy" target="_blank" class="iran-src-link">🔗 بلومبرغ</a></div></div></div>
           <div class="iran-update"><span class="iran-update-time">18:55</span><div class="iran-update-body"><div class="iran-update-title"><span class="badge badge-likely" style="font-size:10px;margin-inline-end:6px">~</span>تقارير عن إغلاق جزئي للمجال الجوي الإيراني أمام الرحلات التجارية</div><div class="iran-update-src">فلايت ريدار 24<a href="https://www.flightradar24.com" target="_blank" class="iran-src-link">🔗 FlightRadar</a></div></div></div>
           <div class="iran-update"><span class="iran-update-time">18:41</span><div class="iran-update-body"><div class="iran-update-title"><span class="badge badge-confirmed" style="font-size:10px;margin-inline-end:6px">✓</span>مجلس الأمن يعقد جلسة طارئة الساعة 21:00 بتوقيت القاهرة بطلب أمريكي فرنسي</div><div class="iran-update-src">الأمم المتحدة<a href="https://news.un.org/ar/" target="_blank" class="iran-src-link">🔗 UN</a></div></div></div>
-          <div class="iran-update"><span class="iran-update-time">18:12</span><div class="iran-update-body"><div class="iran-update-title"><span class="badge badge-disputed" style="font-size:10px;margin-inline-end:6px">⚠ متضارب</span>التقارير تتضارب حول حجم الأضرار — مصدر إيراني ينفي بينما تؤكد مصادر غربية</div><div class="iran-update-src">تعارض: فارس نيوز ↔ رويترز<a href="https://www.farsnews.ir" target="_blank" class="iran-src-link">🔗 فارس</a></div></div></div>
+          <div class="iran-update"><span class="iran-update-time">18:12</span><div class="iran-update-body"><div class="iran-update-title"><span class="badge badge-disputed" style="font-size:10px;margin-inline-end:6px">⚠ متضارب</span>التقارير تتضارب حول حجم الأضرار — مصدر إيراني ينفي بينما تؤكد مصادر غربية</div><div class="iran-update-src">تعارض: فارس نيوز ↔ رويترز<a href="https://www.farsnews.ir" target="_blank" class="iran-src-link">🔗 فارس</a><a href="https://arabic.reuters.com" target="_blank" class="iran-src-link">🔗 رويترز</a></div></div></div>
         </div>
         <div class="iran-sidebar">
           <div class="iran-stat-block"><div class="iran-stat-label">⚡ مؤشرات الأزمة</div><div class="iran-stat-item"><span class="iran-stat-key">مستوى الخطورة</span><span class="iran-stat-val red">مرتفع جداً</span></div><div class="iran-stat-item"><span class="iran-stat-key">المصادر النشطة</span><span class="iran-stat-val">34 مصدراً</span></div><div class="iran-stat-item"><span class="iran-stat-key">تقارير مؤكدة</span><span class="iran-stat-val green">17</span></div><div class="iran-stat-item"><span class="iran-stat-key">متضاربة</span><span class="iran-stat-val red">3</span></div></div>
@@ -509,17 +770,17 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
   </div>
 
   <!-- ECONOMY -->
-  <div id="economy" class="section-gap">
+  <div id="economy" class="section-gap" data-cat="economy">
     <div class="two-col">
       <div>
-        <div class="sec-header"><div class="sec-line"></div><span class="sec-title">📈 الاقتصاد</span><a href="#" class="sec-more">عرض الكل ←</a></div>
+        <div class="sec-header"><div class="sec-line"></div><span class="sec-title">📈 الاقتصاد</span><a href="https://www.bloomberg.com/middleeast" target="_blank" class="sec-more">بلومبرغ الشرق الأوسط ←</a></div>
         <div class="econ-cards">
           <div class="econ-indicator"><div class="ei-label">دولار / جنيه مصري</div><div class="ei-value">49.85</div><div class="ei-change down">▼ 0.8٪ اليوم</div></div>
           <div class="econ-indicator" style="border-top-color:var(--gold)"><div class="ei-label">الذهب (غ / جنيه)</div><div class="ei-value">3,421</div><div class="ei-change up">▲ 2.1٪ اليوم</div></div>
           <div class="econ-indicator" style="border-top-color:var(--red)"><div class="ei-label">خام برنت ($/برميل)</div><div class="ei-value">$94.2</div><div class="ei-change down">▲ 4.2٪</div></div>
         </div>
         <div class="econ-event-list">
-          <div class="econ-event" onclick="openModal('egypt-economy')"><div class="econ-event-icon">🏦</div><div><div class="econ-event-title">البنك المركزي يرفع الفائدة 150 نقطة أساس بقرار استثنائي</div><div class="econ-event-meta"><span class="badge badge-confirmed" style="font-size:10px">✓</span>·<a href="https://www.cbe.org.eg" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 CBE</a><a href="https://www.reuters.com/markets/egypt/" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 رويترز</a></div></div></div>
+          <div class="econ-event" onclick="openModal('egypt-economy')"><div class="econ-event-icon">🏦</div><div><div class="econ-event-title">البنك المركزي يرفع الفائدة 150 نقطة أساس بقرار استثنائي</div><div class="econ-event-meta"><span class="badge badge-confirmed" style="font-size:10px">✓</span>·<a href="https://www.cbe.org.eg" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 CBE</a><a href="https://arabic.reuters.com" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 رويترز</a></div></div></div>
           <div class="econ-event"><div class="econ-event-icon">📦</div><div><div class="econ-event-title">ارتفاع أسعار السلع الأساسية في مصر بنسبة 12٪ منذ بداية الأزمة</div><div class="econ-event-meta"><span class="badge badge-likely" style="font-size:10px">~</span>·<a href="https://www.capmas.gov.eg" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 CAPMAS</a></div></div></div>
           <div class="econ-event"><div class="econ-event-icon">🛢️</div><div><div class="econ-event-title">دول الخليج تُراجع ميزانياتها في ضوء أسعار النفط المرتفعة</div><div class="econ-event-meta"><span class="badge badge-developing"><span class="pulse"></span>يتطور</span>·<a href="https://www.bloomberg.com/energy" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 بلومبرغ</a></div></div></div>
         </div>
@@ -527,7 +788,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
       <div style="display:flex;flex-direction:column;gap:16px">
         <div class="brief-widget"><div class="brief-header"><span>☀️</span><span class="brief-title">الموجز اليومي</span><span class="brief-date">٤ أبريل ٢٠٢٦</span></div><div class="brief-body"><div class="brief-item"><span class="brief-num">١</span><span class="brief-text">انفجارات قرب إصفهان تُهدد استقرار المنطقة والمجتمع الدولي يتحرك لاحتواء الأزمة</span></div><div class="brief-item"><span class="brief-num">٢</span><span class="brief-text">البنك المركزي المصري يرفع الفائدة بقرار استثنائي تزامناً مع ضغوط الأزمة الإقليمية</span></div><div class="brief-item"><span class="brief-num">٣</span><span class="brief-text">النفط فوق 94 دولاراً للمرة الأولى منذ 16 شهراً وموجة شراء غير مسبوقة في الذهب</span></div><div class="brief-item"><span class="brief-num">٤</span><span class="brief-text">مفاوضات غزة في مرحلة حاسمة والمبعوث الأمريكي يتوجه إلى القاهرة الليلة</span></div><div class="brief-item"><span class="brief-num">٥</span><span class="brief-text">الأردن والكويت يُفعّلان خطط الطوارئ تحسباً لانعكاسات التصعيد الإقليمي</span></div></div></div>
         <div class="source-activity"><div class="sa-title">📡 المصادر النشطة الآن</div><div class="sa-list">
-          <div class="sa-item"><div class="sa-logo">ر</div><a href="https://www.reuters.com/world/middle-east/" target="_blank" class="sa-name">رويترز عربي</a><span class="sa-tier gold">ذهبي</span><div class="sa-bar-wrap"><div class="sa-bar" style="width:95%"></div></div><span class="sa-time">2د</span></div>
+          <div class="sa-item"><div class="sa-logo">ر</div><a href="https://arabic.reuters.com" target="_blank" class="sa-name">رويترز عربي</a><span class="sa-tier gold">ذهبي</span><div class="sa-bar-wrap"><div class="sa-bar" style="width:95%"></div></div><span class="sa-time">2د</span></div>
           <div class="sa-item"><div class="sa-logo">ب</div><a href="https://www.bbc.com/arabic" target="_blank" class="sa-name">بي بي سي عربي</a><span class="sa-tier gold">ذهبي</span><div class="sa-bar-wrap"><div class="sa-bar" style="width:88%"></div></div><span class="sa-time">5د</span></div>
           <div class="sa-item"><div class="sa-logo">ج</div><a href="https://www.aljazeera.net" target="_blank" class="sa-name">الجزيرة</a><span class="sa-tier gold">ذهبي</span><div class="sa-bar-wrap"><div class="sa-bar" style="width:82%"></div></div><span class="sa-time">7د</span></div>
           <div class="sa-item"><div class="sa-logo">أ</div><a href="https://www.ahram.org.eg" target="_blank" class="sa-name">الأهرام</a><span class="sa-tier silver">فضي</span><div class="sa-bar-wrap"><div class="sa-bar" style="width:65%"></div></div><span class="sa-time">12د</span></div>
@@ -539,34 +800,46 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
   </div>
 
   <!-- VIDEO SECTION -->
-  <div id="videos" class="section-gap">
-    <div class="sec-header"><div class="sec-line"></div><span class="sec-title">🎬 فيديو — تغطيات مباشرة</span><a href="#" class="sec-more">عرض الكل ←</a></div>
+  <div id="videos" class="section-gap" data-cat="world mideast">
+    <div class="sec-header"><div class="sec-line"></div><span class="sec-title">🎬 بث مباشر — قنوات الأخبار</span><a href="https://www.youtube.com" target="_blank" class="sec-more">يوتيوب ←</a></div>
     <div class="video-grid">
       <div class="video-card">
         <div class="video-embed-wrap">
-          <iframe src="https://www.youtube.com/embed/live_stream?channel=UCNye-wNBqNL5ZzHSJj3l8Bg&autoplay=0" title="الجزيرة مباشر" loading="lazy" allowfullscreen></iframe>
+          <iframe src="https://www.youtube.com/embed/coqHxCEtjgA?autoplay=0&rel=0" title="الجزيرة مباشر" loading="lazy" allowfullscreen allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+          <div class="video-fallback" id="vf1" style="display:none">
+            <span>🎬 البث غير متاح في المتصفح</span>
+            <a href="https://www.youtube.com/@aljazeeraarabic/live" target="_blank">شاهد على يوتيوب ←</a>
+          </div>
         </div>
         <div class="video-card-body">
-          <div class="video-card-title">الجزيرة مباشر — البث الحي على مدار الساعة</div>
-          <div class="video-card-meta"><span class="video-source-badge">● مباشر</span><a href="https://www.youtube.com/@aljazeeraarabic" target="_blank" class="src-link">🔗 القناة</a></div>
+          <div class="video-card-title">قناة الجزيرة — بث مباشر على مدار الساعة</div>
+          <div class="video-card-meta"><span class="video-source-badge">● مباشر</span><a href="https://www.youtube.com/@aljazeeraarabic/live" target="_blank" class="src-link">🔗 يوتيوب</a><a href="https://www.aljazeera.net" target="_blank" class="src-link">🔗 الموقع</a></div>
         </div>
       </div>
       <div class="video-card">
         <div class="video-embed-wrap">
-          <iframe src="https://www.youtube.com/embed/live_stream?channel=UCVGazpCBRFBJGb9FJbdJZzA&autoplay=0" title="بي بي سي عربي" loading="lazy" allowfullscreen></iframe>
+          <iframe src="https://www.youtube.com/embed/Nb5cPEHXfP8?autoplay=0&rel=0" title="بي بي سي عربي" loading="lazy" allowfullscreen allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+          <div class="video-fallback" id="vf2" style="display:none">
+            <span>🎬 البث غير متاح في المتصفح</span>
+            <a href="https://www.youtube.com/@BBCArabic/live" target="_blank">شاهد على يوتيوب ←</a>
+          </div>
         </div>
         <div class="video-card-body">
           <div class="video-card-title">بي بي سي عربي — تغطية مباشرة للأحداث الإقليمية</div>
-          <div class="video-card-meta"><span class="video-source-badge">● مباشر</span><a href="https://www.youtube.com/@BBCArabic" target="_blank" class="src-link">🔗 القناة</a></div>
+          <div class="video-card-meta"><span class="video-source-badge">● مباشر</span><a href="https://www.youtube.com/@BBCArabic/live" target="_blank" class="src-link">🔗 يوتيوب</a><a href="https://www.bbc.com/arabic" target="_blank" class="src-link">🔗 الموقع</a></div>
         </div>
       </div>
       <div class="video-card">
         <div class="video-embed-wrap">
-          <iframe src="https://www.youtube.com/embed/live_stream?channel=UCDlKnCFWMWlK8mSbzaxMJww&autoplay=0" title="فرانس 24 عربي" loading="lazy" allowfullscreen></iframe>
+          <iframe src="https://www.youtube.com/embed/l8PMl7tUDIE?autoplay=0&rel=0" title="فرانس 24 عربي" loading="lazy" allowfullscreen allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+          <div class="video-fallback" id="vf3" style="display:none">
+            <span>🎬 البث غير متاح في المتصفح</span>
+            <a href="https://www.youtube.com/@France24Arabic/live" target="_blank">شاهد على يوتيوب ←</a>
+          </div>
         </div>
         <div class="video-card-body">
           <div class="video-card-title">فرانس 24 عربي — التغطية المستمرة للأزمة الإقليمية</div>
-          <div class="video-card-meta"><span class="video-source-badge">● مباشر</span><a href="https://www.youtube.com/@France24Arabic" target="_blank" class="src-link">🔗 القناة</a></div>
+          <div class="video-card-meta"><span class="video-source-badge">● مباشر</span><a href="https://www.youtube.com/@France24Arabic/live" target="_blank" class="src-link">🔗 يوتيوب</a><a href="https://www.france24.com/ar" target="_blank" class="src-link">🔗 الموقع</a></div>
         </div>
       </div>
     </div>
@@ -575,17 +848,99 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
 </div>
 </main>
 
+<!-- ABOUT SECTION -->
+<div id="about" style="background:var(--navy-mid);padding:40px 0;margin-top:40px">
+  <div style="max-width:1280px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center">
+    <div>
+      <div style="color:var(--gold);font-size:11px;font-weight:800;letter-spacing:1px;margin-bottom:10px">عن منصة نظرة</div>
+      <h2 style="color:#fff;font-size:22px;font-weight:900;margin-bottom:14px;line-height:1.4">منصة ذكاء إخباري متخصصة في مصر والشرق الأوسط</h2>
+      <p style="color:rgba(255,255,255,.6);font-size:14px;line-height:1.8;margin-bottom:20px">نظرة منصة إخبارية تعتمد على الذكاء الاصطناعي لتجميع الأخبار من أكثر من 30 مصدراً موثوقاً، مع التحقق متعدد المصادر وتصنيف درجة الثقة لكل خبر. هدفنا تقديم الحقيقة في أسرع وقت وبأعلى دقة.</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:12px 18px;text-align:center">
+          <div style="color:var(--gold);font-size:22px;font-weight:900">30+</div>
+          <div style="color:rgba(255,255,255,.55);font-size:11px">مصدر موثوق</div>
+        </div>
+        <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:12px 18px;text-align:center">
+          <div style="color:var(--gold);font-size:22px;font-weight:900">24/7</div>
+          <div style="color:rgba(255,255,255,.55);font-size:11px">تغطية مستمرة</div>
+        </div>
+        <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:12px 18px;text-align:center">
+          <div style="color:var(--gold);font-size:22px;font-weight:900">AI</div>
+          <div style="color:rgba(255,255,255,.55);font-size:11px">تحقق ذكي</div>
+        </div>
+      </div>
+    </div>
+    <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:24px">
+      <div style="color:var(--gold);font-size:11px;font-weight:800;letter-spacing:1px;margin-bottom:16px">🧑‍💼 إدارة الموقع</div>
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px">
+        <div style="width:56px;height:56px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:var(--navy);flex-shrink:0">AK</div>
+        <div>
+          <div style="color:#fff;font-size:16px;font-weight:800">Amr Kamal</div>
+          <div style="color:rgba(255,255,255,.5);font-size:12px">مؤسس ومدير منصة نظرة</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;gap:10px;font-size:13px">
+          <span style="color:var(--gold)">✉️</span>
+          <a href="mailto:Amr.Kamal@outlook.com" style="color:rgba(255,255,255,.7);transition:.2s" onmouseover="this.style.color='#E9C46A'" onmouseout="this.style.color='rgba(255,255,255,.7)'">Amr.Kamal@outlook.com</a>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:13px">
+          <span style="color:var(--gold)">🔐</span>
+          <a href="nazra_admin.html" style="color:rgba(255,255,255,.7);transition:.2s" onmouseover="this.style.color='#E9C46A'" onmouseout="this.style.color='rgba(255,255,255,.7)'">لوحة إدارة المصادر</a>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:13px">
+          <span style="color:var(--gold)">📍</span>
+          <span style="color:rgba(255,255,255,.55)">القاهرة، جمهورية مصر العربية</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <footer>
   <div class="footer-inner">
     <div class="footer-grid">
-      <div class="footer-brand"><div class="fb-logo">نظرة</div><div class="fb-tagline">منصة ذكاء إخباري متخصصة في مصر والشرق الأوسط. نجمع الأخبار ونحللها ونتحقق منها لنقدم لك الحقيقة بأسرع وقت وأعلى دقة.</div></div>
-      <div><div class="footer-col-title">الأقسام</div><ul class="footer-links"><li><a href="#">الرئيسية</a></li><li><a href="#egypt">مصر</a></li><li><a href="#iran">إيران والصراعات</a></li><li><a href="#economy">الاقتصاد</a></li><li><a href="#videos">فيديو</a></li></ul></div>
-      <div><div class="footer-col-title">عن المنصة</div><ul class="footer-links"><li><a href="#">كيف نتحقق؟</a></li><li><a href="#">تقييم المصادر</a></li><li><a href="#">سياسة التصحيح</a></li><li><a href="nazra_admin.html">لوحة الإدارة</a></li></ul></div>
-      <div><div class="footer-col-title">تواصل معنا</div><ul class="footer-links"><li><a href="#">الموجز اليومي</a></li><li><a href="#">تنبيهات عاجلة</a></li><li><a href="#">تغذية RSS</a></li><li><a href="#">إبلاغ عن خطأ</a></li></ul></div>
+      <div class="footer-brand">
+        <div class="fb-logo">نظرة</div>
+        <div class="fb-tagline">منصة ذكاء إخباري متخصصة في مصر والشرق الأوسط. نجمع الأخبار ونحللها ونتحقق منها لنقدم لك الحقيقة بأسرع وقت وأعلى دقة.</div>
+      </div>
+      <div>
+        <div class="footer-col-title">الأقسام</div>
+        <ul class="footer-links">
+          <li><a href="#top">الرئيسية</a></li>
+          <li><a href="#egypt">مصر اليوم</a></li>
+          <li><a href="#region">التحقق من الأخبار</a></li>
+          <li><a href="#iran">إيران والصراعات</a></li>
+          <li><a href="#economy">الاقتصاد</a></li>
+          <li><a href="#videos">بث مباشر</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">عن المنصة</div>
+        <ul class="footer-links">
+          <li><a href="#about">من نحن</a></li>
+          <li><a href="#region">كيف نتحقق؟</a></li>
+          <li><a href="#">تقييم المصادر</a></li>
+          <li><a href="#">سياسة التصحيح</a></li>
+          <li><a href="nazra_admin.html">لوحة الإدارة</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">تواصل معنا</div>
+        <div class="footer-contact-item">✉️ <a href="mailto:Amr.Kamal@outlook.com">Amr.Kamal@outlook.com</a></div>
+        <div class="footer-contact-item">🧑‍💼 <span>Amr Kamal — مؤسس المنصة</span></div>
+        <div class="footer-contact-item">📍 <span>القاهرة، مصر</span></div>
+        <div style="margin-top:12px"><a href="#" style="color:rgba(255,255,255,.55);font-size:13px;display:block;margin-bottom:6px;transition:.2s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.55)'">📬 الموجز اليومي</a><a href="#" style="color:rgba(255,255,255,.55);font-size:13px;display:block;margin-bottom:6px" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.55)'">🔔 تنبيهات عاجلة</a></div>
+      </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2026 نظرة للذكاء الإخباري.</span>
-      <div class="trust-badges"><span class="trust-badge">✓ محتوى مدقق</span><span class="trust-badge">🤖 ذكاء اصطناعي</span><span class="trust-badge">📋 سياسة شفافة</span></div>
+      <span>© 2026 نظرة للذكاء الإخباري · Amr Kamal</span>
+      <div class="trust-badges">
+        <span class="trust-badge">✓ محتوى مدقق</span>
+        <span class="trust-badge">🤖 ذكاء اصطناعي</span>
+        <span class="trust-badge">📋 سياسة شفافة</span>
+        <span class="trust-badge">📱 متوافق مع الجوال</span>
+      </div>
     </div>
   </div>
 </footer>
@@ -600,7 +955,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
 <!-- MODAL -->
 <div class="modal-overlay" id="overlay" onclick="closeModalOutside(event)">
   <div class="modal">
-    <div class="modal-hero"><img id="mImg" src="" alt=""><span class="modal-cat" id="mCat"></span><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div class="modal-hero"><img id="mImg" src="" alt="" loading="lazy"><span class="modal-cat" id="mCat"></span><button class="modal-close" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
       <div class="modal-meta" id="mMeta"></div>
       <h2 class="modal-title" id="mTitle"></h2>
@@ -612,7 +967,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
       <div class="key-facts" id="mFacts"></div>
       <div class="modal-section-title">المصادر المُبلِّغة</div>
       <div class="sources-list" id="mSrcs"></div>
-      <div class="modal-section-title">التسلسل الزمني</div>
+      <div class="modal-section-title">تسلسل التحقق الزمني</div>
       <div class="timeline-list" id="mTime"></div>
     </div>
   </div>
@@ -625,17 +980,17 @@ const EV={
     summary:'أفادت مصادر موثوقة متعددة بوقوع انفجارات في محيط المنشأة النووية بإصفهان فجر الأحد الرابع من أبريل. وتشير التقارير من رويترز وبي بي سي وفرانس برس إلى تدخل قوات متعددة الجنسية. الوكالة الدولية للطاقة الذرية أعلنت تفعيل بروتوكول الطوارئ.',
     know:['الانفجارات وقعت بين 03:10–03:45 بتوقيت طهران (رويترز/بي بي سي)','الوكالة الدولية للطاقة الذرية أكدت التواصل الفوري مع طهران','مجلس الأمن يعقد جلسة طارئة مساء اليوم','ارتفاع النفط 4.2٪ والذهب 2.3٪ في التعاملات الآنية'],
     dontKnow:['الجهة المسؤولة لم تُعلن رسمياً حتى الآن','حجم الأضرار داخل المنشأة غير مؤكد','الموقف الرسمي الإيراني الكامل لم يصدر','تداعيات الحادثة على المفاوضات النووية'],
-    facts:[{i:'💥',t:'انفجارات رُصدت في محيط 15كم من المنشأة',s:'رويترز · بي بي سي',l:'https://www.reuters.com'},{i:'⚛️',t:'الوكالة الدولية للطاقة الذرية تؤكد التواصل الفوري مع السلطات',s:'IAEA',l:'https://www.iaea.org'},{i:'🛢️',t:'برنت تجاوز 94 دولاراً للأول مرة منذ ديسمبر 2025',s:'بلومبرغ',l:'https://www.bloomberg.com/energy'},{i:'🌍',t:'مجلس الأمن يعقد جلسة طارئة بطلب أمريكي فرنسي',s:'الأمم المتحدة',l:'https://news.un.org/ar/'}],
-    srcs:[{lo:'ر',n:'رويترز عربي',t:'gold',tt:'ذهبي',ti:'19:34',l:'https://www.reuters.com/world/middle-east/'},{lo:'ب',n:'بي بي سي عربي',t:'gold',tt:'ذهبي',ti:'19:28',l:'https://www.bbc.com/arabic/middleeast'},{lo:'ف',n:'فرانس برس',t:'gold',tt:'ذهبي',ti:'19:22',l:'https://www.france24.com/ar'},{lo:'ج',n:'الجزيرة',t:'gold',tt:'ذهبي',ti:'19:15',l:'https://www.aljazeera.net'},{lo:'أ',n:'أسوشيتد برس',t:'gold',tt:'ذهبي',ti:'18:58',l:'https://apnews.com'}],
-    tl:[{ti:'19:34',st:'confirmed',tx:'الوكالة الدولية للطاقة الذرية تُرسل فريق طوارئ',s:'IAEA'},{ti:'19:18',st:'confirmed',tx:'أسعار النفط تتجاوز 94 دولاراً للبرميل',s:'بلومبرغ'},{ti:'18:55',st:'likely',tx:'تقارير عن إغلاق جزئي للمجال الجوي الإيراني',s:'FlightRadar'},{ti:'18:41',st:'confirmed',tx:'مجلس الأمن يعقد جلسة طارئة اليوم',s:'الأمم المتحدة'},{ti:'18:12',st:'developing',tx:'تضارب الروايات حول حجم الأضرار',s:'تحليل متعدد'},{ti:'03:45',st:'confirmed',tx:'الانفجارات الأولى تُرصد في محيط إصفهان',s:'رويترز'}]},
+    facts:[{i:'💥',t:'انفجارات رُصدت في محيط 15كم من المنشأة',s:'رويترز · بي بي سي',l:'https://arabic.reuters.com'},{i:'⚛️',t:'الوكالة الدولية للطاقة الذرية تؤكد التواصل الفوري مع السلطات',s:'IAEA',l:'https://www.iaea.org'},{i:'🛢️',t:'برنت تجاوز 94 دولاراً للأول مرة منذ ديسمبر 2025',s:'بلومبرغ',l:'https://www.bloomberg.com/energy'},{i:'🌍',t:'مجلس الأمن يعقد جلسة طارئة بطلب أمريكي فرنسي',s:'الأمم المتحدة',l:'https://news.un.org/ar/'}],
+    srcs:[{lo:'ر',n:'رويترز عربي',t:'gold',tt:'ذهبي',ti:'19:34',l:'https://arabic.reuters.com'},{lo:'ب',n:'بي بي سي عربي',t:'gold',tt:'ذهبي',ti:'19:28',l:'https://www.bbc.com/arabic/middleeast'},{lo:'ف',n:'فرانس برس',t:'gold',tt:'ذهبي',ti:'19:22',l:'https://www.france24.com/ar'},{lo:'ج',n:'الجزيرة',t:'gold',tt:'ذهبي',ti:'19:15',l:'https://www.aljazeera.net'},{lo:'أ',n:'أسوشيتد برس',t:'gold',tt:'ذهبي',ti:'18:58',l:'https://apnews.com'}],
+    tl:[{ti:'03:12',st:'developing',tx:'تسريبات على تيليغرام — غير مؤكد',s:'قنوات مجهولة'},{ti:'03:34',st:'likely',tx:'FlightRadar يُسجّل إغلاق المجال الجوي وصحفيان يؤكدان',s:'FlightRadar24 + ميدانيون'},{ti:'04:10',st:'likely',tx:'رويترز وبي بي سي وفرانس برس ينشرون تقارير مستقلة',s:'3 وكالات ذهبية'},{ti:'05:45',st:'confirmed',tx:'IAEA تُصدر بياناً رسمياً — مؤكد من 17 مصدراً ✓',s:'IAEA + 16 مصدراً'}]},
   'egypt-economy':{img:'https://picsum.photos/seed/cbeegypt26b/900/400',cat:'الاقتصاد',badge:'confirmed',bt:'✓ مؤكد',src:8,conf:88,
     title:'البنك المركزي المصري يرفع سعر الفائدة 150 نقطة أساس بقرار استثنائي',
     summary:'أعلن البنك المركزي المصري رفع سعر الفائدة على الإيداع بنسبة 1.5٪ ليصل إلى 28.75٪ في قرار استثنائي خارج مواعيد الاجتماعات المقررة وسط تراجع ملحوظ لقيمة الجنيه وتصاعد ضغوط التضخم جراء الأزمة الإقليمية.',
     know:['البنك المركزي أصدر بياناً رسمياً مؤكداً رفع الفائدة 150 نقطة','سعر الفائدة على الإيداع بلغ 28.75٪','الجنيه تراجع 0.8٪ ليصل إلى 49.85 للدولار','القرار فعّال من جلسة التداول الثلاثاء'],
     dontKnow:['مدى مواصلة الرفع في الاجتماع القادم','تأثير القرار على الاستثمار الأجنبي','موعد استقرار سعر الصرف'],
     facts:[{i:'🏦',t:'سعر الفائدة على الإيداع رُفع إلى 28.75٪',s:'البنك المركزي المصري',l:'https://www.cbe.org.eg'},{i:'💱',t:'الجنيه تراجع 0.8٪ ليسجل 49.85 للدولار',s:'بلومبرغ',l:'https://www.bloomberg.com'},{i:'📊',t:'التضخم السنوي 31.2٪ في مارس',s:'CAPMAS',l:'https://www.capmas.gov.eg'}],
-    srcs:[{lo:'م',n:'البنك المركزي المصري',t:'gold',tt:'رسمي',ti:'13:00',l:'https://www.cbe.org.eg'},{lo:'أ',n:'الأهرام',t:'silver',tt:'فضي',ti:'13:15',l:'https://www.ahram.org.eg'},{lo:'ر',n:'رويترز',t:'gold',tt:'ذهبي',ti:'13:08',l:'https://www.reuters.com/markets/egypt/'}],
-    tl:[{ti:'13:00',st:'confirmed',tx:'بيان CBE الرسمي برفع الفائدة',s:'CBE'},{ti:'13:08',st:'confirmed',tx:'رويترز تؤكد القرار وتحلل الأسباب',s:'رويترز'},{ti:'13:30',st:'confirmed',tx:'البورصة المصرية تفتح على ارتفاع 1.2٪',s:'EGX'}]},
+    srcs:[{lo:'م',n:'البنك المركزي المصري',t:'gold',tt:'رسمي',ti:'13:00',l:'https://www.cbe.org.eg'},{lo:'أ',n:'الأهرام',t:'silver',tt:'فضي',ti:'13:15',l:'https://www.ahram.org.eg'},{lo:'ر',n:'رويترز',t:'gold',tt:'ذهبي',ti:'13:08',l:'https://arabic.reuters.com'}],
+    tl:[{ti:'11:30',st:'developing',tx:'تسريب من مصدر مصرفي — اجتماع طارئ',s:'مصدر مصرفي'},{ti:'12:15',st:'likely',tx:'اليوم السابع والمصري اليوم يؤكدان الاجتماع',s:'صحافة محلية'},{ti:'13:00',st:'confirmed',tx:'بيان CBE الرسمي برفع الفائدة 150 نقطة ✓',s:'CBE رسمي'},{ti:'13:08',st:'confirmed',tx:'رويترز والأهرام يؤكدان وينشران التفاصيل',s:'رويترز + الأهرام'}]},
   'gaza-ceasefire':{img:'https://picsum.photos/seed/gazadip26b/900/400',cat:'الشأن الفلسطيني',badge:'developing',bt:'● يتطور',src:11,conf:62,
     title:'مفاوضات الهدنة في غزة تدخل مرحلة حاسمة والمبعوث الأمريكي يتوجه إلى القاهرة',
     summary:'أفادت مصادر مطلعة بأن مفاوضات الهدنة في غزة وصلت إلى مرحلة حساسة. وتؤكد القاهرة استمرار دورها الوساطي الفعّال، فيما يتوجه المبعوث الأمريكي إلى مصر اليوم لاستئناف المباحثات.',
@@ -643,14 +998,14 @@ const EV={
     dontKnow:['نقاط الخلاف الجوهرية غير معلنة','الجدول الزمني للاتفاق النهائي','موقف الفصائل الأخرى من المسودة'],
     facts:[{i:'🏛️',t:'القاهرة تستضيف جولة مفاوضات بحضور قطر والأمم المتحدة',s:'مصراوي · الجزيرة',l:'https://www.aljazeera.net'},{i:'✈️',t:'المبعوث الأمريكي يصل القاهرة الليلة',s:'الخارجية الأمريكية',l:'https://www.state.gov'}],
     srcs:[{lo:'ج',n:'الجزيرة',t:'gold',tt:'ذهبي',ti:'19:00',l:'https://www.aljazeera.net'},{lo:'أ',n:'أسوشيتد برس',t:'gold',tt:'ذهبي',ti:'18:45',l:'https://apnews.com'},{lo:'م',n:'مصراوي',t:'silver',tt:'فضي',ti:'18:30',l:'https://www.masrawy.com'}],
-    tl:[{ti:'19:00',st:'developing',tx:'وصول الوفد الأمريكي إلى القاهرة',s:'الجزيرة'},{ti:'18:30',st:'likely',tx:'تقارير عن تقدم في مسألة الأسرى',s:'AP'},{ti:'17:00',st:'confirmed',tx:'القاهرة تؤكد استمرار دورها الوساطي',s:'الخارجية المصرية'}]}
+    tl:[{ti:'16:00',st:'developing',tx:'تقارير أولية عن استئناف المفاوضات',s:'مصادر إعلامية'},{ti:'17:00',st:'confirmed',tx:'القاهرة تؤكد استمرار دورها الوساطي',s:'الخارجية المصرية'},{ti:'18:30',st:'likely',tx:'تقارير عن تقدم في مسألة الأسرى',s:'AP'},{ti:'19:00',st:'developing',tx:'11 مصدراً تتابع — لا يزال يتطور ⏳',s:'متعدد المصادر'}]}
 };
 
 const BM={confirmed:'badge-confirmed',likely:'badge-likely',developing:'badge-developing',unverified:'badge-unverified',disputed:'badge-disputed'};
 const DM={confirmed:'confirmed',likely:'likely',developing:'developing'};
 
 function openModal(id){
-  const e=EV[id]; if(!e) return;
+  const e=EV[id];if(!e)return;
   document.getElementById('mImg').src=e.img;
   document.getElementById('mCat').textContent=e.cat;
   document.getElementById('mTitle').textContent=e.title;
@@ -667,6 +1022,43 @@ function openModal(id){
 function closeModal(){document.getElementById('overlay').classList.remove('open');document.body.style.overflow='';}
 function closeModalOutside(e){if(e.target===document.getElementById('overlay'))closeModal();}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+// VERIFY TOGGLE
+function toggleVerify(head){
+  const tl=head.nextElementSibling;
+  if(!tl)return;
+  tl.style.display=tl.style.display==='none'?'flex':'none';
+}
+
+// CATEGORY FILTER
+function filterCat(cat,btn){
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const sections=['heroSection','egypt','region','iran','economy','videos'];
+  sections.forEach(id=>{
+    const el=document.getElementById(id)||document.querySelector(`[id="${id}"]`);
+    if(!el)return;
+    const cats=(el.dataset.cat||'all').split(' ');
+    if(cat==='all'||cats.includes(cat)){el.style.display='';el.style.opacity='1';}
+    else{el.style.display='none';}
+  });
+}
+
+// SEARCH FILTER
+function filterBySearch(q){
+  if(!q.trim()){document.querySelectorAll('.eg-card,.side-card,.econ-event').forEach(el=>el.style.display='');return;}
+  const lq=q.toLowerCase();
+  document.querySelectorAll('.eg-card').forEach(el=>{
+    const txt=el.textContent.toLowerCase();
+    el.style.display=txt.includes(lq)?'':'none';
+  });
+}
+
+// MOBILE MENU
+function toggleMenu(){
+  const m=document.getElementById('mobileMenu');
+  m.classList.toggle('open');
+}
 
 // AUTO-REFRESH
 const CIRC=97.4;
@@ -691,11 +1083,25 @@ function startTimer(){if(timer)clearInterval(timer);timer=setInterval(()=>{if(pa
 function updateTime(){const n=new Date(),c=new Date(n.toLocaleString('en-US',{timeZone:'Africa/Cairo'}));const h=String(c.getHours()).padStart(2,'0'),m=String(c.getMinutes()).padStart(2,'0'),s=String(c.getSeconds()).padStart(2,'0');document.getElementById('luTime').textContent=`${h}:${m}:${s} بتوقيت القاهرة`;document.title=`${h}:${m} — نظرة للذكاء الإخباري`;}
 setInterval(updateTime,1000);updateTime();startTimer();updateFAB();
 
-// NAV SCROLL
+// SMOOTH SCROLL
 document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'});}});});
 
-// ANIMATE BARS
-window.addEventListener('load',()=>{document.querySelectorAll('.conf-fill,.sa-bar').forEach(el=>{const w=el.style.width;el.style.width='0%';setTimeout(()=>{el.style.width=w;},300);});});
+// ANIMATE ON LOAD
+window.addEventListener('load',()=>{
+  document.querySelectorAll('.conf-fill,.sa-bar,.vi-conf-fill').forEach(el=>{const w=el.style.width;el.style.width='0%';setTimeout(()=>{el.style.width=w;},300);});
+  // Open first verify item
+  const firstVtl=document.getElementById('vt0');
+  if(firstVtl)firstVtl.style.display='flex';
+});
+
+// ABOUT SECTION responsive fix
+function fixAbout(){
+  const ab=document.querySelector('#about > div');
+  if(!ab)return;
+  if(window.innerWidth<768){ab.style.gridTemplateColumns='1fr';}
+  else{ab.style.gridTemplateColumns='1fr 1fr';}
+}
+window.addEventListener('resize',fixAbout);fixAbout();
 </script>
 </body>
 </html>
