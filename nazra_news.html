@@ -50,7 +50,8 @@ nav.main-nav{background:var(--navy);position:sticky;top:44px;z-index:900;box-sha
 .hamburger{display:none;background:none;border:none;color:#fff;font-size:22px;padding:4px 8px;line-height:1}
 
 /* CATEGORY BAR */
-.cat-bar{background:#fff;border-bottom:2px solid var(--border);position:sticky;top:104px;z-index:850;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.cat-bar{background:#fff;border-bottom:2px solid var(--border);position:sticky;top:var(--cat-top,104px);z-index:850;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+nav.main-nav{top:var(--nav-top,44px)!important}
 .cat-bar-inner{max-width:1280px;margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:4px;overflow-x:auto;scrollbar-width:none}
 .cat-bar-inner::-webkit-scrollbar{display:none}
 .cat-btn{background:none;border:none;font-family:var(--font);font-size:14px;font-weight:700;color:var(--mid);padding:12px 18px;border-bottom:3px solid transparent;margin-bottom:-2px;transition:.2s;white-space:nowrap;cursor:pointer}
@@ -439,6 +440,31 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
 .login-err.show{display:block}
 .login-close{position:absolute;top:14px;left:14px;background:none;border:none;font-size:20px;color:var(--mid);cursor:pointer;line-height:1;padding:2px 6px}
 .login-close:hover{color:var(--red)}
+
+/* ── 6-CHANNEL VIDEO GRID ── */
+.video-grid-6{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.video-card-v2{background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:.2s}
+.video-card-v2:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.video-embed-wrap{position:relative;padding-top:56.25%;background:#0a0a14;overflow:hidden}
+.video-embed-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
+.vcv2-body{display:flex;align-items:center;gap:10px;padding:10px 14px 6px}
+.vcv2-logo{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;flex-shrink:0}
+.vcv2-info{flex:1}
+.vcv2-name{font-size:13px;font-weight:700;color:var(--navy);line-height:1.3}
+.vcv2-country{font-size:10px;color:var(--mid)}
+.vcv2-actions{display:flex;gap:8px;padding:0 14px 12px}
+.vcv2-watch{flex:1;background:var(--red);color:#fff;border-radius:6px;padding:7px 10px;font-size:12px;font-weight:700;text-align:center;text-decoration:none;transition:.2s;font-family:var(--font)}
+.vcv2-watch:hover{background:#a00d18}
+.vcv2-site{background:var(--light-bg);border:1px solid var(--border);color:var(--mid);border-radius:6px;padding:7px 10px;font-size:12px;font-weight:600;text-decoration:none;transition:.2s;white-space:nowrap}
+.vcv2-site:hover{background:var(--border)}
+
+/* ── STICKY DYNAMIC FIX ── */
+:root{--nav-top:0px;--cat-top:60px}
+.breaking-banner{position:sticky;top:0;z-index:1000}
+
+@media(max-width:900px){.video-grid-6{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.video-grid-6{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -825,47 +851,127 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
 
   <!-- VIDEO SECTION -->
   <div id="videos" class="section-gap" data-cat="world mideast">
-    <div class="sec-header"><div class="sec-line"></div><span class="sec-title">🎬 بث مباشر — قنوات الأخبار</span><a href="https://www.youtube.com" target="_blank" class="sec-more">يوتيوب ←</a></div>
-    <div class="video-grid">
-      <div class="video-card">
+    <div class="sec-header"><div class="sec-line"></div><span class="sec-title">🎬 بث مباشر — قنوات الأخبار العالمية</span><a href="https://www.youtube.com/results?search_query=بث+مباشر+أخبار+عربي" target="_blank" class="sec-more">كل القنوات ←</a></div>
+    <div class="video-grid-6">
+
+      <!-- 1. Al Jazeera -->
+      <div class="video-card-v2">
         <div class="video-embed-wrap">
-          <iframe src="https://www.youtube.com/embed/coqHxCEtjgA?autoplay=0&rel=0" title="الجزيرة مباشر" loading="lazy" allowfullscreen allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
-          <div class="video-fallback" id="vf1" style="display:none">
-            <span>🎬 البث غير متاح في المتصفح</span>
-            <a href="https://www.youtube.com/@aljazeeraarabic/live" target="_blank">شاهد على يوتيوب ←</a>
-          </div>
+          <iframe src="https://www.youtube.com/embed/live_stream?channel=UCNye-wNBqNL5ZzHSJj3l8Bg&autoplay=0" title="الجزيرة مباشر" loading="lazy" allowfullscreen allow="accelerometer;clipboard-write;encrypted-media;gyroscope;picture-in-picture" onerror="this.style.display='none'"></iframe>
         </div>
-        <div class="video-card-body">
-          <div class="video-card-title">قناة الجزيرة — بث مباشر على مدار الساعة</div>
-          <div class="video-card-meta"><span class="video-source-badge">● مباشر</span><a href="https://www.youtube.com/@aljazeeraarabic/live" target="_blank" class="src-link">🔗 يوتيوب</a><a href="https://www.aljazeera.net/news/political/" target="_blank" class="src-link">🔗 الموقع</a></div>
+        <div class="vcv2-body">
+          <div class="vcv2-logo" style="background:#c8102e">ج</div>
+          <div class="vcv2-info">
+            <div class="vcv2-name">قناة الجزيرة</div>
+            <div class="vcv2-country">🇶🇦 قطر · أخبار سياسية</div>
+          </div>
+          <span class="video-source-badge">● مباشر</span>
+        </div>
+        <div class="vcv2-actions">
+          <a href="https://www.youtube.com/@aljazeeraarabic/live" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
+          <a href="https://www.aljazeera.net/news/political/" target="_blank" class="vcv2-site">🌐 الموقع</a>
         </div>
       </div>
-      <div class="video-card">
+
+      <!-- 2. BBC Arabic -->
+      <div class="video-card-v2">
         <div class="video-embed-wrap">
-          <iframe src="https://www.youtube.com/embed/Nb5cPEHXfP8?autoplay=0&rel=0" title="بي بي سي عربي" loading="lazy" allowfullscreen allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
-          <div class="video-fallback" id="vf2" style="display:none">
-            <span>🎬 البث غير متاح في المتصفح</span>
-            <a href="https://www.youtube.com/@BBCArabic/live" target="_blank">شاهد على يوتيوب ←</a>
-          </div>
+          <iframe src="https://www.youtube.com/embed/live_stream?channel=UCVGazpCBRFBJGb9FJbdJZzA&autoplay=0" title="بي بي سي عربي" loading="lazy" allowfullscreen allow="accelerometer;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
         </div>
-        <div class="video-card-body">
-          <div class="video-card-title">بي بي سي عربي — تغطية مباشرة للأحداث الإقليمية</div>
-          <div class="video-card-meta"><span class="video-source-badge">● مباشر</span><a href="https://www.youtube.com/@BBCArabic/live" target="_blank" class="src-link">🔗 يوتيوب</a><a href="https://www.bbc.com/arabic/middleeast" target="_blank" class="src-link">🔗 الموقع</a></div>
+        <div class="vcv2-body">
+          <div class="vcv2-logo" style="background:#bb1919">ب</div>
+          <div class="vcv2-info">
+            <div class="vcv2-name">بي بي سي عربي</div>
+            <div class="vcv2-country">🇬🇧 بريطانيا · دولي</div>
+          </div>
+          <span class="video-source-badge">● مباشر</span>
+        </div>
+        <div class="vcv2-actions">
+          <a href="https://www.youtube.com/@BBCArabic/live" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
+          <a href="https://www.bbc.com/arabic/middleeast" target="_blank" class="vcv2-site">🌐 الموقع</a>
         </div>
       </div>
-      <div class="video-card">
+
+      <!-- 3. France 24 -->
+      <div class="video-card-v2">
         <div class="video-embed-wrap">
-          <iframe src="https://www.youtube.com/embed/l8PMl7tUDIE?autoplay=0&rel=0" title="فرانس 24 عربي" loading="lazy" allowfullscreen allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
-          <div class="video-fallback" id="vf3" style="display:none">
-            <span>🎬 البث غير متاح في المتصفح</span>
-            <a href="https://www.youtube.com/@France24Arabic/live" target="_blank">شاهد على يوتيوب ←</a>
-          </div>
+          <iframe src="https://www.youtube.com/embed/live_stream?channel=UCmqhalEoYfOGaGjD2p_MFHA&autoplay=0" title="فرانس 24 عربي" loading="lazy" allowfullscreen allow="accelerometer;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
         </div>
-        <div class="video-card-body">
-          <div class="video-card-title">فرانس 24 عربي — التغطية المستمرة للأزمة الإقليمية</div>
-          <div class="video-card-meta"><span class="video-source-badge">● مباشر</span><a href="https://www.youtube.com/@France24Arabic/live" target="_blank" class="src-link">🔗 يوتيوب</a><a href="https://www.france24.com/ar/%D8%A7%D9%84%D8%B4%D8%B1%D9%82-%D8%A7%D9%84%D8%A3%D9%88%D8%B3%D8%B7" target="_blank" class="src-link">🔗 الموقع</a></div>
+        <div class="vcv2-body">
+          <div class="vcv2-logo" style="background:#003F8A">ف</div>
+          <div class="vcv2-info">
+            <div class="vcv2-name">فرانس 24 عربي</div>
+            <div class="vcv2-country">🇫🇷 فرنسا · دولي</div>
+          </div>
+          <span class="video-source-badge">● مباشر</span>
+        </div>
+        <div class="vcv2-actions">
+          <a href="https://www.youtube.com/@France24Arabic/live" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
+          <a href="https://www.france24.com/ar/%D8%A7%D9%84%D8%B4%D8%B1%D9%82-%D8%A7%D9%84%D8%A3%D9%88%D8%B3%D8%B7" target="_blank" class="vcv2-site">🌐 الموقع</a>
         </div>
       </div>
+
+      <!-- 4. Sky News Arabia -->
+      <div class="video-card-v2">
+        <div class="video-embed-wrap">
+          <iframe src="https://www.youtube.com/embed/live_stream?channel=UCzOT9jCwHHFAHZaKi_KmM7w&autoplay=0" title="سكاي نيوز عربية" loading="lazy" allowfullscreen allow="accelerometer;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
+        </div>
+        <div class="vcv2-body">
+          <div class="vcv2-logo" style="background:#e8173a">س</div>
+          <div class="vcv2-info">
+            <div class="vcv2-name">سكاي نيوز عربية</div>
+            <div class="vcv2-country">🇦🇪 الإمارات · خليج</div>
+          </div>
+          <span class="video-source-badge">● مباشر</span>
+        </div>
+        <div class="vcv2-actions">
+          <a href="https://www.youtube.com/@SkyNewsArabia/live" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
+          <a href="https://www.skynewsarabia.com" target="_blank" class="vcv2-site">🌐 الموقع</a>
+        </div>
+      </div>
+
+      <!-- 5. Al Arabiya -->
+      <div class="video-card-v2">
+        <div class="video-embed-wrap">
+          <iframe src="https://www.youtube.com/embed/live_stream?channel=UC6OiblJFJNRyVnhGRlrklAg&autoplay=0" title="العربية" loading="lazy" allowfullscreen allow="accelerometer;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
+        </div>
+        <div class="vcv2-body">
+          <div class="vcv2-logo" style="background:#1a56a0">ع</div>
+          <div class="vcv2-info">
+            <div class="vcv2-name">قناة العربية</div>
+            <div class="vcv2-country">🇸🇦 السعودية · خليج</div>
+          </div>
+          <span class="video-source-badge">● مباشر</span>
+        </div>
+        <div class="vcv2-actions">
+          <a href="https://www.youtube.com/@AlArabiya/live" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
+          <a href="https://www.alarabiya.net" target="_blank" class="vcv2-site">🌐 الموقع</a>
+        </div>
+      </div>
+
+      <!-- 6. DW Arabic -->
+      <div class="video-card-v2">
+        <div class="video-embed-wrap">
+          <iframe src="https://www.youtube.com/embed/live_stream?channel=UCNje4uO5UF8lDHB0Dc2xgvg&autoplay=0" title="دي دبليو عربي" loading="lazy" allowfullscreen allow="accelerometer;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
+        </div>
+        <div class="vcv2-body">
+          <div class="vcv2-logo" style="background:#00629A">د</div>
+          <div class="vcv2-info">
+            <div class="vcv2-name">DW عربي</div>
+            <div class="vcv2-country">🇩🇪 ألمانيا · دولي</div>
+          </div>
+          <span class="video-source-badge">● مباشر</span>
+        </div>
+        <div class="vcv2-actions">
+          <a href="https://www.youtube.com/@dwarabic/live" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
+          <a href="https://www.dw.com/ar" target="_blank" class="vcv2-site">🌐 الموقع</a>
+        </div>
+      </div>
+
+    </div>
+    <div style="background:rgba(21,101,192,.07);border:1px solid rgba(21,101,192,.2);border-radius:8px;padding:10px 16px;margin-top:14px;font-size:12px;color:var(--blue);display:flex;align-items:center;gap:8px">
+      <span>ℹ️</span>
+      <span>إذا لم يعمل البث داخل الصفحة، اضغط <strong>شاهد على يوتيوب</strong> لفتح البث الحي مباشرةً في يوتيوب. البث يتطلب اتصالاً بالإنترنت.</span>
     </div>
   </div>
 
@@ -1126,6 +1232,21 @@ function fixAbout(){
   else{ab.style.gridTemplateColumns='1fr 1fr';}
 }
 window.addEventListener('resize',fixAbout);fixAbout();
+
+// DYNAMIC STICKY POSITIONS
+function fixSticky(){
+  const bb=document.getElementById('bb');
+  const nav=document.querySelector('nav.main-nav');
+  const cat=document.querySelector('.cat-bar');
+  const bbH=(bb&&bb.style.display!=='none')?bb.offsetHeight:0;
+  const navH=nav?nav.offsetHeight:60;
+  document.documentElement.style.setProperty('--nav-top', bbH+'px');
+  document.documentElement.style.setProperty('--cat-top', (bbH+navH)+'px');
+}
+window.addEventListener('resize', fixSticky);
+fixSticky();
+// Also re-run when breaking banner is closed
+document.querySelector('.bb-close')?.addEventListener('click',()=>setTimeout(fixSticky,50));
 </script>
 
 <!-- LOGIN MODAL -->
