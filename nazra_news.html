@@ -414,6 +414,31 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
   .iran-sidebar{grid-template-columns:1fr}
   .verify-section .verify-body{padding:12px}
 }
+
+/* GEAR / LOGIN */
+.btn-gear{background:none;border:none;color:rgba(255,255,255,.3);font-size:16px;padding:6px 8px;border-radius:6px;transition:.3s;cursor:pointer;line-height:1;opacity:.4}
+.btn-gear:hover{color:rgba(255,255,255,.7);opacity:.7;transform:rotate(20deg)}
+
+/* LOGIN MODAL */
+.login-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;align-items:center;justify-content:center}
+.login-overlay.open{display:flex}
+.login-box{background:#fff;border-radius:16px;padding:36px 32px;width:min(380px,90vw);box-shadow:0 24px 80px rgba(0,0,0,.4);animation:scaleIn .25s ease;position:relative}
+.login-logo{text-align:center;font-size:32px;font-weight:900;color:var(--navy);margin-bottom:4px;letter-spacing:-1px}
+.login-logo span{color:var(--gold)}
+.login-sub{text-align:center;font-size:12px;color:var(--mid);margin-bottom:24px}
+.login-lock{text-align:center;font-size:36px;margin-bottom:18px;opacity:.15}
+.login-field{margin-bottom:14px}
+.login-field label{display:block;font-size:12px;font-weight:700;color:var(--mid);margin-bottom:5px}
+.login-field input{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-family:var(--font);font-size:14px;outline:none;transition:.2s;background:#f8fafc;direction:ltr;text-align:left}
+.login-field input:focus{border-color:var(--navy);background:#fff}
+.login-field input.error{border-color:var(--red);background:#fff8f8}
+.login-btn{width:100%;background:var(--navy);color:#fff;border:none;border-radius:8px;padding:12px;font-family:var(--font);font-size:15px;font-weight:700;cursor:pointer;transition:.2s;margin-top:6px}
+.login-btn:hover{background:var(--navy-mid)}
+.login-btn:active{transform:scale(.98)}
+.login-err{display:none;background:#fef2f2;border:1px solid #fecaca;border-radius:6px;padding:8px 12px;font-size:12px;color:var(--red);font-weight:600;margin-top:10px;text-align:center}
+.login-err.show{display:block}
+.login-close{position:absolute;top:14px;left:14px;background:none;border:none;font-size:20px;color:var(--mid);cursor:pointer;line-height:1;padding:2px 6px}
+.login-close:hover{color:var(--red)}
 </style>
 </head>
 <body>
@@ -423,7 +448,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
   <span class="bb-dot"></span>
   <span class="bb-label">⚡ عاجل</span>
   <span class="bb-text">إيران تعلن حالة التأهب القصوى في المنشآت النووية عقب تقارير عن عمليات عسكرية غير مسبوقة في محيط إصفهان</span>
-  <a href="https://arabic.reuters.com" target="_blank" class="bb-link">اقرأ التقرير ←</a>
+  <a href="https://arabic.reuters.com/world" target="_blank" class="bb-link">اقرأ التقرير ←</a>
   <button class="bb-close" onclick="document.getElementById('bb').style.display='none'">✕</button>
 </div>
 
@@ -463,7 +488,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
     </div>
     <div class="nav-actions">
       <input type="text" class="nav-search" placeholder="🔍 ابحث عن حدث..." id="siteSearch" oninput="filterBySearch(this.value)">
-      <a href="nazra_admin.html" class="btn-admin">⚙️ الإدارة</a>
+      <button class="btn-gear" id="gearBtn" onclick="openLoginModal()" title="">⚙</button>
       <button class="hamburger" onclick="toggleMenu()" aria-label="القائمة">☰</button>
     </div>
   </div>
@@ -476,7 +501,6 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
     <a href="#economy" class="nav-link" onclick="toggleMenu()">الاقتصاد</a>
     <a href="#videos" class="nav-link" onclick="toggleMenu()">فيديو</a>
     <a href="#about" class="nav-link" onclick="toggleMenu()">عن نظرة</a>
-    <a href="nazra_admin.html" class="nav-link">⚙️ الإدارة</a>
     <input type="text" class="mobile-search" placeholder="🔍 ابحث..." oninput="filterBySearch(this.value)">
   </div>
 </nav>
@@ -526,9 +550,9 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
         <p class="hero-summary">أفادت مصادر متعددة موثوقة بوقوع انفجارات في محيط المنشأة النووية بإصفهان فجر الأحد. تشير التقارير إلى تدخل قوات متعددة الجنسية، والوكالة الدولية للطاقة الذرية أعلنت تفعيل بروتوكول الطوارئ.</p>
         <div class="src-links-row">
           <a href="https://www.bbc.com/arabic/middleeast" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 بي بي سي</a>
-          <a href="https://arabic.reuters.com" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 رويترز</a>
-          <a href="https://www.aljazeera.net" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 الجزيرة</a>
-          <a href="https://www.france24.com/ar" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 فرانس 24</a>
+          <a href="https://arabic.reuters.com/world" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 رويترز</a>
+          <a href="https://www.aljazeera.net/news/political/" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 الجزيرة</a>
+          <a href="https://www.france24.com/ar/%D8%A7%D9%84%D8%B4%D8%B1%D9%82-%D8%A7%D9%84%D8%A3%D9%88%D8%B3%D8%B7" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 فرانس 24</a>
         </div>
         <div class="hero-footer">
           <span class="badge badge-confirmed" style="font-size:10px">✓ رويترز</span>
@@ -545,8 +569,8 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
         <div class="side-card-title">مصر ترفع سعر الفائدة 150 نقطة أساس وسط ضغوط التضخم</div>
         <div class="side-card-time">🕐 منذ ساعة · الاقتصاد</div>
         <div class="src-links-row">
-          <a href="https://www.cbe.org.eg" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 CBE</a>
-          <a href="https://www.ahram.org.eg" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 الأهرام</a>
+          <a href="https://www.cbe.org.eg/ar/monetary-policy/press-releases" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 CBE</a>
+          <a href="https://gate.ahram.org.eg/Economy.aspx" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 الأهرام</a>
         </div>
       </div>
     </div>
@@ -557,8 +581,8 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
         <div class="side-card-title">مفاوضات الهدنة في غزة تدخل مرحلة حاسمة وواشنطن تُرسل مبعوثاً خاصاً</div>
         <div class="side-card-time">🕐 منذ 45 دقيقة · الشأن الفلسطيني</div>
         <div class="src-links-row">
-          <a href="https://www.aljazeera.net" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 الجزيرة</a>
-          <a href="https://apnews.com" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 AP</a>
+          <a href="https://www.aljazeera.net/news/political/" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 الجزيرة</a>
+          <a href="https://apnews.com/hub/middle-east" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 AP</a>
         </div>
       </div>
     </div>
@@ -583,22 +607,22 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
       <div class="eg-card" onclick="openModal('egypt-economy')">
         <div class="eg-card-img"><img src="https://picsum.photos/seed/cbeegypt/600/300" alt="البنك المركزي" loading="lazy"></div>
         <div class="eg-card-body"><div class="eg-card-cat">الاقتصاد</div><div class="eg-card-title">رفع الفائدة 150 نقطة أساس وتوقعات بمزيد من الارتفاعات</div>
-        <div class="eg-card-footer"><span class="badge badge-confirmed" style="font-size:10px">✓ مؤكد</span><a href="https://www.cbe.org.eg" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 CBE</a></div></div>
+        <div class="eg-card-footer"><span class="badge badge-confirmed" style="font-size:10px">✓ مؤكد</span><a href="https://www.cbe.org.eg/ar/monetary-policy/press-releases" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 CBE</a></div></div>
       </div>
       <div class="eg-card">
         <div class="eg-card-img"><img src="https://picsum.photos/seed/parliament26/600/300" alt="البرلمان" loading="lazy"></div>
         <div class="eg-card-body"><div class="eg-card-cat">السياسة</div><div class="eg-card-title">البرلمان يُقر قانون الضريبة على القيمة المضافة بتعديلات جوهرية</div>
-        <div class="eg-card-footer"><span class="badge badge-confirmed" style="font-size:10px">✓ مؤكد</span><a href="https://www.ahram.org.eg" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 الأهرام</a></div></div>
+        <div class="eg-card-footer"><span class="badge badge-confirmed" style="font-size:10px">✓ مؤكد</span><a href="https://gate.ahram.org.eg/Economy.aspx" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 الأهرام</a></div></div>
       </div>
       <div class="eg-card">
         <div class="eg-card-img"><img src="https://picsum.photos/seed/nuclear26/600/300" alt="الضبعة" loading="lazy"></div>
         <div class="eg-card-body"><div class="eg-card-cat">البنية التحتية</div><div class="eg-card-title">مصر تُعلن توقف انقطاعات الكهرباء بعد تشغيل الضبعة النووية جزئياً</div>
-        <div class="eg-card-footer"><span class="badge badge-likely" style="font-size:10px">~ محتمل</span><a href="https://www.masrawy.com" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 مصراوي</a></div></div>
+        <div class="eg-card-footer"><span class="badge badge-likely" style="font-size:10px">~ محتمل</span><a href="https://www.masrawy.com/news/news_egypt" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 مصراوي</a></div></div>
       </div>
       <div class="eg-card">
         <div class="eg-card-img"><img src="https://picsum.photos/seed/nile2026/600/300" alt="سد النهضة" loading="lazy"></div>
         <div class="eg-card-body"><div class="eg-card-cat">المياه والأمن القومي</div><div class="eg-card-title">جولة مفاوضات جديدة حول سد النهضة في أديس أبابا الأسبوع القادم</div>
-        <div class="eg-card-footer"><span class="badge badge-developing"><span class="pulse"></span>يتطور</span><a href="https://www.ahram.org.eg" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 الأهرام</a></div></div>
+        <div class="eg-card-footer"><span class="badge badge-developing"><span class="pulse"></span>يتطور</span><a href="https://gate.ahram.org.eg/Economy.aspx" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 الأهرام</a></div></div>
       </div>
     </div>
   </div>
@@ -741,7 +765,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
 
   <!-- IRAN LIVE -->
   <div id="iran" class="section-gap" data-cat="mideast world">
-    <div class="sec-header"><div class="sec-line"></div><span class="sec-title">التغطية المباشرة — إيران والمنطقة</span><a href="https://www.aljazeera.net" target="_blank" class="sec-more">الجزيرة مباشر ←</a></div>
+    <div class="sec-header"><div class="sec-line"></div><span class="sec-title">التغطية المباشرة — إيران والمنطقة</span><a href="https://www.aljazeera.net/news/political/" target="_blank" class="sec-more">الجزيرة مباشر ←</a></div>
     <div class="iran-section">
       <div class="iran-header">
         <span class="iran-live">● مباشر</span>
@@ -754,11 +778,11 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
       </div>
       <div class="iran-body">
         <div>
-          <div class="iran-update"><span class="iran-update-time">19:34</span><div class="iran-update-body"><div class="iran-update-title"><span class="badge badge-confirmed" style="font-size:10px;margin-inline-end:6px">✓</span>الوكالة الدولية للطاقة الذرية تُقرر إرسال فريق طوارئ لمراقبة الوضع في إصفهان</div><div class="iran-update-src">رويترز · فرانس برس · بي بي سي<a href="https://arabic.reuters.com" target="_blank" class="iran-src-link">🔗 رويترز</a><a href="https://www.iaea.org" target="_blank" class="iran-src-link">🔗 IAEA</a></div></div></div>
+          <div class="iran-update"><span class="iran-update-time">19:34</span><div class="iran-update-body"><div class="iran-update-title"><span class="badge badge-confirmed" style="font-size:10px;margin-inline-end:6px">✓</span>الوكالة الدولية للطاقة الذرية تُقرر إرسال فريق طوارئ لمراقبة الوضع في إصفهان</div><div class="iran-update-src">رويترز · فرانس برس · بي بي سي<a href="https://arabic.reuters.com/world" target="_blank" class="iran-src-link">🔗 رويترز</a><a href="https://www.iaea.org/newscenter/news" target="_blank" class="iran-src-link">🔗 IAEA</a></div></div></div>
           <div class="iran-update"><span class="iran-update-time">19:18</span><div class="iran-update-body"><div class="iran-update-title"><span class="badge badge-confirmed" style="font-size:10px;margin-inline-end:6px">✓</span>أسعار النفط ترتفع 4.2٪ مسجلةً أعلى مستوى منذ ديسمبر 2025</div><div class="iran-update-src">رويترز · بلومبرغ<a href="https://www.bloomberg.com/energy" target="_blank" class="iran-src-link">🔗 بلومبرغ</a></div></div></div>
-          <div class="iran-update"><span class="iran-update-time">18:55</span><div class="iran-update-body"><div class="iran-update-title"><span class="badge badge-likely" style="font-size:10px;margin-inline-end:6px">~</span>تقارير عن إغلاق جزئي للمجال الجوي الإيراني أمام الرحلات التجارية</div><div class="iran-update-src">فلايت ريدار 24<a href="https://www.flightradar24.com" target="_blank" class="iran-src-link">🔗 FlightRadar</a></div></div></div>
+          <div class="iran-update"><span class="iran-update-time">18:55</span><div class="iran-update-body"><div class="iran-update-title"><span class="badge badge-likely" style="font-size:10px;margin-inline-end:6px">~</span>تقارير عن إغلاق جزئي للمجال الجوي الإيراني أمام الرحلات التجارية</div><div class="iran-update-src">فلايت ريدار 24<a href="https://www.flightradar24.com/" target="_blank" class="iran-src-link">🔗 FlightRadar</a></div></div></div>
           <div class="iran-update"><span class="iran-update-time">18:41</span><div class="iran-update-body"><div class="iran-update-title"><span class="badge badge-confirmed" style="font-size:10px;margin-inline-end:6px">✓</span>مجلس الأمن يعقد جلسة طارئة الساعة 21:00 بتوقيت القاهرة بطلب أمريكي فرنسي</div><div class="iran-update-src">الأمم المتحدة<a href="https://news.un.org/ar/" target="_blank" class="iran-src-link">🔗 UN</a></div></div></div>
-          <div class="iran-update"><span class="iran-update-time">18:12</span><div class="iran-update-body"><div class="iran-update-title"><span class="badge badge-disputed" style="font-size:10px;margin-inline-end:6px">⚠ متضارب</span>التقارير تتضارب حول حجم الأضرار — مصدر إيراني ينفي بينما تؤكد مصادر غربية</div><div class="iran-update-src">تعارض: فارس نيوز ↔ رويترز<a href="https://www.farsnews.ir" target="_blank" class="iran-src-link">🔗 فارس</a><a href="https://arabic.reuters.com" target="_blank" class="iran-src-link">🔗 رويترز</a></div></div></div>
+          <div class="iran-update"><span class="iran-update-time">18:12</span><div class="iran-update-body"><div class="iran-update-title"><span class="badge badge-disputed" style="font-size:10px;margin-inline-end:6px">⚠ متضارب</span>التقارير تتضارب حول حجم الأضرار — مصدر إيراني ينفي بينما تؤكد مصادر غربية</div><div class="iran-update-src">تعارض: فارس نيوز ↔ رويترز<a href="https://www.farsnews.ir/" target="_blank" class="iran-src-link">🔗 فارس</a><a href="https://arabic.reuters.com/world" target="_blank" class="iran-src-link">🔗 رويترز</a></div></div></div>
         </div>
         <div class="iran-sidebar">
           <div class="iran-stat-block"><div class="iran-stat-label">⚡ مؤشرات الأزمة</div><div class="iran-stat-item"><span class="iran-stat-key">مستوى الخطورة</span><span class="iran-stat-val red">مرتفع جداً</span></div><div class="iran-stat-item"><span class="iran-stat-key">المصادر النشطة</span><span class="iran-stat-val">34 مصدراً</span></div><div class="iran-stat-item"><span class="iran-stat-key">تقارير مؤكدة</span><span class="iran-stat-val green">17</span></div><div class="iran-stat-item"><span class="iran-stat-key">متضاربة</span><span class="iran-stat-val red">3</span></div></div>
@@ -780,20 +804,20 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
           <div class="econ-indicator" style="border-top-color:var(--red)"><div class="ei-label">خام برنت ($/برميل)</div><div class="ei-value">$94.2</div><div class="ei-change down">▲ 4.2٪</div></div>
         </div>
         <div class="econ-event-list">
-          <div class="econ-event" onclick="openModal('egypt-economy')"><div class="econ-event-icon">🏦</div><div><div class="econ-event-title">البنك المركزي يرفع الفائدة 150 نقطة أساس بقرار استثنائي</div><div class="econ-event-meta"><span class="badge badge-confirmed" style="font-size:10px">✓</span>·<a href="https://www.cbe.org.eg" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 CBE</a><a href="https://arabic.reuters.com" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 رويترز</a></div></div></div>
-          <div class="econ-event"><div class="econ-event-icon">📦</div><div><div class="econ-event-title">ارتفاع أسعار السلع الأساسية في مصر بنسبة 12٪ منذ بداية الأزمة</div><div class="econ-event-meta"><span class="badge badge-likely" style="font-size:10px">~</span>·<a href="https://www.capmas.gov.eg" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 CAPMAS</a></div></div></div>
+          <div class="econ-event" onclick="openModal('egypt-economy')"><div class="econ-event-icon">🏦</div><div><div class="econ-event-title">البنك المركزي يرفع الفائدة 150 نقطة أساس بقرار استثنائي</div><div class="econ-event-meta"><span class="badge badge-confirmed" style="font-size:10px">✓</span>·<a href="https://www.cbe.org.eg/ar/monetary-policy/press-releases" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 CBE</a><a href="https://arabic.reuters.com/world" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 رويترز</a></div></div></div>
+          <div class="econ-event"><div class="econ-event-icon">📦</div><div><div class="econ-event-title">ارتفاع أسعار السلع الأساسية في مصر بنسبة 12٪ منذ بداية الأزمة</div><div class="econ-event-meta"><span class="badge badge-likely" style="font-size:10px">~</span>·<a href="https://www.capmas.gov.eg/" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 CAPMAS</a></div></div></div>
           <div class="econ-event"><div class="econ-event-icon">🛢️</div><div><div class="econ-event-title">دول الخليج تُراجع ميزانياتها في ضوء أسعار النفط المرتفعة</div><div class="econ-event-meta"><span class="badge badge-developing"><span class="pulse"></span>يتطور</span>·<a href="https://www.bloomberg.com/energy" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 بلومبرغ</a></div></div></div>
         </div>
       </div>
       <div style="display:flex;flex-direction:column;gap:16px">
         <div class="brief-widget"><div class="brief-header"><span>☀️</span><span class="brief-title">الموجز اليومي</span><span class="brief-date">٤ أبريل ٢٠٢٦</span></div><div class="brief-body"><div class="brief-item"><span class="brief-num">١</span><span class="brief-text">انفجارات قرب إصفهان تُهدد استقرار المنطقة والمجتمع الدولي يتحرك لاحتواء الأزمة</span></div><div class="brief-item"><span class="brief-num">٢</span><span class="brief-text">البنك المركزي المصري يرفع الفائدة بقرار استثنائي تزامناً مع ضغوط الأزمة الإقليمية</span></div><div class="brief-item"><span class="brief-num">٣</span><span class="brief-text">النفط فوق 94 دولاراً للمرة الأولى منذ 16 شهراً وموجة شراء غير مسبوقة في الذهب</span></div><div class="brief-item"><span class="brief-num">٤</span><span class="brief-text">مفاوضات غزة في مرحلة حاسمة والمبعوث الأمريكي يتوجه إلى القاهرة الليلة</span></div><div class="brief-item"><span class="brief-num">٥</span><span class="brief-text">الأردن والكويت يُفعّلان خطط الطوارئ تحسباً لانعكاسات التصعيد الإقليمي</span></div></div></div>
         <div class="source-activity"><div class="sa-title">📡 المصادر النشطة الآن</div><div class="sa-list">
-          <div class="sa-item"><div class="sa-logo">ر</div><a href="https://arabic.reuters.com" target="_blank" class="sa-name">رويترز عربي</a><span class="sa-tier gold">ذهبي</span><div class="sa-bar-wrap"><div class="sa-bar" style="width:95%"></div></div><span class="sa-time">2د</span></div>
-          <div class="sa-item"><div class="sa-logo">ب</div><a href="https://www.bbc.com/arabic" target="_blank" class="sa-name">بي بي سي عربي</a><span class="sa-tier gold">ذهبي</span><div class="sa-bar-wrap"><div class="sa-bar" style="width:88%"></div></div><span class="sa-time">5د</span></div>
-          <div class="sa-item"><div class="sa-logo">ج</div><a href="https://www.aljazeera.net" target="_blank" class="sa-name">الجزيرة</a><span class="sa-tier gold">ذهبي</span><div class="sa-bar-wrap"><div class="sa-bar" style="width:82%"></div></div><span class="sa-time">7د</span></div>
-          <div class="sa-item"><div class="sa-logo">أ</div><a href="https://www.ahram.org.eg" target="_blank" class="sa-name">الأهرام</a><span class="sa-tier silver">فضي</span><div class="sa-bar-wrap"><div class="sa-bar" style="width:65%"></div></div><span class="sa-time">12د</span></div>
-          <div class="sa-item"><div class="sa-logo">ف</div><a href="https://www.france24.com/ar" target="_blank" class="sa-name">فرانس 24</a><span class="sa-tier gold">ذهبي</span><div class="sa-bar-wrap"><div class="sa-bar" style="width:79%"></div></div><span class="sa-time">9د</span></div>
-          <div class="sa-item"><div class="sa-logo">م</div><a href="https://www.masrawy.com" target="_blank" class="sa-name">مصراوي</a><span class="sa-tier silver">فضي</span><div class="sa-bar-wrap"><div class="sa-bar" style="width:55%"></div></div><span class="sa-time">18د</span></div>
+          <div class="sa-item"><div class="sa-logo">ر</div><a href="https://arabic.reuters.com/world" target="_blank" class="sa-name">رويترز عربي</a><span class="sa-tier gold">ذهبي</span><div class="sa-bar-wrap"><div class="sa-bar" style="width:95%"></div></div><span class="sa-time">2د</span></div>
+          <div class="sa-item"><div class="sa-logo">ب</div><a href="https://www.bbc.com/arabic/middleeast" target="_blank" class="sa-name">بي بي سي عربي</a><span class="sa-tier gold">ذهبي</span><div class="sa-bar-wrap"><div class="sa-bar" style="width:88%"></div></div><span class="sa-time">5د</span></div>
+          <div class="sa-item"><div class="sa-logo">ج</div><a href="https://www.aljazeera.net/news/political/" target="_blank" class="sa-name">الجزيرة</a><span class="sa-tier gold">ذهبي</span><div class="sa-bar-wrap"><div class="sa-bar" style="width:82%"></div></div><span class="sa-time">7د</span></div>
+          <div class="sa-item"><div class="sa-logo">أ</div><a href="https://gate.ahram.org.eg/Economy.aspx" target="_blank" class="sa-name">الأهرام</a><span class="sa-tier silver">فضي</span><div class="sa-bar-wrap"><div class="sa-bar" style="width:65%"></div></div><span class="sa-time">12د</span></div>
+          <div class="sa-item"><div class="sa-logo">ف</div><a href="https://www.france24.com/ar/%D8%A7%D9%84%D8%B4%D8%B1%D9%82-%D8%A7%D9%84%D8%A3%D9%88%D8%B3%D8%B7" target="_blank" class="sa-name">فرانس 24</a><span class="sa-tier gold">ذهبي</span><div class="sa-bar-wrap"><div class="sa-bar" style="width:79%"></div></div><span class="sa-time">9د</span></div>
+          <div class="sa-item"><div class="sa-logo">م</div><a href="https://www.masrawy.com/news/news_egypt" target="_blank" class="sa-name">مصراوي</a><span class="sa-tier silver">فضي</span><div class="sa-bar-wrap"><div class="sa-bar" style="width:55%"></div></div><span class="sa-time">18د</span></div>
         </div></div>
       </div>
     </div>
@@ -813,7 +837,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
         </div>
         <div class="video-card-body">
           <div class="video-card-title">قناة الجزيرة — بث مباشر على مدار الساعة</div>
-          <div class="video-card-meta"><span class="video-source-badge">● مباشر</span><a href="https://www.youtube.com/@aljazeeraarabic/live" target="_blank" class="src-link">🔗 يوتيوب</a><a href="https://www.aljazeera.net" target="_blank" class="src-link">🔗 الموقع</a></div>
+          <div class="video-card-meta"><span class="video-source-badge">● مباشر</span><a href="https://www.youtube.com/@aljazeeraarabic/live" target="_blank" class="src-link">🔗 يوتيوب</a><a href="https://www.aljazeera.net/news/political/" target="_blank" class="src-link">🔗 الموقع</a></div>
         </div>
       </div>
       <div class="video-card">
@@ -826,7 +850,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
         </div>
         <div class="video-card-body">
           <div class="video-card-title">بي بي سي عربي — تغطية مباشرة للأحداث الإقليمية</div>
-          <div class="video-card-meta"><span class="video-source-badge">● مباشر</span><a href="https://www.youtube.com/@BBCArabic/live" target="_blank" class="src-link">🔗 يوتيوب</a><a href="https://www.bbc.com/arabic" target="_blank" class="src-link">🔗 الموقع</a></div>
+          <div class="video-card-meta"><span class="video-source-badge">● مباشر</span><a href="https://www.youtube.com/@BBCArabic/live" target="_blank" class="src-link">🔗 يوتيوب</a><a href="https://www.bbc.com/arabic/middleeast" target="_blank" class="src-link">🔗 الموقع</a></div>
         </div>
       </div>
       <div class="video-card">
@@ -839,7 +863,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
         </div>
         <div class="video-card-body">
           <div class="video-card-title">فرانس 24 عربي — التغطية المستمرة للأزمة الإقليمية</div>
-          <div class="video-card-meta"><span class="video-source-badge">● مباشر</span><a href="https://www.youtube.com/@France24Arabic/live" target="_blank" class="src-link">🔗 يوتيوب</a><a href="https://www.france24.com/ar" target="_blank" class="src-link">🔗 الموقع</a></div>
+          <div class="video-card-meta"><span class="video-source-badge">● مباشر</span><a href="https://www.youtube.com/@France24Arabic/live" target="_blank" class="src-link">🔗 يوتيوب</a><a href="https://www.france24.com/ar/%D8%A7%D9%84%D8%B4%D8%B1%D9%82-%D8%A7%D9%84%D8%A3%D9%88%D8%B3%D8%B7" target="_blank" class="src-link">🔗 الموقع</a></div>
         </div>
       </div>
     </div>
@@ -886,7 +910,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
         </div>
         <div style="display:flex;align-items:center;gap:10px;font-size:13px">
           <span style="color:var(--gold)">🔐</span>
-          <a href="nazra_admin.html" style="color:rgba(255,255,255,.7);transition:.2s" onmouseover="this.style.color='#E9C46A'" onmouseout="this.style.color='rgba(255,255,255,.7)'">لوحة إدارة المصادر</a>
+          <a href="#" onclick="openLoginModal();return false;" style="color:rgba(255,255,255,.7);transition:.2s" onmouseover="this.style.color='#E9C46A'" onmouseout="this.style.color='rgba(255,255,255,.7)'">لوحة إدارة المصادر 🔒</a>
         </div>
         <div style="display:flex;align-items:center;gap:10px;font-size:13px">
           <span style="color:var(--gold)">📍</span>
@@ -922,7 +946,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
           <li><a href="#region">كيف نتحقق؟</a></li>
           <li><a href="#">تقييم المصادر</a></li>
           <li><a href="#">سياسة التصحيح</a></li>
-          <li><a href="nazra_admin.html">لوحة الإدارة</a></li>
+
         </ul>
       </div>
       <div>
@@ -980,24 +1004,24 @@ const EV={
     summary:'أفادت مصادر موثوقة متعددة بوقوع انفجارات في محيط المنشأة النووية بإصفهان فجر الأحد الرابع من أبريل. وتشير التقارير من رويترز وبي بي سي وفرانس برس إلى تدخل قوات متعددة الجنسية. الوكالة الدولية للطاقة الذرية أعلنت تفعيل بروتوكول الطوارئ.',
     know:['الانفجارات وقعت بين 03:10–03:45 بتوقيت طهران (رويترز/بي بي سي)','الوكالة الدولية للطاقة الذرية أكدت التواصل الفوري مع طهران','مجلس الأمن يعقد جلسة طارئة مساء اليوم','ارتفاع النفط 4.2٪ والذهب 2.3٪ في التعاملات الآنية'],
     dontKnow:['الجهة المسؤولة لم تُعلن رسمياً حتى الآن','حجم الأضرار داخل المنشأة غير مؤكد','الموقف الرسمي الإيراني الكامل لم يصدر','تداعيات الحادثة على المفاوضات النووية'],
-    facts:[{i:'💥',t:'انفجارات رُصدت في محيط 15كم من المنشأة',s:'رويترز · بي بي سي',l:'https://arabic.reuters.com'},{i:'⚛️',t:'الوكالة الدولية للطاقة الذرية تؤكد التواصل الفوري مع السلطات',s:'IAEA',l:'https://www.iaea.org'},{i:'🛢️',t:'برنت تجاوز 94 دولاراً للأول مرة منذ ديسمبر 2025',s:'بلومبرغ',l:'https://www.bloomberg.com/energy'},{i:'🌍',t:'مجلس الأمن يعقد جلسة طارئة بطلب أمريكي فرنسي',s:'الأمم المتحدة',l:'https://news.un.org/ar/'}],
-    srcs:[{lo:'ر',n:'رويترز عربي',t:'gold',tt:'ذهبي',ti:'19:34',l:'https://arabic.reuters.com'},{lo:'ب',n:'بي بي سي عربي',t:'gold',tt:'ذهبي',ti:'19:28',l:'https://www.bbc.com/arabic/middleeast'},{lo:'ف',n:'فرانس برس',t:'gold',tt:'ذهبي',ti:'19:22',l:'https://www.france24.com/ar'},{lo:'ج',n:'الجزيرة',t:'gold',tt:'ذهبي',ti:'19:15',l:'https://www.aljazeera.net'},{lo:'أ',n:'أسوشيتد برس',t:'gold',tt:'ذهبي',ti:'18:58',l:'https://apnews.com'}],
+    facts:[{i:'💥',t:'انفجارات رُصدت في محيط 15كم من المنشأة',s:'رويترز · بي بي سي',l:'https://arabic.reuters.com/world'},{i:'⚛️',t:'الوكالة الدولية للطاقة الذرية تؤكد التواصل الفوري مع السلطات',s:'IAEA',l:'https://www.iaea.org/newscenter/news'},{i:'🛢️',t:'برنت تجاوز 94 دولاراً للأول مرة منذ ديسمبر 2025',s:'بلومبرغ',l:'https://www.bloomberg.com/energy'},{i:'🌍',t:'مجلس الأمن يعقد جلسة طارئة بطلب أمريكي فرنسي',s:'الأمم المتحدة',l:'https://news.un.org/ar/'}],
+    srcs:[{lo:'ر',n:'رويترز عربي',t:'gold',tt:'ذهبي',ti:'19:34',l:'https://arabic.reuters.com/world'},{lo:'ب',n:'بي بي سي عربي',t:'gold',tt:'ذهبي',ti:'19:28',l:'https://www.bbc.com/arabic/middleeast'},{lo:'ف',n:'فرانس 24 عربي',t:'gold',tt:'ذهبي',ti:'19:22',l:'https://www.france24.com/ar/%D8%A7%D9%84%D8%B4%D8%B1%D9%82-%D8%A7%D9%84%D8%A3%D9%88%D8%B3%D8%B7'},{lo:'ج',n:'الجزيرة',t:'gold',tt:'ذهبي',ti:'19:15',l:'https://www.aljazeera.net/news/political/'},{lo:'أ',n:'أسوشيتد برس',t:'gold',tt:'ذهبي',ti:'18:58',l:'https://apnews.com/hub/middle-east'}],
     tl:[{ti:'03:12',st:'developing',tx:'تسريبات على تيليغرام — غير مؤكد',s:'قنوات مجهولة'},{ti:'03:34',st:'likely',tx:'FlightRadar يُسجّل إغلاق المجال الجوي وصحفيان يؤكدان',s:'FlightRadar24 + ميدانيون'},{ti:'04:10',st:'likely',tx:'رويترز وبي بي سي وفرانس برس ينشرون تقارير مستقلة',s:'3 وكالات ذهبية'},{ti:'05:45',st:'confirmed',tx:'IAEA تُصدر بياناً رسمياً — مؤكد من 17 مصدراً ✓',s:'IAEA + 16 مصدراً'}]},
   'egypt-economy':{img:'https://picsum.photos/seed/cbeegypt26b/900/400',cat:'الاقتصاد',badge:'confirmed',bt:'✓ مؤكد',src:8,conf:88,
     title:'البنك المركزي المصري يرفع سعر الفائدة 150 نقطة أساس بقرار استثنائي',
     summary:'أعلن البنك المركزي المصري رفع سعر الفائدة على الإيداع بنسبة 1.5٪ ليصل إلى 28.75٪ في قرار استثنائي خارج مواعيد الاجتماعات المقررة وسط تراجع ملحوظ لقيمة الجنيه وتصاعد ضغوط التضخم جراء الأزمة الإقليمية.',
     know:['البنك المركزي أصدر بياناً رسمياً مؤكداً رفع الفائدة 150 نقطة','سعر الفائدة على الإيداع بلغ 28.75٪','الجنيه تراجع 0.8٪ ليصل إلى 49.85 للدولار','القرار فعّال من جلسة التداول الثلاثاء'],
     dontKnow:['مدى مواصلة الرفع في الاجتماع القادم','تأثير القرار على الاستثمار الأجنبي','موعد استقرار سعر الصرف'],
-    facts:[{i:'🏦',t:'سعر الفائدة على الإيداع رُفع إلى 28.75٪',s:'البنك المركزي المصري',l:'https://www.cbe.org.eg'},{i:'💱',t:'الجنيه تراجع 0.8٪ ليسجل 49.85 للدولار',s:'بلومبرغ',l:'https://www.bloomberg.com'},{i:'📊',t:'التضخم السنوي 31.2٪ في مارس',s:'CAPMAS',l:'https://www.capmas.gov.eg'}],
-    srcs:[{lo:'م',n:'البنك المركزي المصري',t:'gold',tt:'رسمي',ti:'13:00',l:'https://www.cbe.org.eg'},{lo:'أ',n:'الأهرام',t:'silver',tt:'فضي',ti:'13:15',l:'https://www.ahram.org.eg'},{lo:'ر',n:'رويترز',t:'gold',tt:'ذهبي',ti:'13:08',l:'https://arabic.reuters.com'}],
+    facts:[{i:'🏦',t:'سعر الفائدة على الإيداع رُفع إلى 28.75٪',s:'البنك المركزي المصري',l:'https://www.cbe.org.eg/ar/monetary-policy/press-releases'},{i:'💱',t:'الجنيه تراجع 0.8٪ ليسجل 49.85 للدولار',s:'بلومبرغ',l:'https://www.bloomberg.com/middleeast'},{i:'📊',t:'التضخم السنوي 31.2٪ في مارس',s:'CAPMAS',l:'https://www.capmas.gov.eg/'}],
+    srcs:[{lo:'م',n:'البنك المركزي المصري',t:'gold',tt:'رسمي',ti:'13:00',l:'https://www.cbe.org.eg/ar/monetary-policy/press-releases'},{lo:'أ',n:'الأهرام الاقتصادي',t:'silver',tt:'فضي',ti:'13:15',l:'https://gate.ahram.org.eg/Economy.aspx'},{lo:'ر',n:'رويترز اقتصاد',t:'gold',tt:'ذهبي',ti:'13:08',l:'https://arabic.reuters.com/business'}],
     tl:[{ti:'11:30',st:'developing',tx:'تسريب من مصدر مصرفي — اجتماع طارئ',s:'مصدر مصرفي'},{ti:'12:15',st:'likely',tx:'اليوم السابع والمصري اليوم يؤكدان الاجتماع',s:'صحافة محلية'},{ti:'13:00',st:'confirmed',tx:'بيان CBE الرسمي برفع الفائدة 150 نقطة ✓',s:'CBE رسمي'},{ti:'13:08',st:'confirmed',tx:'رويترز والأهرام يؤكدان وينشران التفاصيل',s:'رويترز + الأهرام'}]},
   'gaza-ceasefire':{img:'https://picsum.photos/seed/gazadip26b/900/400',cat:'الشأن الفلسطيني',badge:'developing',bt:'● يتطور',src:11,conf:62,
     title:'مفاوضات الهدنة في غزة تدخل مرحلة حاسمة والمبعوث الأمريكي يتوجه إلى القاهرة',
     summary:'أفادت مصادر مطلعة بأن مفاوضات الهدنة في غزة وصلت إلى مرحلة حساسة. وتؤكد القاهرة استمرار دورها الوساطي الفعّال، فيما يتوجه المبعوث الأمريكي إلى مصر اليوم لاستئناف المباحثات.',
     know:['القاهرة تحتضن جولة مفاوضات جديدة اليوم','المبعوث الأمريكي متجه إلى مصر الليلة','قطر والأمم المتحدة مشاركتان في الجولة'],
     dontKnow:['نقاط الخلاف الجوهرية غير معلنة','الجدول الزمني للاتفاق النهائي','موقف الفصائل الأخرى من المسودة'],
-    facts:[{i:'🏛️',t:'القاهرة تستضيف جولة مفاوضات بحضور قطر والأمم المتحدة',s:'مصراوي · الجزيرة',l:'https://www.aljazeera.net'},{i:'✈️',t:'المبعوث الأمريكي يصل القاهرة الليلة',s:'الخارجية الأمريكية',l:'https://www.state.gov'}],
-    srcs:[{lo:'ج',n:'الجزيرة',t:'gold',tt:'ذهبي',ti:'19:00',l:'https://www.aljazeera.net'},{lo:'أ',n:'أسوشيتد برس',t:'gold',tt:'ذهبي',ti:'18:45',l:'https://apnews.com'},{lo:'م',n:'مصراوي',t:'silver',tt:'فضي',ti:'18:30',l:'https://www.masrawy.com'}],
+    facts:[{i:'🏛️',t:'القاهرة تستضيف جولة مفاوضات بحضور قطر والأمم المتحدة',s:'مصراوي · الجزيرة',l:'https://www.aljazeera.net/tag/%D8%BA%D8%B2%D8%A9'},{i:'✈️',t:'المبعوث الأمريكي يصل القاهرة الليلة',s:'الخارجية الأمريكية',l:'https://www.state.gov/region/near-eastern-affairs/'}],
+    srcs:[{lo:'ج',n:'الجزيرة — غزة',t:'gold',tt:'ذهبي',ti:'19:00',l:'https://www.aljazeera.net/tag/%D8%BA%D8%B2%D8%A9'},{lo:'أ',n:'AP — حرب غزة',t:'gold',tt:'ذهبي',ti:'18:45',l:'https://apnews.com/hub/israel-hamas-war'},{lo:'م',n:'مصراوي أخبار',t:'silver',tt:'فضي',ti:'18:30',l:'https://www.masrawy.com/news/news_egypt'}],
     tl:[{ti:'16:00',st:'developing',tx:'تقارير أولية عن استئناف المفاوضات',s:'مصادر إعلامية'},{ti:'17:00',st:'confirmed',tx:'القاهرة تؤكد استمرار دورها الوساطي',s:'الخارجية المصرية'},{ti:'18:30',st:'likely',tx:'تقارير عن تقدم في مسألة الأسرى',s:'AP'},{ti:'19:00',st:'developing',tx:'11 مصدراً تتابع — لا يزال يتطور ⏳',s:'متعدد المصادر'}]}
 };
 
@@ -1103,5 +1127,60 @@ function fixAbout(){
 }
 window.addEventListener('resize',fixAbout);fixAbout();
 </script>
+
+<!-- LOGIN MODAL -->
+<div class="login-overlay" id="loginOverlay" onclick="closeLoginOutside(event)">
+  <div class="login-box">
+    <button class="login-close" onclick="closeLogin()">✕</button>
+    <div class="login-lock">🔒</div>
+    <div class="login-logo">نظ<span>رة</span></div>
+    <div class="login-sub">منطقة مقيدة — لوحة الإدارة</div>
+    <div class="login-field">
+      <label>اسم المستخدم</label>
+      <input type="text" id="loginUser" placeholder="username" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <div class="login-field">
+      <label>كلمة المرور</label>
+      <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="login-btn" onclick="doLogin()">دخول ←</button>
+    <div class="login-err" id="loginErr">❌ اسم المستخدم أو كلمة المرور غير صحيحة</div>
+  </div>
+</div>
+
+<script>
+function openLoginModal(){
+  if(sessionStorage.getItem('nazra_auth')==='ok'){
+    window.location.href='nazra_admin.html';return;
+  }
+  document.getElementById('loginOverlay').classList.add('open');
+  document.getElementById('loginUser').value='';
+  document.getElementById('loginPass').value='';
+  document.getElementById('loginErr').classList.remove('show');
+  document.getElementById('loginUser').focus();
+}
+function closeLogin(){document.getElementById('loginOverlay').classList.remove('open');}
+function closeLoginOutside(e){if(e.target===document.getElementById('loginOverlay'))closeLogin();}
+function doLogin(){
+  const u=document.getElementById('loginUser').value.trim();
+  const p=document.getElementById('loginPass').value;
+  if(u==='akamal'&&p==='WAwakoko@09'){
+    sessionStorage.setItem('nazra_auth','ok');
+    document.getElementById('loginOverlay').classList.remove('open');
+    window.location.href='nazra_admin.html';
+  } else {
+    document.getElementById('loginErr').classList.add('show');
+    document.getElementById('loginUser').classList.add('error');
+    document.getElementById('loginPass').classList.add('error');
+    document.getElementById('loginPass').value='';
+    setTimeout(()=>{
+      document.getElementById('loginUser').classList.remove('error');
+      document.getElementById('loginPass').classList.remove('error');
+    },2000);
+  }
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLogin();});
+</script>
+
 </body>
 </html>

@@ -258,6 +258,67 @@ input:checked+.slider:before{transform:translateX(-18px)}
 </style>
 </head>
 <body>
+<!-- AUTH GUARD -->
+<div id="authGuard" style="display:none;position:fixed;inset:0;background:#0D1B2A;z-index:99999;align-items:center;justify-content:center;flex-direction:column;gap:20px;font-family:'Cairo',sans-serif">
+  <div style="font-size:42px;font-weight:900;color:#E9C46A;letter-spacing:-2px">نظرة</div>
+  <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:36px 32px;width:min(380px,90vw)">
+    <div style="text-align:center;font-size:36px;margin-bottom:14px">🔒</div>
+    <div style="text-align:center;color:#fff;font-size:16px;font-weight:700;margin-bottom:4px">منطقة مقيدة</div>
+    <div style="text-align:center;color:rgba(255,255,255,.45);font-size:12px;margin-bottom:24px">لوحة إدارة المصادر — يرجى تسجيل الدخول</div>
+    <div style="margin-bottom:12px">
+      <label style="display:block;font-size:11px;font-weight:700;color:rgba(255,255,255,.5);margin-bottom:5px">اسم المستخدم</label>
+      <input id="guardUser" type="text" placeholder="username" autocomplete="username"
+        style="width:100%;padding:10px 14px;border:1.5px solid rgba(255,255,255,.15);border-radius:8px;background:rgba(255,255,255,.08);color:#fff;font-family:'Cairo',sans-serif;font-size:14px;outline:none;direction:ltr;text-align:left"
+        onkeydown="if(event.key==='Enter')guardLogin()">
+    </div>
+    <div style="margin-bottom:16px">
+      <label style="display:block;font-size:11px;font-weight:700;color:rgba(255,255,255,.5);margin-bottom:5px">كلمة المرور</label>
+      <input id="guardPass" type="password" placeholder="••••••••" autocomplete="current-password"
+        style="width:100%;padding:10px 14px;border:1.5px solid rgba(255,255,255,.15);border-radius:8px;background:rgba(255,255,255,.08);color:#fff;font-family:'Cairo',sans-serif;font-size:14px;outline:none;direction:ltr;text-align:left"
+        onkeydown="if(event.key==='Enter')guardLogin()">
+    </div>
+    <button onclick="guardLogin()"
+      style="width:100%;background:#E9C46A;color:#0D1B2A;border:none;border-radius:8px;padding:12px;font-family:'Cairo',sans-serif;font-size:15px;font-weight:800;cursor:pointer;transition:.2s">
+      دخول ←
+    </button>
+    <div id="guardErr" style="display:none;margin-top:10px;background:rgba(193,18,31,.2);border:1px solid rgba(193,18,31,.4);border-radius:6px;padding:8px 12px;font-size:12px;color:#ef4444;text-align:center;font-weight:600">
+      ❌ اسم المستخدم أو كلمة المرور غير صحيحة
+    </div>
+    <div style="text-align:center;margin-top:16px">
+      <a href="nazra_news.html" style="color:rgba(255,255,255,.35);font-size:12px;text-decoration:none">← العودة للموقع الرئيسي</a>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  if(sessionStorage.getItem('nazra_auth')!=='ok'){
+    var g=document.getElementById('authGuard');
+    g.style.display='flex';
+    document.body.style.overflow='hidden';
+    setTimeout(function(){document.getElementById('guardUser').focus();},100);
+  }
+})();
+function guardLogin(){
+  var u=document.getElementById('guardUser').value.trim();
+  var p=document.getElementById('guardPass').value;
+  if(u==='akamal'&&p==='WAwakoko@09'){
+    sessionStorage.setItem('nazra_auth','ok');
+    document.getElementById('authGuard').style.display='none';
+    document.body.style.overflow='';
+  } else {
+    document.getElementById('guardErr').style.display='block';
+    document.getElementById('guardPass').value='';
+    document.getElementById('guardPass').style.borderColor='rgba(193,18,31,.6)';
+    document.getElementById('guardUser').style.borderColor='rgba(193,18,31,.6)';
+    setTimeout(function(){
+      document.getElementById('guardPass').style.borderColor='rgba(255,255,255,.15)';
+      document.getElementById('guardUser').style.borderColor='rgba(255,255,255,.15)';
+    },2000);
+  }
+}
+</script>
+
 
 <!-- TOP NAV -->
 <nav class="topnav">
@@ -266,7 +327,7 @@ input:checked+.slider:before{transform:translateX(-18px)}
     <button class="nav-btn active" onclick="showTab('sources')">📋 المصادر</button>
     <button class="nav-btn" onclick="showTab('suggest')">➕ اضف مصادر</button>
     <button class="nav-btn" onclick="showTab('settings')">⚙️ الإعدادات</button>
-    <a href="nazra_news.html" class="nav-btn back">← الموقع الرئيسي</a>
+    <a href="nazra_news.html" class="nav-btn back">← الموقع الرئيسي</a><button class="nav-btn" onclick="guardLogout()" style="background:rgba(193,18,31,.3);border-color:rgba(193,18,31,.5)">🚪 خروج</button>
   </div>
 </nav>
 
@@ -753,6 +814,11 @@ function saveSettings(){
 // ─── INIT ────────────────────────────────────────────────
 buildStats();
 renderTable();
+
+function guardLogout(){
+  sessionStorage.removeItem('nazra_auth');
+  window.location.href='nazra_news.html';
+}
 </script>
 </body>
 </html>
