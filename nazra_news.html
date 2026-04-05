@@ -1915,35 +1915,89 @@ function drawMarkers(){
 /* ─── RSS LIVE NEWS FETCHER ─── */
 (function(){
 
-// Arabic RSS feeds via rss2json (CORS-friendly)
+// Arabic RSS feeds — multiple reliable sources
 const FEEDS = [
-  {url:'https://www.aljazeera.net/xmlfeatures/rss_all/arabic.xml',   name:'الجزيرة',  link:'https://www.aljazeera.net/news/political/'},
-  {url:'https://feeds.bbci.co.uk/arabic/rss.xml',                    name:'بي بي سي', link:'https://www.bbc.com/arabic/middleeast'},
-  {url:'https://arabic.rt.com/rss/',                                  name:'RT عربي',  link:'https://arabic.rt.com/news/'},
-  {url:'https://www.skynewsarabia.com/mep/rss.xml',                  name:'سكاي نيوز',link:'https://www.skynewsarabia.com/middle-east'},
+  {url:'https://www.aljazeera.net/xmlfeatures/rss_all/arabic.xml',   name:'الجزيرة',   link:'https://www.aljazeera.net/news/'},
+  {url:'https://feeds.bbci.co.uk/arabic/rss.xml',                    name:'بي بي سي',  link:'https://www.bbc.com/arabic'},
+  {url:'https://arabic.rt.com/rss/',                                  name:'RT عربي',   link:'https://arabic.rt.com/news/'},
+  {url:'https://www.france24.com/ar/rss',                             name:'فرانس 24',  link:'https://www.france24.com/ar/'},
+  {url:'https://www.skynewsarabia.com/mep/rss.xml',                  name:'سكاي نيوز', link:'https://www.skynewsarabia.com/middle-east'},
 ];
-const PROXY = 'https://api.rss2json.com/v1/api.json?count=12&rss_url=';
+
+// CORS proxy strategies — tried in order
+const P_RSS2JSON  = u => `https://api.rss2json.com/v1/api.json?count=12&rss_url=${encodeURIComponent(u)}`;
+const P_ALLORIGIN = u => `https://api.allorigins.win/get?url=${encodeURIComponent(u)}`;
 
 let liveItems = [];
 let loadedCount = 0;
 
-async function fetchFeed(feed){
+// Parse raw RSS/Atom XML text into our item format
+function parseRawXML(text, feed){
   try {
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 7000);
-    const res = await fetch(PROXY + encodeURIComponent(feed.url), {signal: ctrl.signal});
-    clearTimeout(timer);
-    const data = await res.json();
-    if(data.status === 'ok' && Array.isArray(data.items)){
-      return data.items.slice(0,10).map(it => ({
-        title: (it.title||'').replace(/<[^>]+>/g,'').trim(),
-        link:  it.link || it.url || feed.link,
-        date:  it.pubDate ? new Date(it.pubDate) : new Date(),
+    const xml = new DOMParser().parseFromString(text, 'text/xml');
+    const nodes = Array.from(xml.querySelectorAll('item, entry'));
+    if(!nodes.length) return [];
+    return nodes.slice(0,12).map(n => {
+      const txt = tag => {
+        const el = n.querySelector(tag);
+        if(!el) return '';
+        return (el.textContent||'').replace(/<!\[CDATA\[|\]\]>/g,'').trim();
+      };
+      // <link> in RSS 2.0 stores URL as text node sibling, not textContent
+      let link = '';
+      const linkEl = n.querySelector('link');
+      if(linkEl){
+        link = linkEl.getAttribute('href') ||
+               (linkEl.nextSibling && linkEl.nextSibling.nodeValue && linkEl.nextSibling.nodeValue.trim()) ||
+               linkEl.textContent.trim();
+      }
+      return {
+        title: txt('title'),
+        link:  link || feed.link,
+        date:  new Date(txt('pubDate') || txt('updated') || Date.now()),
         source: feed.name,
         sourceLink: feed.link
-      })).filter(it => it.title && it.title.length > 5);
+      };
+    }).filter(it => it.title && it.title.length > 5);
+  } catch(e){ return []; }
+}
+
+async function fetchFeed(feed){
+  // ── Strategy 1: rss2json (returns clean JSON) ──
+  try {
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 7000);
+    const res = await fetch(P_RSS2JSON(feed.url), {signal: ctrl.signal});
+    clearTimeout(t);
+    if(res.ok){
+      const data = await res.json();
+      if(data.status === 'ok' && Array.isArray(data.items) && data.items.length){
+        return data.items.slice(0,10).map(it => ({
+          title: (it.title||'').replace(/<[^>]+>/g,'').trim(),
+          link:  it.link || it.url || feed.link,
+          date:  it.pubDate ? new Date(it.pubDate) : new Date(),
+          source: feed.name,
+          sourceLink: feed.link
+        })).filter(it => it.title && it.title.length > 5);
+      }
     }
   } catch(e){}
+
+  // ── Strategy 2: allorigins.win (returns raw XML) ──
+  try {
+    const ctrl2 = new AbortController();
+    const t2 = setTimeout(() => ctrl2.abort(), 9000);
+    const res2 = await fetch(P_ALLORIGIN(feed.url), {signal: ctrl2.signal});
+    clearTimeout(t2);
+    if(res2.ok){
+      const data2 = await res2.json();
+      if(data2.contents){
+        const items = parseRawXML(data2.contents, feed);
+        if(items.length) return items;
+      }
+    }
+  } catch(e){}
+
   return [];
 }
 
@@ -2006,17 +2060,24 @@ function updateLiveBadge(success){
 
 // Expose fetch function globally for the control bar button
 window._nazraFetchAll = async function() {
-  // Include saved custom sources
   const customFeeds = window._nazraCustomFeeds || [];
   const allFeeds = [...FEEDS, ...customFeeds];
   liveItems = [];
+  let successCount = 0;
   const results = await Promise.allSettled(allFeeds.map(f => fetchFeed(f)));
-  results.forEach(r => { if(r.status==='fulfilled') liveItems.push(...r.value); });
+  results.forEach(r => {
+    if(r.status==='fulfilled' && r.value.length){
+      liveItems.push(...r.value);
+      successCount++;
+    }
+  });
   liveItems.sort((a,b) => b.date - a.date);
   if(liveItems.length > 0){
     updateTicker();
     updateBreakingBanner();
     updateLiveBadge(true);
+    // Return stats for UI
+    return { loaded: liveItems.length, sources: successCount, total: allFeeds.length };
   } else {
     updateLiveBadge(false);
     throw new Error('No news loaded');
@@ -2056,15 +2117,15 @@ async function fetchNewsNow() {
   prog.classList.add('active');
 
   try {
-    await window._nazraFetchAll();
+    const info = await window._nazraFetchAll();
     const now = new Date();
     const t = now.toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'});
     stat.className = 'ncb-status live';
-    stat.textContent = `✓ تم التحديث في ${t} — عُثر على أخبار جديدة`;
+    stat.textContent = `✓ تم التحديث في ${t} — ${info.loaded} خبر من ${info.sources} مصادر`;
     updateSrcCount();
   } catch(e) {
     stat.className = 'ncb-status error';
-    stat.textContent = '⚠ تعذّر الاتصال ببعض المصادر — يُعرض المحتوى المحلي';
+    stat.textContent = '⚠ لم يُمكن الوصول للمصادر — تأكد من اتصالك بالإنترنت';
   }
 
   btn.classList.remove('loading');
@@ -2074,7 +2135,7 @@ async function fetchNewsNow() {
 
 function updateSrcCount() {
   const saved = getSavedSources();
-  const base  = 4;
+  const base  = 5; // الجزيرة، بي بي سي، RT، فرانس 24، سكاي نيوز
   const total = base + saved.length;
   const el = document.getElementById('ncbSrcCount');
   if(el) el.textContent = `📡 ${total} مصادر نشطة`;
