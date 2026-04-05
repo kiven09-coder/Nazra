@@ -364,6 +364,24 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
 @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 @keyframes scaleIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
 @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes fadeSlideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+/* Live news card */
+.live-card{background:var(--white);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:box-shadow .2s,transform .2s;display:flex;flex-direction:column;cursor:pointer;text-decoration:none;color:inherit;animation:fadeSlideIn .4s ease both}
+.live-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.live-card-img{height:160px;overflow:hidden;background:#eee;position:relative}
+.live-card-img img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
+.live-card:hover .live-card-img img{transform:scale(1.04)}
+.live-card-body{padding:14px;flex:1;display:flex;flex-direction:column;gap:6px}
+.live-card-src{font-size:11px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.5px}
+.live-card-title{font-size:14px;font-weight:700;line-height:1.55;color:var(--navy);flex:1;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.live-card-time{font-size:11px;color:var(--mid);margin-top:4px}
+/* Live hero card */
+.live-hero-link{display:contents;text-decoration:none;color:inherit}
+/* New badge flash */
+.new-badge{background:var(--red);color:#fff;font-size:10px;font-weight:800;padding:2px 7px;border-radius:3px;animation:pulse .8s 3}
+/* Refresh shimmer on update */
+@keyframes shimmer{0%{background-position:200% center}100%{background-position:-200% center}}
+.updating{background:linear-gradient(90deg,var(--light-bg) 25%,#e8edf2 50%,var(--light-bg) 75%);background-size:200% auto;animation:shimmer .8s linear}
 ::-webkit-scrollbar{width:6px;height:6px}
 ::-webkit-scrollbar-track{background:var(--light-bg)}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
@@ -483,10 +501,10 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
 #worldMap{width:100%;height:auto;display:block}
 /* Zoom controls */
 .map-zoom-ctrl{position:absolute;top:12px;left:12px;display:flex;flex-direction:column;gap:4px;z-index:10}
-.zoom-btn{width:32px;height:32px;border-radius:6px;border:1px solid rgba(255,255,255,.25);background:rgba(5,15,35,.75);color:#fff;font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;backdrop-filter:blur(4px);font-family:monospace;line-height:1}
+.zoom-btn{width:32px;height:32px;border-radius:6px;border:1px solid rgba(255,255,255,.25);background:rgba(5,15,35,.75);color:#fff;font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);font-family:monospace;line-height:1}
 .zoom-btn:hover{background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.5)}
 /* Live news badge */
-.map-live-badge{position:absolute;top:12px;right:12px;background:rgba(193,18,31,.85);color:#fff;font-size:10px;font-weight:800;padding:4px 10px;border-radius:4px;display:flex;align-items:center;gap:5px;backdrop-filter:blur(4px)}
+.map-live-badge{position:absolute;top:12px;right:12px;background:rgba(193,18,31,.85);color:#fff;font-size:10px;font-weight:800;padding:4px 10px;border-radius:4px;display:flex;align-items:center;gap:5px;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
 .map-live-dot{width:6px;height:6px;border-radius:50%;background:#fff;animation:pulse 1s infinite}
 /* Pulsing markers on map */
 @keyframes mapPulse{0%,100%{opacity:.3}50%{opacity:.8}}
@@ -500,7 +518,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
 .gcountry-name{color:rgba(255,255,255,.75);font-size:12px;font-weight:600}
 .gcountry-count{background:var(--red);color:#fff;border-radius:20px;font-size:10px;font-weight:800;padding:2px 8px;margin-right:2px}
 /* Day/Night legend */
-.map-legend{display:flex;align-items:center;gap:10px;position:absolute;bottom:10px;left:12px;font-size:10px;color:rgba(255,255,255,.5);background:rgba(0,0,0,.4);padding:5px 10px;border-radius:5px;backdrop-filter:blur(3px)}
+.map-legend{display:flex;align-items:center;gap:10px;position:absolute;bottom:10px;left:12px;font-size:10px;color:rgba(255,255,255,.5);background:rgba(0,0,0,.4);padding:5px 10px;border-radius:5px;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
 .map-legend-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
 /* Country popup */
 .country-news-popup{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:14px;padding:0;width:min(420px,92vw);box-shadow:0 20px 60px rgba(0,0,0,.4);z-index:3000;overflow:hidden;animation:scaleIn .25s ease}
@@ -809,7 +827,18 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
     </button>
   </div>
 
-  <!-- HERO GRID -->
+  <!-- LIVE NEWS GRID — dynamically populated from RSS -->
+  <div id="liveNewsGrid" class="section-gap" style="display:none">
+    <div class="sec-header">
+      <div class="sec-line"></div>
+      <span class="sec-title" id="liveNewsTitle">📡 آخر الأخبار — حية</span>
+      <span id="liveNewsTime" style="margin-inline-start:auto;font-size:12px;color:var(--mid)"></span>
+    </div>
+    <div id="liveNewsHero" class="hero-grid"></div>
+    <div id="liveNewsCards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-top:14px"></div>
+  </div>
+
+  <!-- HERO GRID (static fallback — visible until live news loads) -->
   <div class="hero-grid" id="heroSection" data-cat="all mideast world">
     <div class="hero-main" onclick="openModal('iran-strike')">
       <div class="hero-img">
@@ -1438,10 +1467,16 @@ function toggleVerify(head){
 function filterCat(cat,btn){
   document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  const sections=['heroSection','egypt','region','iran','economy','videos'];
+  // include liveNewsGrid (shown when news loads) + static heroSection (fallback)
+  const sections=['liveNewsGrid','heroSection','egypt','region','iran','economy','videos'];
   sections.forEach(id=>{
     const el=document.getElementById(id)||document.querySelector(`[id="${id}"]`);
     if(!el)return;
+    // liveNewsGrid and heroSection: only show liveNewsGrid if it has content
+    if(id==='heroSection' && document.getElementById('liveNewsGrid') &&
+       document.getElementById('liveNewsGrid').style.display!=='none'){
+      el.style.display='none'; return;
+    }
     const cats=(el.dataset.cat||'all').split(' ');
     if(cat==='all'||cats.includes(cat)){el.style.display='';el.style.opacity='1';}
     else{el.style.display='none';}
@@ -1925,8 +1960,9 @@ const FEEDS = [
 ];
 
 // CORS proxy strategies — tried in order
-const P_RSS2JSON  = u => `https://api.rss2json.com/v1/api.json?count=12&rss_url=${encodeURIComponent(u)}`;
-const P_ALLORIGIN = u => `https://api.allorigins.win/get?url=${encodeURIComponent(u)}`;
+const P_RSS2JSON   = u => `https://api.rss2json.com/v1/api.json?count=12&rss_url=${encodeURIComponent(u)}`;
+const P_ALLORIGIN  = u => `https://api.allorigins.win/get?url=${encodeURIComponent(u)}`;
+const P_CORSPROXY  = u => `https://corsproxy.io/?${encodeURIComponent(u)}`;
 
 let liveItems = [];
 let loadedCount = 0;
@@ -1962,12 +1998,14 @@ function parseRawXML(text, feed){
   } catch(e){ return []; }
 }
 
+const FETCH_OPTS = { mode:'cors', cache:'no-cache' };
+
 async function fetchFeed(feed){
-  // ── Strategy 1: rss2json (returns clean JSON) ──
+  // ── Strategy 1: rss2json (JSON response) ──
   try {
     const ctrl = new AbortController();
-    const t = setTimeout(() => ctrl.abort(), 7000);
-    const res = await fetch(P_RSS2JSON(feed.url), {signal: ctrl.signal});
+    const t = setTimeout(() => ctrl.abort(), 8000);
+    const res = await fetch(P_RSS2JSON(feed.url), {...FETCH_OPTS, signal: ctrl.signal});
     clearTimeout(t);
     if(res.ok){
       const data = await res.json();
@@ -1983,11 +2021,11 @@ async function fetchFeed(feed){
     }
   } catch(e){}
 
-  // ── Strategy 2: allorigins.win (returns raw XML) ──
+  // ── Strategy 2: allorigins.win (raw XML wrapped in JSON) ──
   try {
     const ctrl2 = new AbortController();
     const t2 = setTimeout(() => ctrl2.abort(), 9000);
-    const res2 = await fetch(P_ALLORIGIN(feed.url), {signal: ctrl2.signal});
+    const res2 = await fetch(P_ALLORIGIN(feed.url), {...FETCH_OPTS, signal: ctrl2.signal});
     clearTimeout(t2);
     if(res2.ok){
       const data2 = await res2.json();
@@ -1995,6 +2033,19 @@ async function fetchFeed(feed){
         const items = parseRawXML(data2.contents, feed);
         if(items.length) return items;
       }
+    }
+  } catch(e){}
+
+  // ── Strategy 3: corsproxy.io (raw XML) ──
+  try {
+    const ctrl3 = new AbortController();
+    const t3 = setTimeout(() => ctrl3.abort(), 9000);
+    const res3 = await fetch(P_CORSPROXY(feed.url), {...FETCH_OPTS, signal: ctrl3.signal});
+    clearTimeout(t3);
+    if(res3.ok){
+      const text3 = await res3.text();
+      const items = parseRawXML(text3, feed);
+      if(items.length) return items;
     }
   } catch(e){}
 
@@ -2058,6 +2109,103 @@ function updateLiveBadge(success){
   }
 }
 
+/* ── helper: time ago in Arabic ── */
+function timeAgoAr(date){
+  const mins = Math.round((Date.now() - (date instanceof Date ? date : new Date(date))) / 60000);
+  if(mins < 1) return 'الآن';
+  if(mins < 60) return `منذ ${mins} دقيقة`;
+  const hrs = Math.floor(mins / 60);
+  if(hrs < 24) return `منذ ${hrs} ساعة`;
+  return `منذ ${Math.floor(hrs/24)} يوم`;
+}
+
+/* ── build a stable image seed from title ── */
+function imgSeed(title){ return encodeURIComponent((title||'').replace(/\s+/g,' ').slice(0,15)); }
+
+/* ── render live news grid from liveItems ── */
+function updateNewsGrid(){
+  if(!liveItems.length) return;
+
+  const gridEl  = document.getElementById('liveNewsGrid');
+  const heroEl  = document.getElementById('liveNewsHero');
+  const cardsEl = document.getElementById('liveNewsCards');
+  const timeEl  = document.getElementById('liveNewsTime');
+  const staticHero = document.getElementById('heroSection');
+  if(!gridEl || !heroEl || !cardsEl) return;
+
+  // Brief shimmer on heroEl during rebuild
+  heroEl.classList.add('updating');
+  cardsEl.classList.add('updating');
+
+  setTimeout(() => {
+    const top  = liveItems[0];
+    const s1   = liveItems[1];
+    const s2   = liveItems[2];
+    const rest = liveItems.slice(3, 15);
+
+    /* hero card */
+    heroEl.innerHTML = `
+      <a class="hero-main" href="${top.link}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+        <div class="hero-img">
+          <img src="https://picsum.photos/seed/${imgSeed(top.title)}/900/400" alt="" loading="lazy"
+               onerror="this.src='https://picsum.photos/seed/nazranews/900/400'">
+          <div class="img-overlay"></div>
+          <span class="img-cat">${top.source}</span>
+          <span class="img-time">🕐 ${timeAgoAr(top.date)}</span>
+        </div>
+        <div class="hero-body">
+          <div class="hero-meta">
+            <span class="new-badge">● حديث</span>
+          </div>
+          <h1 class="hero-title">${top.title}</h1>
+          <div class="hero-footer">
+            <span class="badge badge-confirmed" style="font-size:10px">✓ ${top.source}</span>
+            <a href="${top.sourceLink}" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 الموقع</a>
+          </div>
+        </div>
+      </a>
+      ${[s1,s2].filter(Boolean).map(item => `
+        <a class="side-card" href="${item.link}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+          <div class="side-card-img">
+            <img src="https://picsum.photos/seed/${imgSeed(item.title)}/400/300" alt="" loading="lazy"
+                 onerror="this.src='https://picsum.photos/seed/nazraside/400/300'">
+          </div>
+          <div class="side-card-body">
+            <div class="side-card-meta"><span class="badge badge-developing"><span class="pulse"></span>حديث</span></div>
+            <div class="side-card-title">${item.title}</div>
+            <div class="side-card-time">🕐 ${timeAgoAr(item.date)} · ${item.source}</div>
+          </div>
+        </a>
+      `).join('')}`;
+
+    /* cards grid */
+    cardsEl.innerHTML = rest.map((item, i) => `
+      <a class="live-card" href="${item.link}" target="_blank" rel="noopener"
+         style="animation-delay:${i * 0.04}s">
+        <div class="live-card-img">
+          <img src="https://picsum.photos/seed/${imgSeed(item.title)}/400/220" alt="" loading="lazy"
+               onerror="this.src='https://picsum.photos/seed/nazra${i}/400/220'">
+        </div>
+        <div class="live-card-body">
+          <div class="live-card-src">${item.source}</div>
+          <div class="live-card-title">${item.title}</div>
+          <div class="live-card-time">🕐 ${timeAgoAr(item.date)}</div>
+        </div>
+      </a>`).join('');
+
+    /* update timestamp */
+    const now = new Date();
+    if(timeEl) timeEl.textContent = `آخر تحديث: ${now.toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'})}`;
+
+    heroEl.classList.remove('updating');
+    cardsEl.classList.remove('updating');
+
+    /* show live grid, hide static fallback */
+    gridEl.style.display = '';
+    if(staticHero) staticHero.style.display = 'none';
+  }, 150);
+}
+
 // Expose fetch function globally for the control bar button
 window._nazraFetchAll = async function() {
   const customFeeds = window._nazraCustomFeeds || [];
@@ -2076,6 +2224,7 @@ window._nazraFetchAll = async function() {
     updateTicker();
     updateBreakingBanner();
     updateLiveBadge(true);
+    updateNewsGrid();   // ← تحديث بطاقات الأخبار الرئيسية
     // Return stats for UI
     return { loaded: liveItems.length, sources: successCount, total: allFeeds.length };
   } else {
