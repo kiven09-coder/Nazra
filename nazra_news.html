@@ -465,6 +465,83 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
 @media(max-width:900px){.video-grid-6{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:600px){.video-grid-6{grid-template-columns:1fr}}
 
+
+/* ── GLOBE SECTION ── */
+.globe-section{background:linear-gradient(180deg,#060d1a 0%,#0D1B2A 100%);padding:28px 0;overflow:hidden;position:relative}
+.globe-section::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(62,130,200,.12) 0%,transparent 60%);pointer-events:none}
+.globe-inner{max-width:1280px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:400px 1fr;gap:32px;align-items:center}
+.globe-wrap{position:relative;width:400px;height:400px;flex-shrink:0}
+#globeCanvas{width:400px;height:400px;cursor:grab;border-radius:50%;box-shadow:0 0 60px rgba(62,130,200,.35),0 0 120px rgba(62,130,200,.15)}
+#globeCanvas:active{cursor:grabbing}
+.globe-info{display:flex;flex-direction:column;gap:20px}
+.globe-title{color:#fff;font-size:20px;font-weight:900;margin-bottom:4px}
+.globe-sub{color:rgba(255,255,255,.5);font-size:13px;line-height:1.6;margin-bottom:8px}
+.globe-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.gstat{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:12px;text-align:center}
+.gstat-val{color:var(--gold);font-size:22px;font-weight:900}
+.gstat-label{color:rgba(255,255,255,.5);font-size:11px;margin-top:3px}
+.globe-countries{display:flex;flex-direction:column;gap:8px;max-height:200px;overflow-y:auto}
+.gcountry{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:6px;padding:8px 12px;cursor:pointer;transition:.2s}
+.gcountry:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2)}
+.gcountry-flag{font-size:18px;flex-shrink:0}
+.gcountry-name{color:#fff;font-size:13px;font-weight:600;flex:1}
+.gcountry-count{background:var(--red);color:#fff;border-radius:20px;font-size:10px;font-weight:800;padding:2px 8px}
+/* Country popup overlay on globe */
+.country-news-popup{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:14px;padding:0;width:min(420px,92vw);box-shadow:0 20px 60px rgba(0,0,0,.4);z-index:3000;overflow:hidden;animation:scaleIn .25s ease}
+.country-news-popup.open{display:block}
+.cnp-header{background:var(--navy);padding:16px 20px;display:flex;align-items:center;gap:12px}
+.cnp-flag{font-size:28px}
+.cnp-title{color:#fff;font-size:16px;font-weight:800;flex:1}
+.cnp-count{background:var(--red);color:#fff;border-radius:20px;padding:3px 12px;font-size:12px;font-weight:800}
+.cnp-close{background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:50%;width:28px;height:28px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.cnp-body{padding:16px}
+.cnp-story{display:flex;gap:10px;padding:10px;background:var(--light-bg);border-radius:8px;margin-bottom:8px;cursor:pointer;transition:.2s}
+.cnp-story:last-child{margin-bottom:0}
+.cnp-story:hover{background:var(--border)}
+.cnp-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.cnp-story-text{font-size:13px;color:var(--navy);font-weight:600;line-height:1.4}
+.globe-popup-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2999}
+.globe-popup-overlay.open{display:block}
+
+/* ── TICKER LINKS ── */
+.ticker-item{padding:0 28px;border-inline-start:1px solid rgba(255,255,255,.15);white-space:nowrap;color:rgba(255,255,255,.85);text-decoration:none;transition:.2s;cursor:pointer}
+.ticker-item:hover{color:var(--gold)}
+
+/* ── SOURCE POPUP ── */
+.src-count{cursor:pointer;transition:.2s}
+.src-count:hover{background:var(--border);border-color:var(--navy)}
+.src-popup{display:none;position:absolute;background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px;box-shadow:0 8px 32px rgba(0,0,0,.18);z-index:2000;min-width:220px;animation:scaleIn .2s ease}
+.src-popup.open{display:block}
+.src-popup-title{font-size:11px;font-weight:800;color:var(--mid);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:.5px}
+.src-popup-list{display:flex;flex-direction:column;gap:5px}
+.src-popup-item{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--slate);padding:4px 0}
+.src-popup-item::before{content:"📰";font-size:10px}
+.src-popup-close{position:absolute;top:8px;left:8px;background:none;border:none;font-size:14px;color:var(--mid);cursor:pointer;padding:2px 6px;border-radius:4px}
+.src-popup-close:hover{color:var(--red)}
+
+/* ── CURRENCY / GOLD PRICES ── */
+.prices-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
+.price-card{background:#fff;border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);border-top:3px solid var(--gold)}
+.price-card-title{font-size:12px;font-weight:800;color:var(--mid);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.price-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px}
+.price-row:last-child{border-bottom:none}
+.price-label{color:var(--slate);font-weight:600}
+.price-val{font-weight:800;color:var(--navy)}
+.price-val.up{color:var(--green)}
+.price-val.down{color:var(--red)}
+.price-source{font-size:10px;color:var(--mid);margin-top:8px;text-align:left}
+
+@media(max-width:900px){
+  .globe-inner{grid-template-columns:1fr;justify-items:center}
+  .globe-wrap{width:300px;height:300px}
+  #globeCanvas{width:300px;height:300px}
+  .prices-grid{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .globe-stats{grid-template-columns:1fr 1fr}
+  .globe-wrap{width:260px;height:260px}
+  #globeCanvas{width:260px;height:260px}
+}
 </style>
 </head>
 <body>
@@ -482,20 +559,20 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
 <div class="ticker-bar">
   <span class="ticker-label">الأخبار</span>
   <div class="ticker-track">
-    <span class="ticker-item">البرلمان المصري يناقش مشروع قانون الضريبة على الدخل الجديد</span>
-    <span class="ticker-item">الرياض تستدعي سفير طهران احتجاجاً على التصريحات الأخيرة</span>
-    <span class="ticker-item">الذهب يرتفع 2.3٪ وسط مخاوف التصعيد الإقليمي</span>
-    <span class="ticker-item">الأردن يُعلن إغلاق مجاله الجوي أمام الطائرات المدنية الإيرانية</span>
-    <span class="ticker-item">مصر تُعلن عن حزمة دعم اقتصادي بقيمة 15 مليار جنيه</span>
-    <span class="ticker-item">الأمم المتحدة تدعو إلى ضبط النفس وتجنب التصعيد في المنطقة</span>
-    <span class="ticker-item">الكويت تُفعّل خطط الطوارئ في المنشآت النفطية</span>
-    <span class="ticker-item">البرلمان المصري يناقش مشروع قانون الضريبة على الدخل الجديد</span>
-    <span class="ticker-item">الرياض تستدعي سفير طهران احتجاجاً على التصريحات الأخيرة</span>
-    <span class="ticker-item">الذهب يرتفع 2.3٪ وسط مخاوف التصعيد الإقليمي</span>
-    <span class="ticker-item">الأردن يُعلن إغلاق مجاله الجوي أمام الطائرات المدنية الإيرانية</span>
-    <span class="ticker-item">مصر تُعلن عن حزمة دعم اقتصادي بقيمة 15 مليار جنيه</span>
-    <span class="ticker-item">الأمم المتحدة تدعو إلى ضبط النفس وتجنب التصعيد في المنطقة</span>
-    <span class="ticker-item">الكويت تُفعّل خطط الطوارئ في المنشآت النفطية</span>
+    <a class="ticker-item" href="https://gate.ahram.org.eg/Economy.aspx" target="_blank">البرلمان المصري يناقش مشروع قانون الضريبة على الدخل الجديد</a>
+    <a class="ticker-item" href="https://arabic.reuters.com/world" target="_blank">الرياض تستدعي سفير طهران احتجاجاً على التصريحات الأخيرة</a>
+    <a class="ticker-item" href="https://www.bloomberg.com/energy" target="_blank">الذهب يرتفع 2.3٪ وسط مخاوف التصعيد الإقليمي</a>
+    <a class="ticker-item" href="https://arabic.reuters.com/world" target="_blank">الأردن يُعلن إغلاق مجاله الجوي أمام الطائرات المدنية الإيرانية</a>
+    <a class="ticker-item" href="https://www.masrawy.com/news/news_egypt" target="_blank">مصر تُعلن عن حزمة دعم اقتصادي بقيمة 15 مليار جنيه</a>
+    <a class="ticker-item" href="https://news.un.org/ar/" target="_blank">الأمم المتحدة تدعو إلى ضبط النفس وتجنب التصعيد في المنطقة</a>
+    <a class="ticker-item" href="https://arabic.reuters.com/world" target="_blank">الكويت تُفعّل خطط الطوارئ في المنشآت النفطية</a>
+    <a class="ticker-item" href="https://gate.ahram.org.eg/Economy.aspx" target="_blank">البرلمان المصري يناقش مشروع قانون الضريبة على الدخل الجديد</a>
+    <a class="ticker-item" href="https://arabic.reuters.com/world" target="_blank">الرياض تستدعي سفير طهران احتجاجاً على التصريحات الأخيرة</a>
+    <a class="ticker-item" href="https://www.bloomberg.com/energy" target="_blank">الذهب يرتفع 2.3٪ وسط مخاوف التصعيد الإقليمي</a>
+    <a class="ticker-item" href="https://arabic.reuters.com/world" target="_blank">الأردن يُعلن إغلاق مجاله الجوي أمام الطائرات المدنية الإيرانية</a>
+    <a class="ticker-item" href="https://www.masrawy.com/news/news_egypt" target="_blank">مصر تُعلن عن حزمة دعم اقتصادي بقيمة 15 مليار جنيه</a>
+    <a class="ticker-item" href="https://news.un.org/ar/" target="_blank">الأمم المتحدة تدعو إلى ضبط النفس وتجنب التصعيد في المنطقة</a>
+    <a class="ticker-item" href="https://arabic.reuters.com/world" target="_blank">الكويت تُفعّل خطط الطوارئ في المنشآت النفطية</a>
   </div>
 </div>
 
@@ -534,13 +611,58 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
 <!-- CATEGORY BAR -->
 <div class="cat-bar">
   <div class="cat-bar-inner">
-    <button class="cat-btn active" onclick="filterCat('all',this)">⭐ أهم الأخبار <span class="cat-count">12</span></button>
-    <button class="cat-btn" onclick="filterCat('world',this)">🌍 عالمية <span class="cat-count">8</span></button>
-    <button class="cat-btn" onclick="filterCat('mideast',this)">🕌 شرق أوسط <span class="cat-count">9</span></button>
-    <button class="cat-btn" onclick="filterCat('local',this)">🇪🇬 محلية <span class="cat-count">6</span></button>
-    <button class="cat-btn" onclick="filterCat('economy',this)">📈 اقتصاد <span class="cat-count">4</span></button>
-    <button class="cat-btn" onclick="filterCat('verify',this)">✅ التحقق <span class="cat-count">3</span></button>
+    <a class="cat-btn active" href="nazra_news.html">⭐ أهم الأخبار <span class="cat-count">12</span></a>
+    <a class="cat-btn" href="nazra_world.html">🌍 عالمية <span class="cat-count">8</span></a>
+    <a class="cat-btn" href="nazra_mideast.html">🕌 شرق أوسط <span class="cat-count">9</span></a>
+    <a class="cat-btn" href="nazra_local.html">🇪🇬 محلية <span class="cat-count">6</span></a>
+    <a class="cat-btn" href="nazra_economy.html">📈 اقتصاد <span class="cat-count">4</span></a>
+    <a class="cat-btn" href="nazra_verify.html">✅ التحقق <span class="cat-count">3</span></a>
   </div>
+</div>
+
+<!-- GLOBE SECTION -->
+<div class="globe-section">
+  <div class="globe-inner">
+    <div class="globe-wrap">
+      <canvas id="globeCanvas" width="400" height="400"></canvas>
+    </div>
+    <div class="globe-info">
+      <div>
+        <div class="globe-title">🌍 خريطة الأخبار العالمية — مباشر</div>
+        <div class="globe-sub">اضغط على أي دولة مضاءة لعرض أهم أخبارها. الجانب المضيء = نهار / المظلل = ليل حسب التوقيت الحالي.</div>
+      </div>
+      <div class="globe-stats">
+        <div class="gstat"><div class="gstat-val">34</div><div class="gstat-label">مصدراً نشطاً</div></div>
+        <div class="gstat"><div class="gstat-val">8</div><div class="gstat-label">دول تحت المتابعة</div></div>
+        <div class="gstat"><div class="gstat-val">47</div><div class="gstat-label">خبراً منذ الفجر</div></div>
+      </div>
+      <div>
+        <div style="color:var(--gold);font-size:11px;font-weight:800;letter-spacing:.5px;margin-bottom:10px">الدول الأكثر تغطية</div>
+        <div class="globe-countries" id="gcList">
+          <div class="gcountry" onclick="showCountryNews('iran')"><span class="gcountry-flag">🇮🇷</span><span class="gcountry-name">إيران — إصفهان</span><span class="gcountry-count">17 خبراً</span></div>
+          <div class="gcountry" onclick="showCountryNews('palestine')"><span class="gcountry-flag">🇵🇸</span><span class="gcountry-name">فلسطين — غزة</span><span class="gcountry-count">11 خبراً</span></div>
+          <div class="gcountry" onclick="showCountryNews('egypt')"><span class="gcountry-flag">🇪🇬</span><span class="gcountry-name">مصر — القاهرة</span><span class="gcountry-count">6 أخبار</span></div>
+          <div class="gcountry" onclick="showCountryNews('saudi')"><span class="gcountry-flag">🇸🇦</span><span class="gcountry-name">السعودية — الرياض</span><span class="gcountry-count">4 أخبار</span></div>
+          <div class="gcountry" onclick="showCountryNews('uae')"><span class="gcountry-flag">🇦🇪</span><span class="gcountry-name">الإمارات — أبوظبي</span><span class="gcountry-count">3 أخبار</span></div>
+          <div class="gcountry" onclick="showCountryNews('jordan')"><span class="gcountry-flag">🇯🇴</span><span class="gcountry-name">الأردن — عمّان</span><span class="gcountry-count">2 خبران</span></div>
+          <div class="gcountry" onclick="showCountryNews('kuwait')"><span class="gcountry-flag">🇰🇼</span><span class="gcountry-name">الكويت</span><span class="gcountry-count">2 خبران</span></div>
+          <div class="gcountry" onclick="showCountryNews('un')"><span class="gcountry-flag">🇺🇳</span><span class="gcountry-name">الأمم المتحدة — نيويورك</span><span class="gcountry-count">3 أخبار</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Country News Popup -->
+<div class="globe-popup-overlay" id="globeOverlay" onclick="closeCountryPopup()"></div>
+<div class="country-news-popup" id="countryPopup">
+  <div class="cnp-header">
+    <span class="cnp-flag" id="cnpFlag">🌍</span>
+    <span class="cnp-title" id="cnpTitle">أخبار الدولة</span>
+    <span class="cnp-count" id="cnpCount">0 أخبار</span>
+    <button class="cnp-close" onclick="closeCountryPopup()">✕</button>
+  </div>
+  <div class="cnp-body" id="cnpBody"></div>
 </div>
 
 <main>
@@ -569,7 +691,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
       <div class="hero-body">
         <div class="hero-meta">
           <span class="badge badge-confirmed">✓ مؤكد</span>
-          <span class="src-count">📰 17 مصدراً</span>
+          <span class="src-count" onclick="showSrcPopup(event,'iran17')" title="اضغط لعرض المصادر">📰 17 مصدراً</span>
           <div class="conf-meter" style="flex:1;max-width:140px"><div class="conf-bar"><div class="conf-fill high" style="width:91%"></div></div><span class="conf-num">91/100</span></div>
         </div>
         <h1 class="hero-title">عمليات عسكرية قرب منشأة إصفهان النووية وطهران تُفعّل بروتوكولات الطوارئ الشاملة</h1>
@@ -591,11 +713,11 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
     <div class="side-card" onclick="openModal('egypt-economy')">
       <div class="side-card-img"><img src="https://picsum.photos/seed/cbeegypt26/400/300" alt="البنك المركزي" loading="lazy"></div>
       <div class="side-card-body">
-        <div class="side-card-meta"><span class="badge badge-confirmed" style="font-size:10px">✓ مؤكد</span><span class="src-count" style="font-size:10px">📰 8</span></div>
+        <div class="side-card-meta"><span class="badge badge-confirmed" style="font-size:10px">✓ مؤكد</span><span class="src-count" style="font-size:10px" onclick="showSrcPopup(event,'egypt8')" title="اضغط لعرض المصادر">📰 8 مصادر</span></div>
         <div class="side-card-title">مصر ترفع سعر الفائدة 150 نقطة أساس وسط ضغوط التضخم</div>
         <div class="side-card-time">🕐 منذ ساعة · الاقتصاد</div>
         <div class="src-links-row">
-          <a href="https://www.cbe.org.eg/ar/monetary-policy/press-releases" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 CBE</a>
+          <a href="https://www.cbe.org.eg/ar/monetary-policy/press-releases/monetary-policy/press-releases" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 CBE</a>
           <a href="https://gate.ahram.org.eg/Economy.aspx" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 الأهرام</a>
         </div>
       </div>
@@ -603,7 +725,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
     <div class="side-card" onclick="openModal('gaza-ceasefire')">
       <div class="side-card-img"><img src="https://picsum.photos/seed/gazadip26/400/300" alt="مفاوضات غزة" loading="lazy"></div>
       <div class="side-card-body">
-        <div class="side-card-meta"><span class="badge badge-developing"><span class="pulse"></span>يتطور</span><span class="src-count" style="font-size:10px">📰 11</span></div>
+        <div class="side-card-meta"><span class="badge badge-developing"><span class="pulse"></span>يتطور</span><span class="src-count" style="font-size:10px" onclick="showSrcPopup(event,'gaza11')" title="اضغط لعرض المصادر">📰 11 مصدراً</span></div>
         <div class="side-card-title">مفاوضات الهدنة في غزة تدخل مرحلة حاسمة وواشنطن تُرسل مبعوثاً خاصاً</div>
         <div class="side-card-time">🕐 منذ 45 دقيقة · الشأن الفلسطيني</div>
         <div class="src-links-row">
@@ -628,12 +750,12 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
 
   <!-- EGYPT -->
   <div id="egypt" class="section-gap" data-cat="local">
-    <div class="sec-header"><div class="sec-line"></div><span class="sec-title">🇪🇬 مصر اليوم</span><a href="https://www.ahram.org.eg" target="_blank" class="sec-more">أهرام أونلاين ←</a></div>
+    <div class="sec-header"><div class="sec-line"></div><span class="sec-title">🇪🇬 مصر اليوم</span><a href="https://gate.ahram.org.eg/Economy.aspx" target="_blank" class="sec-more">أهرام أونلاين ←</a></div>
     <div class="egypt-strip">
       <div class="eg-card" onclick="openModal('egypt-economy')">
         <div class="eg-card-img"><img src="https://picsum.photos/seed/cbeegypt/600/300" alt="البنك المركزي" loading="lazy"></div>
         <div class="eg-card-body"><div class="eg-card-cat">الاقتصاد</div><div class="eg-card-title">رفع الفائدة 150 نقطة أساس وتوقعات بمزيد من الارتفاعات</div>
-        <div class="eg-card-footer"><span class="badge badge-confirmed" style="font-size:10px">✓ مؤكد</span><a href="https://www.cbe.org.eg/ar/monetary-policy/press-releases" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 CBE</a></div></div>
+        <div class="eg-card-footer"><span class="badge badge-confirmed" style="font-size:10px">✓ مؤكد</span><a href="https://www.cbe.org.eg/ar/monetary-policy/press-releases/monetary-policy/press-releases" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 CBE</a></div></div>
       </div>
       <div class="eg-card">
         <div class="eg-card-img"><img src="https://picsum.photos/seed/parliament26/600/300" alt="البرلمان" loading="lazy"></div>
@@ -650,7 +772,29 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
         <div class="eg-card-body"><div class="eg-card-cat">المياه والأمن القومي</div><div class="eg-card-title">جولة مفاوضات جديدة حول سد النهضة في أديس أبابا الأسبوع القادم</div>
         <div class="eg-card-footer"><span class="badge badge-developing"><span class="pulse"></span>يتطور</span><a href="https://gate.ahram.org.eg/Economy.aspx" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 الأهرام</a></div></div>
       </div>
+
+    <!-- CURRENCY & GOLD PRICES -->
+    <div class="prices-grid" style="margin-top:20px">
+      <div class="price-card">
+        <div class="price-card-title" style="border-top-color:#FFD700">🥇 أسعار الذهب — بالجنيه المصري (للجرام)</div>
+        <div class="price-row"><span class="price-label">ذهب 24 قيراط</span><span class="price-val up" id="gold24">4,056 ج</span></div>
+        <div class="price-row"><span class="price-label">ذهب 21 قيراط</span><span class="price-val up" id="gold21">3,549 ج</span></div>
+        <div class="price-row"><span class="price-label">ذهب 18 قيراط</span><span class="price-val up" id="gold18">3,042 ج</span></div>
+        <div class="price-row"><span class="price-label">الأونصة (دولار)</span><span class="price-val up" id="goldOz">$2,847 ▲2.3٪</span></div>
+        <div class="price-source">المصدر: <a href="https://www.cbe.org.eg/ar/monetary-policy/press-releases" target="_blank" class="src-link">البنك المركزي المصري</a> · تحديث: منذ 8 دقائق</div>
+      </div>
+      <div class="price-card" style="border-top-color:#1565C0">
+        <div class="price-card-title" style="border-top-color:#1565C0">💱 أسعار العملات — مقابل الجنيه المصري</div>
+        <div class="price-row"><span class="price-label">🇺🇸 دولار أمريكي</span><span class="price-val down" id="usd">49.85 ▼0.8٪</span></div>
+        <div class="price-row"><span class="price-label">🇪🇺 يورو أوروبي</span><span class="price-val down" id="eur">54.20 ▼0.5٪</span></div>
+        <div class="price-row"><span class="price-label">🇸🇦 ريال سعودي</span><span class="price-val" id="sar">13.28</span></div>
+        <div class="price-row"><span class="price-label">🇦🇪 درهم إماراتي</span><span class="price-val" id="aed">13.57</span></div>
+        <div class="price-row"><span class="price-label">🇰🇼 دينار كويتي</span><span class="price-val up" id="kwd">162.15 ▲0.2٪</span></div>
+        <div class="price-row"><span class="price-label">🇶🇦 ريال قطري</span><span class="price-val" id="qar">13.69</span></div>
+        <div class="price-source">المصدر: <a href="https://www.cbe.org.eg/ar/monetary-policy/press-releases/market-data/exchange-rates" target="_blank" class="src-link">CBE</a> · <a href="https://www.bloomberg.com/middleeast" target="_blank" class="src-link">بلومبرغ</a> · تحديث: منذ 12 دقيقة</div>
+      </div>
     </div>
+
   </div>
 
   <!-- VERIFICATION SYSTEM -->
@@ -806,7 +950,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
         <div>
           <div class="iran-update"><span class="iran-update-time">19:34</span><div class="iran-update-body"><div class="iran-update-title"><span class="badge badge-confirmed" style="font-size:10px;margin-inline-end:6px">✓</span>الوكالة الدولية للطاقة الذرية تُقرر إرسال فريق طوارئ لمراقبة الوضع في إصفهان</div><div class="iran-update-src">رويترز · فرانس برس · بي بي سي<a href="https://arabic.reuters.com/world" target="_blank" class="iran-src-link">🔗 رويترز</a><a href="https://www.iaea.org/newscenter/news" target="_blank" class="iran-src-link">🔗 IAEA</a></div></div></div>
           <div class="iran-update"><span class="iran-update-time">19:18</span><div class="iran-update-body"><div class="iran-update-title"><span class="badge badge-confirmed" style="font-size:10px;margin-inline-end:6px">✓</span>أسعار النفط ترتفع 4.2٪ مسجلةً أعلى مستوى منذ ديسمبر 2025</div><div class="iran-update-src">رويترز · بلومبرغ<a href="https://www.bloomberg.com/energy" target="_blank" class="iran-src-link">🔗 بلومبرغ</a></div></div></div>
-          <div class="iran-update"><span class="iran-update-time">18:55</span><div class="iran-update-body"><div class="iran-update-title"><span class="badge badge-likely" style="font-size:10px;margin-inline-end:6px">~</span>تقارير عن إغلاق جزئي للمجال الجوي الإيراني أمام الرحلات التجارية</div><div class="iran-update-src">فلايت ريدار 24<a href="https://www.flightradar24.com/" target="_blank" class="iran-src-link">🔗 FlightRadar</a></div></div></div>
+          <div class="iran-update"><span class="iran-update-time">18:55</span><div class="iran-update-body"><div class="iran-update-title"><span class="badge badge-likely" style="font-size:10px;margin-inline-end:6px">~</span>تقارير عن إغلاق جزئي للمجال الجوي الإيراني أمام الرحلات التجارية</div><div class="iran-update-src">فلايت ريدار 24<a href="https://www.flightradar24.com/data/flights#eyJhbGciOiJSUzI1NiJ9" target="_blank" class="iran-src-link">🔗 FlightRadar</a></div></div></div>
           <div class="iran-update"><span class="iran-update-time">18:41</span><div class="iran-update-body"><div class="iran-update-title"><span class="badge badge-confirmed" style="font-size:10px;margin-inline-end:6px">✓</span>مجلس الأمن يعقد جلسة طارئة الساعة 21:00 بتوقيت القاهرة بطلب أمريكي فرنسي</div><div class="iran-update-src">الأمم المتحدة<a href="https://news.un.org/ar/" target="_blank" class="iran-src-link">🔗 UN</a></div></div></div>
           <div class="iran-update"><span class="iran-update-time">18:12</span><div class="iran-update-body"><div class="iran-update-title"><span class="badge badge-disputed" style="font-size:10px;margin-inline-end:6px">⚠ متضارب</span>التقارير تتضارب حول حجم الأضرار — مصدر إيراني ينفي بينما تؤكد مصادر غربية</div><div class="iran-update-src">تعارض: فارس نيوز ↔ رويترز<a href="https://www.farsnews.ir/" target="_blank" class="iran-src-link">🔗 فارس</a><a href="https://arabic.reuters.com/world" target="_blank" class="iran-src-link">🔗 رويترز</a></div></div></div>
         </div>
@@ -830,8 +974,8 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
           <div class="econ-indicator" style="border-top-color:var(--red)"><div class="ei-label">خام برنت ($/برميل)</div><div class="ei-value">$94.2</div><div class="ei-change down">▲ 4.2٪</div></div>
         </div>
         <div class="econ-event-list">
-          <div class="econ-event" onclick="openModal('egypt-economy')"><div class="econ-event-icon">🏦</div><div><div class="econ-event-title">البنك المركزي يرفع الفائدة 150 نقطة أساس بقرار استثنائي</div><div class="econ-event-meta"><span class="badge badge-confirmed" style="font-size:10px">✓</span>·<a href="https://www.cbe.org.eg/ar/monetary-policy/press-releases" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 CBE</a><a href="https://arabic.reuters.com/world" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 رويترز</a></div></div></div>
-          <div class="econ-event"><div class="econ-event-icon">📦</div><div><div class="econ-event-title">ارتفاع أسعار السلع الأساسية في مصر بنسبة 12٪ منذ بداية الأزمة</div><div class="econ-event-meta"><span class="badge badge-likely" style="font-size:10px">~</span>·<a href="https://www.capmas.gov.eg/" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 CAPMAS</a></div></div></div>
+          <div class="econ-event" onclick="openModal('egypt-economy')"><div class="econ-event-icon">🏦</div><div><div class="econ-event-title">البنك المركزي يرفع الفائدة 150 نقطة أساس بقرار استثنائي</div><div class="econ-event-meta"><span class="badge badge-confirmed" style="font-size:10px">✓</span>·<a href="https://www.cbe.org.eg/ar/monetary-policy/press-releases/monetary-policy/press-releases" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 CBE</a><a href="https://arabic.reuters.com/world" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 رويترز</a></div></div></div>
+          <div class="econ-event"><div class="econ-event-icon">📦</div><div><div class="econ-event-title">ارتفاع أسعار السلع الأساسية في مصر بنسبة 12٪ منذ بداية الأزمة</div><div class="econ-event-meta"><span class="badge badge-likely" style="font-size:10px">~</span>·<a href="https://www.capmas.gov.eg/Pages/IndicatorsPage.aspx?ind_id=6172" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 CAPMAS</a></div></div></div>
           <div class="econ-event"><div class="econ-event-icon">🛢️</div><div><div class="econ-event-title">دول الخليج تُراجع ميزانياتها في ضوء أسعار النفط المرتفعة</div><div class="econ-event-meta"><span class="badge badge-developing"><span class="pulse"></span>يتطور</span>·<a href="https://www.bloomberg.com/energy" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 بلومبرغ</a></div></div></div>
         </div>
       </div>
@@ -926,7 +1070,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
         </div>
         <div class="vcv2-actions">
           <a href="https://www.youtube.com/@SkyNewsArabia/live" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
-          <a href="https://www.skynewsarabia.com" target="_blank" class="vcv2-site">🌐 الموقع</a>
+          <a href="https://www.skynewsarabia.com/middle-east" target="_blank" class="vcv2-site">🌐 الموقع</a>
         </div>
       </div>
 
@@ -945,7 +1089,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
         </div>
         <div class="vcv2-actions">
           <a href="https://www.youtube.com/@AlArabiya/live" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
-          <a href="https://www.alarabiya.net" target="_blank" class="vcv2-site">🌐 الموقع</a>
+          <a href="https://www.alarabiya.net/arab-and-world/middle-east" target="_blank" class="vcv2-site">🌐 الموقع</a>
         </div>
       </div>
 
@@ -964,7 +1108,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
         </div>
         <div class="vcv2-actions">
           <a href="https://www.youtube.com/@dwarabic/live" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
-          <a href="https://www.dw.com/ar" target="_blank" class="vcv2-site">🌐 الموقع</a>
+          <a href="https://www.dw.com/ar/%D8%A7%D9%84%D8%B4%D8%B1%D9%82-%D8%A7%D9%84%D8%A3%D9%88%D8%B3%D8%B7" target="_blank" class="vcv2-site">🌐 الموقع</a>
         </div>
       </div>
 
@@ -1118,8 +1262,8 @@ const EV={
     summary:'أعلن البنك المركزي المصري رفع سعر الفائدة على الإيداع بنسبة 1.5٪ ليصل إلى 28.75٪ في قرار استثنائي خارج مواعيد الاجتماعات المقررة وسط تراجع ملحوظ لقيمة الجنيه وتصاعد ضغوط التضخم جراء الأزمة الإقليمية.',
     know:['البنك المركزي أصدر بياناً رسمياً مؤكداً رفع الفائدة 150 نقطة','سعر الفائدة على الإيداع بلغ 28.75٪','الجنيه تراجع 0.8٪ ليصل إلى 49.85 للدولار','القرار فعّال من جلسة التداول الثلاثاء'],
     dontKnow:['مدى مواصلة الرفع في الاجتماع القادم','تأثير القرار على الاستثمار الأجنبي','موعد استقرار سعر الصرف'],
-    facts:[{i:'🏦',t:'سعر الفائدة على الإيداع رُفع إلى 28.75٪',s:'البنك المركزي المصري',l:'https://www.cbe.org.eg/ar/monetary-policy/press-releases'},{i:'💱',t:'الجنيه تراجع 0.8٪ ليسجل 49.85 للدولار',s:'بلومبرغ',l:'https://www.bloomberg.com/middleeast'},{i:'📊',t:'التضخم السنوي 31.2٪ في مارس',s:'CAPMAS',l:'https://www.capmas.gov.eg/'}],
-    srcs:[{lo:'م',n:'البنك المركزي المصري',t:'gold',tt:'رسمي',ti:'13:00',l:'https://www.cbe.org.eg/ar/monetary-policy/press-releases'},{lo:'أ',n:'الأهرام الاقتصادي',t:'silver',tt:'فضي',ti:'13:15',l:'https://gate.ahram.org.eg/Economy.aspx'},{lo:'ر',n:'رويترز اقتصاد',t:'gold',tt:'ذهبي',ti:'13:08',l:'https://arabic.reuters.com/business'}],
+    facts:[{i:'🏦',t:'سعر الفائدة على الإيداع رُفع إلى 28.75٪',s:'البنك المركزي المصري',l:'https://www.cbe.org.eg/ar/monetary-policy/press-releases/monetary-policy/press-releases'},{i:'💱',t:'الجنيه تراجع 0.8٪ ليسجل 49.85 للدولار',s:'بلومبرغ',l:'https://www.bloomberg.com/middleeast'},{i:'📊',t:'التضخم السنوي 31.2٪ في مارس',s:'CAPMAS',l:'https://www.capmas.gov.eg/Pages/IndicatorsPage.aspx?ind_id=6172'}],
+    srcs:[{lo:'م',n:'البنك المركزي المصري',t:'gold',tt:'رسمي',ti:'13:00',l:'https://www.cbe.org.eg/ar/monetary-policy/press-releases/monetary-policy/press-releases'},{lo:'أ',n:'الأهرام الاقتصادي',t:'silver',tt:'فضي',ti:'13:15',l:'https://gate.ahram.org.eg/Economy.aspx'},{lo:'ر',n:'رويترز اقتصاد',t:'gold',tt:'ذهبي',ti:'13:08',l:'https://arabic.reuters.com/business'}],
     tl:[{ti:'11:30',st:'developing',tx:'تسريب من مصدر مصرفي — اجتماع طارئ',s:'مصدر مصرفي'},{ti:'12:15',st:'likely',tx:'اليوم السابع والمصري اليوم يؤكدان الاجتماع',s:'صحافة محلية'},{ti:'13:00',st:'confirmed',tx:'بيان CBE الرسمي برفع الفائدة 150 نقطة ✓',s:'CBE رسمي'},{ti:'13:08',st:'confirmed',tx:'رويترز والأهرام يؤكدان وينشران التفاصيل',s:'رويترز + الأهرام'}]},
   'gaza-ceasefire':{img:'https://picsum.photos/seed/gazadip26b/900/400',cat:'الشأن الفلسطيني',badge:'developing',bt:'● يتطور',src:11,conf:62,
     title:'مفاوضات الهدنة في غزة تدخل مرحلة حاسمة والمبعوث الأمريكي يتوجه إلى القاهرة',
@@ -1247,7 +1391,112 @@ window.addEventListener('resize', fixSticky);
 fixSticky();
 // Also re-run when breaking banner is closed
 document.querySelector('.bb-close')?.addEventListener('click',()=>setTimeout(fixSticky,50));
+
+// ─── SOURCE POPUP ───
+const SOURCES_DB = {
+  'iran17': ['رويترز عربي','بي بي سي عربي','الجزيرة','فرانس 24','فرانس برس','أسوشيتد برس','الوكالة الدولية للطاقة الذرية (IAEA)','سكاي نيوز عربية','DW عربي','قناة العربية','فلايت ريدار 24','اليوم السابع','المصري اليوم','الأهرام','مصراوي','الأمم المتحدة (UN News)','بلومبرغ'],
+  'egypt8': ['البنك المركزي المصري (رسمي)','الأهرام الاقتصادي','رويترز اقتصاد','اليوم السابع','المصري اليوم','مصراوي','بلومبرغ','CAPMAS (التعبئة والإحصاء)'],
+  'gaza11': ['الجزيرة نت','أسوشيتد برس (AP)','مصراوي','الخارجية المصرية','قطر الإخبارية','DW عربي','بي بي سي عربي','رويترز','سكاي نيوز عربية','العربية','فرانس 24']
+};
+function showSrcPopup(e, key) {
+  e.stopPropagation();
+  const pop = document.getElementById('srcPopup');
+  const list = document.getElementById('srcPopupList');
+  const srcs = SOURCES_DB[key] || [];
+  list.innerHTML = srcs.map(s => `<div class="src-popup-item">${s}</div>`).join('');
+  const rect = e.currentTarget.getBoundingClientRect();
+  pop.style.top = (rect.bottom + window.scrollY + 8) + 'px';
+  const left = Math.min(rect.left, window.innerWidth - 260);
+  pop.style.left = left + 'px';
+  pop.style.right = 'auto';
+  pop.style.position = 'absolute';
+  pop.classList.add('open');
+  document.getElementById('srcPopupBackdrop').style.display = 'block';
+}
+function closeSrcPopup() {
+  document.getElementById('srcPopup').classList.remove('open');
+  document.getElementById('srcPopupBackdrop').style.display = 'none';
+}
+
+// ─── COUNTRY NEWS DATA ───
+const COUNTRY_NEWS = {
+  iran: {flag:'🇮🇷', name:'إيران — إصفهان', count:'17 خبراً', color:'#C1121F',
+    stories:[
+      {text:'عمليات عسكرية قرب منشأة إصفهان النووية وإيران تُفعّل الطوارئ', link:'https://arabic.reuters.com/world'},
+      {text:'إغلاق جزئي للمجال الجوي الإيراني أمام الرحلات التجارية', link:'https://www.flightradar24.com/data/flights'},
+      {text:'الوكالة الدولية للطاقة الذرية ترسل فريق طوارئ لمراقبة إصفهان', link:'https://www.iaea.org/newscenter/news'},
+      {text:'طهران تُفعّل بروتوكولات الطوارئ الشاملة في المنشآت النووية', link:'https://arabic.reuters.com/world'},
+      {text:'مجلس الأمن يعقد جلسة طارئة بطلب أمريكي-فرنسي', link:'https://news.un.org/ar/'}
+    ]},
+  palestine: {flag:'🇵🇸', name:'فلسطين — غزة', count:'11 خبراً', color:'#2E7D32',
+    stories:[
+      {text:'مفاوضات الهدنة في غزة تدخل مرحلة حاسمة والقاهرة تحتضن الجولة', link:'https://www.aljazeera.net/tag/%D8%BA%D8%B2%D8%A9'},
+      {text:'المبعوث الأمريكي يتوجه إلى القاهرة لاستئناف مفاوضات الهدنة', link:'https://apnews.com/hub/israel-hamas-war'},
+      {text:'قطر والأمم المتحدة تشاركان في جولة مفاوضات جديدة', link:'https://www.aljazeera.net/news/political/'}
+    ]},
+  egypt: {flag:'🇪🇬', name:'مصر — القاهرة', count:'6 أخبار', color:'#E9C46A',
+    stories:[
+      {text:'البنك المركزي يرفع الفائدة 150 نقطة أساس في قرار استثنائي', link:'https://www.cbe.org.eg/ar/monetary-policy/press-releases'},
+      {text:'البرلمان يُقر قانون الضريبة على القيمة المضافة بتعديلات جوهرية', link:'https://gate.ahram.org.eg/Economy.aspx'},
+      {text:'مصر تُعلن توقف انقطاعات الكهرباء بعد تشغيل الضبعة النووية', link:'https://www.masrawy.com/news/news_egypt'},
+      {text:'جولة مفاوضات جديدة حول سد النهضة في أديس أبابا', link:'https://gate.ahram.org.eg/Economy.aspx'}
+    ]},
+  saudi: {flag:'🇸🇦', name:'السعودية — الرياض', count:'4 أخبار', color:'#1565C0',
+    stories:[
+      {text:'الرياض تستدعي سفير طهران احتجاجاً على التصريحات الأخيرة', link:'https://arabic.reuters.com/world'},
+      {text:'السعودية تُراجع ميزانيتها في ضوء ارتفاع أسعار النفط', link:'https://www.bloomberg.com/energy'}
+    ]},
+  uae: {flag:'🇦🇪', name:'الإمارات — أبوظبي', count:'3 أخبار', color:'#AB47BC',
+    stories:[
+      {text:'الإمارات تدعو إلى التهدئة وتؤكد دعمها للحل الدبلوماسي', link:'https://www.skynewsarabia.com/middle-east'},
+      {text:'مجلس التعاون الخليجي يعقد اجتماعاً طارئاً لبحث التطورات', link:'https://www.alarabiya.net/arab-and-world/middle-east'}
+    ]},
+  jordan: {flag:'🇯🇴', name:'الأردن — عمّان', count:'2 خبران', color:'#FF7043',
+    stories:[
+      {text:'الأردن يُعلن إغلاق مجاله الجوي أمام الطائرات المدنية الإيرانية', link:'https://arabic.reuters.com/world'},
+      {text:'الأردن يُفعّل خطط الطوارئ الاحترازية تحسباً للتصعيد', link:'https://arabic.reuters.com/world'}
+    ]},
+  kuwait: {flag:'🇰🇼', name:'الكويت', count:'2 خبران', color:'#26A69A',
+    stories:[
+      {text:'الكويت تُفعّل خطط الطوارئ في المنشآت النفطية الرئيسية', link:'https://arabic.reuters.com/world'},
+      {text:'الكويت تراقب التطورات الإقليمية بقلق بالغ', link:'https://arabic.reuters.com/world'}
+    ]},
+  un: {flag:'🇺🇳', name:'الأمم المتحدة — نيويورك', count:'3 أخبار', color:'#546E7A',
+    stories:[
+      {text:'مجلس الأمن يعقد جلسة طارئة بشأن الأزمة الإيرانية', link:'https://news.un.org/ar/'},
+      {text:'الأمم المتحدة تدعو إلى ضبط النفس وتجنب التصعيد', link:'https://news.un.org/ar/'},
+      {text:'المنسق الأممي يطالب بالحماية الفورية للمنشآت النووية', link:'https://news.un.org/ar/'}
+    ]}
+};
+function showCountryNews(key) {
+  const d = COUNTRY_NEWS[key];
+  if(!d) return;
+  document.getElementById('cnpFlag').textContent = d.flag;
+  document.getElementById('cnpTitle').textContent = d.name;
+  document.getElementById('cnpCount').textContent = d.count;
+  document.getElementById('cnpBody').innerHTML = d.stories.map(s =>
+    `<a href="${s.link}" target="_blank" class="cnp-story" style="text-decoration:none">
+      <div class="cnp-dot" style="background:${d.color}"></div>
+      <div class="cnp-story-text">${s.text}</div>
+    </a>`
+  ).join('');
+  document.getElementById('globeOverlay').classList.add('open');
+  document.getElementById('countryPopup').classList.add('open');
+}
+function closeCountryPopup() {
+  document.getElementById('globeOverlay').classList.remove('open');
+  document.getElementById('countryPopup').classList.remove('open');
+}
 </script>
+
+
+<!-- SOURCE POPUP -->
+<div id="srcPopupBackdrop" style="display:none;position:fixed;inset:0;z-index:1998" onclick="closeSrcPopup()"></div>
+<div class="src-popup" id="srcPopup">
+  <button class="src-popup-close" onclick="closeSrcPopup()">✕</button>
+  <div class="src-popup-title">📡 المصادر المُبلِّغة</div>
+  <div class="src-popup-list" id="srcPopupList"></div>
+</div>
 
 <!-- LOGIN MODAL -->
 <div class="login-overlay" id="loginOverlay" onclick="closeLoginOutside(event)">
@@ -1301,6 +1550,223 @@ function doLogin(){
   }
 }
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLogin();});
+</script>
+
+
+<!-- THREE.JS GLOBE -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  const canvas = document.getElementById('globeCanvas');
+  if(!canvas || typeof THREE === 'undefined') return;
+
+  const W = canvas.width, H = canvas.height;
+  const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
+  renderer.setSize(W, H);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, W/H, 0.1, 100);
+  camera.position.z = 2.5;
+
+  // Earth sphere
+  const geo = new THREE.SphereGeometry(1, 64, 64);
+  const loader = new THREE.TextureLoader();
+  loader.crossOrigin = 'anonymous';
+
+  // Primary texture: Wikipedia Blue Marble
+  const earthTex = loader.load(
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Blue_Marble_2002.png/1280px-Blue_Marble_2002.png',
+    undefined, undefined,
+    function() {
+      // Fallback: procedural sphere
+      mat.color.set(0x1a4080);
+    }
+  );
+  // Night texture (optional, procedural fallback)
+  const mat = new THREE.MeshPhongMaterial({
+    map: earthTex,
+    specular: new THREE.Color(0x444444),
+    shininess: 12,
+  });
+  const globe = new THREE.Mesh(geo, mat);
+  scene.add(globe);
+
+  // Atmosphere glow
+  const atmGeo = new THREE.SphereGeometry(1.035, 64, 64);
+  const atmMat = new THREE.MeshPhongMaterial({
+    color: 0x4488ff,
+    transparent: true,
+    opacity: 0.08,
+    side: THREE.FrontSide,
+  });
+  scene.add(new THREE.Mesh(atmGeo, atmMat));
+
+  // Stars (background particles)
+  const starsGeo = new THREE.BufferGeometry();
+  const starCount = 800;
+  const starPos = new Float32Array(starCount * 3);
+  for(let i=0;i<starCount*3;i++) starPos[i] = (Math.random()-0.5)*80;
+  starsGeo.setAttribute('position', new THREE.BufferAttribute(starPos,3));
+  const starMat = new THREE.PointsMaterial({color:0xffffff, size:0.08, transparent:true, opacity:0.7});
+  scene.add(new THREE.Points(starsGeo, starMat));
+
+  // Lighting: sun (day) + ambient (night)
+  const ambientLight = new THREE.AmbientLight(0x111122, 1.2);
+  scene.add(ambientLight);
+  const sunLight = new THREE.DirectionalLight(0xffeedd, 2.2);
+  // Sun position based on current time (approximate longitude)
+  const now = new Date();
+  const utcH = now.getUTCHours() + now.getUTCMinutes()/60;
+  // Sun is at 0° lon at ~12:00 UTC, moves 15°/hr
+  const sunLon = (12 - utcH) * 15;
+  const sunPhi = Math.PI/2;
+  const sunTheta = (sunLon + 180) * Math.PI / 180;
+  sunLight.position.set(
+    Math.sin(sunPhi)*Math.cos(sunTheta)*5,
+    Math.cos(sunPhi)*5,
+    Math.sin(sunPhi)*Math.sin(sunTheta)*5
+  );
+  scene.add(sunLight);
+
+  // Country markers
+  const MARKERS = [
+    {key:'iran',     lat:32.4, lon:53.7, count:17, color:0xEF5350, size:0.045},
+    {key:'palestine',lat:31.5, lon:34.4, count:11, color:0x66BB6A, size:0.038},
+    {key:'egypt',    lat:26.8, lon:30.8, count:6,  color:0xE9C46A, size:0.032},
+    {key:'saudi',    lat:23.9, lon:45.1, count:4,  color:0x42A5F5, size:0.028},
+    {key:'uae',      lat:23.4, lon:53.8, count:3,  color:0xAB47BC, size:0.024},
+    {key:'jordan',   lat:30.6, lon:36.2, count:2,  color:0xFF7043, size:0.022},
+    {key:'kuwait',   lat:29.3, lon:47.5, count:2,  color:0x26A69A, size:0.022},
+    {key:'un',       lat:40.7, lon:-74.0,count:3,  color:0x78909C, size:0.024}
+  ];
+
+  function latLonToVec3(lat, lon, r) {
+    const phi = (90 - lat) * Math.PI / 180;
+    const theta = (lon + 180) * Math.PI / 180;
+    return new THREE.Vector3(
+      -r * Math.sin(phi) * Math.cos(theta),
+       r * Math.cos(phi),
+       r * Math.sin(phi) * Math.sin(theta)
+    );
+  }
+
+  const markerMeshes = [];
+  MARKERS.forEach(m => {
+    // Outer ring (pulsing)
+    const rGeo = new THREE.SphereGeometry(m.size * 1.8, 12, 12);
+    const rMat = new THREE.MeshBasicMaterial({color:m.color, transparent:true, opacity:0.3});
+    const ring = new THREE.Mesh(rGeo, rMat);
+    // Inner dot
+    const dGeo = new THREE.SphereGeometry(m.size, 12, 12);
+    const dMat = new THREE.MeshBasicMaterial({color:m.color});
+    const dot = new THREE.Mesh(dGeo, dMat);
+    const pos = latLonToVec3(m.lat, m.lon, 1.01);
+    ring.position.copy(pos);
+    dot.position.copy(pos);
+    scene.add(ring);
+    scene.add(dot);
+    markerMeshes.push({dot, ring, key:m.key, pos: pos.clone(), rMat});
+  });
+
+  // Mouse interaction
+  const raycaster = new THREE.Raycaster();
+  const mouse = new THREE.Vector2();
+  let isDragging = false, prevMouse = {x:0, y:0};
+  let rotX = 0, rotY = 0;
+  let autoRotate = true;
+  let autoRotateTimeout = null;
+
+  canvas.addEventListener('mousedown', e => {
+    isDragging = false;
+    prevMouse = {x: e.clientX, y: e.clientY};
+    autoRotate = false;
+    if(autoRotateTimeout) clearTimeout(autoRotateTimeout);
+  });
+  canvas.addEventListener('mousemove', e => {
+    if(e.buttons === 1) {
+      isDragging = true;
+      const dx = e.clientX - prevMouse.x;
+      const dy = e.clientY - prevMouse.y;
+      rotY += dx * 0.005;
+      rotX += dy * 0.005;
+      rotX = Math.max(-Math.PI/2, Math.min(Math.PI/2, rotX));
+      prevMouse = {x: e.clientX, y: e.clientY};
+    }
+  });
+  canvas.addEventListener('mouseup', e => {
+    if(!isDragging) {
+      // Check marker click
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+      raycaster.setFromCamera(mouse, camera);
+      const dots = markerMeshes.map(m => m.dot);
+      const hits = raycaster.intersectObjects(dots);
+      if(hits.length > 0) {
+        const hit = hits[0].object;
+        const marker = markerMeshes.find(m => m.dot === hit);
+        if(marker) showCountryNews(marker.key);
+      }
+    }
+    // Resume auto-rotate after 3s
+    if(autoRotateTimeout) clearTimeout(autoRotateTimeout);
+    autoRotateTimeout = setTimeout(() => { autoRotate = true; }, 3000);
+  });
+
+  // Touch support
+  let lastTouch = null;
+  canvas.addEventListener('touchstart', e => {
+    lastTouch = {x: e.touches[0].clientX, y: e.touches[0].clientY};
+    autoRotate = false;
+    e.preventDefault();
+  }, {passive:false});
+  canvas.addEventListener('touchmove', e => {
+    if(!lastTouch) return;
+    const dx = e.touches[0].clientX - lastTouch.x;
+    const dy = e.touches[0].clientY - lastTouch.y;
+    rotY += dx * 0.005;
+    rotX += dy * 0.005;
+    rotX = Math.max(-Math.PI/2, Math.min(Math.PI/2, rotX));
+    lastTouch = {x: e.touches[0].clientX, y: e.touches[0].clientY};
+    e.preventDefault();
+  }, {passive:false});
+  canvas.addEventListener('touchend', () => {
+    if(autoRotateTimeout) clearTimeout(autoRotateTimeout);
+    autoRotateTimeout = setTimeout(() => { autoRotate = true; }, 3000);
+    lastTouch = null;
+  });
+
+  // Animation loop
+  let t = 0;
+  function animate() {
+    requestAnimationFrame(animate);
+    t += 0.016;
+    if(autoRotate) rotY += 0.003;
+    globe.rotation.x = rotX;
+    globe.rotation.y = rotY;
+    // Sync markers with globe rotation
+    markerMeshes.forEach((m, i) => {
+      const pos = m.pos.clone().applyEuler(new THREE.Euler(rotX, rotY, 0));
+      m.dot.position.copy(pos);
+      m.ring.position.copy(pos);
+      // Pulse effect
+      const pulse = 1 + 0.25 * Math.sin(t * 2.5 + i * 0.8);
+      m.ring.scale.setScalar(pulse);
+      m.rMat.opacity = 0.15 + 0.15 * Math.sin(t * 2.5 + i * 0.8);
+    });
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  // Responsive resize
+  window.addEventListener('resize', () => {
+    const s = canvas.clientWidth;
+    renderer.setSize(s, s);
+    camera.aspect = 1;
+    camera.updateProjectionMatrix();
+  });
+})();
 </script>
 
 </body>
