@@ -376,6 +376,9 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
 .live-card-src{font-size:11px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.5px}
 .live-card-title{font-size:14px;font-weight:700;line-height:1.55;color:var(--navy);flex:1;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .live-card-time{font-size:11px;color:var(--mid);margin-top:4px}
+.live-card-exact-time{font-size:12px;font-weight:700;color:var(--navy);direction:ltr;display:inline-block}
+.live-card-rel-time{font-size:10px;color:var(--mid)}
+.time-block{display:flex;flex-direction:column;gap:1px;margin-top:4px}
 .cred-wrap{margin-top:6px;padding-top:6px;border-top:1px solid #f0f0f0}
 .cred-label{font-size:10px;color:var(--mid);display:flex;justify-content:space-between;align-items:center;margin-bottom:3px}
 .cred-pct{font-weight:700;font-size:10px}
@@ -506,9 +509,11 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
 .gstat-val{color:var(--gold);font-size:16px;font-weight:900;display:inline}
 .gstat-label{color:rgba(255,255,255,.45);font-size:10px;margin-right:4px;display:inline}
 /* Map SVG container */
-.map-svg-wrap{position:relative;width:100%;background:linear-gradient(180deg,#020c1b 0%,#040e1d 100%);border-radius:10px 10px 0 0;overflow:hidden;cursor:grab;min-height:380px;box-shadow:inset 0 0 60px rgba(0,0,0,.5)}
+.map-svg-wrap{position:relative;width:100%;background:linear-gradient(180deg,#020c1b 0%,#040e1d 100%);border-radius:10px 10px 0 0;overflow:hidden;cursor:grab;box-shadow:inset 0 0 60px rgba(0,0,0,.5)}
 .map-svg-wrap:active{cursor:grabbing}
-#worldMap{width:100%;height:auto;display:block;min-height:380px}
+#worldMap{width:100%;height:auto;display:block;aspect-ratio:1100/560;min-height:260px;max-height:65vh}
+@media(max-width:768px){#worldMap{aspect-ratio:1100/600;min-height:200px}}
+@media(min-width:1600px){#worldMap{max-height:72vh}}
 /* Zoom controls */
 .map-zoom-ctrl{position:absolute;top:12px;left:12px;display:flex;flex-direction:column;gap:4px;z-index:10}
 .zoom-btn{width:32px;height:32px;border-radius:6px;border:1px solid rgba(255,255,255,.25);background:rgba(5,15,35,.75);color:#fff;font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);font-family:monospace;line-height:1}
@@ -1149,7 +1154,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
         </div>
       </div>
       <div style="display:flex;flex-direction:column;gap:16px">
-        <div class="brief-widget"><div class="brief-header"><span>☀️</span><span class="brief-title">الموجز اليومي</span><span class="brief-date">٤ أبريل ٢٠٢٦</span></div><div class="brief-body"><div class="brief-item"><span class="brief-num">١</span><span class="brief-text">انفجارات قرب إصفهان تُهدد استقرار المنطقة والمجتمع الدولي يتحرك لاحتواء الأزمة</span></div><div class="brief-item"><span class="brief-num">٢</span><span class="brief-text">البنك المركزي المصري يرفع الفائدة بقرار استثنائي تزامناً مع ضغوط الأزمة الإقليمية</span></div><div class="brief-item"><span class="brief-num">٣</span><span class="brief-text">النفط فوق 94 دولاراً للمرة الأولى منذ 16 شهراً وموجة شراء غير مسبوقة في الذهب</span></div><div class="brief-item"><span class="brief-num">٤</span><span class="brief-text">مفاوضات غزة في مرحلة حاسمة والمبعوث الأمريكي يتوجه إلى القاهرة الليلة</span></div><div class="brief-item"><span class="brief-num">٥</span><span class="brief-text">الأردن والكويت يُفعّلان خطط الطوارئ تحسباً لانعكاسات التصعيد الإقليمي</span></div></div></div>
+        <div class="brief-widget"><div class="brief-header"><span>☀️</span><span class="brief-title">الموجز اليومي</span><span class="brief-date" id="briefDate">—</span></div><div class="brief-body" id="briefBody"><div class="brief-item"><span class="brief-num">١</span><span class="brief-text">جارٍ تحميل أبرز أخبار اليوم...</span></div></div></div>
         <div class="source-activity"><div class="sa-title">📡 المصادر النشطة الآن</div><div class="sa-list">
           <div class="sa-item"><div class="sa-logo">ر</div><a href="https://www.reuters.com/world/middle-east/" target="_blank" class="sa-name">رويترز عربي</a><span class="sa-tier gold">ذهبي</span><div class="sa-bar-wrap"><div class="sa-bar" style="width:95%"></div></div><span class="sa-time">2د</span></div>
           <div class="sa-item"><div class="sa-logo">ب</div><a href="https://www.bbc.com/arabic/middleeast" target="_blank" class="sa-name">بي بي سي عربي</a><span class="sa-tier gold">ذهبي</span><div class="sa-bar-wrap"><div class="sa-bar" style="width:88%"></div></div><span class="sa-time">5د</span></div>
@@ -1200,7 +1205,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
           <span class="video-source-badge">● مباشر</span>
         </div>
         <div class="vcv2-actions">
-          <a href="https://www.youtube.com/bbcarabic/live" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
+          <a href="https://www.youtube.com/@bbcarabic/live" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
           <a href="https://www.bbc.com/arabic" target="_blank" class="vcv2-site">🌐 الموقع</a>
         </div>
       </div>
@@ -1219,7 +1224,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
           <span class="video-source-badge">● مباشر</span>
         </div>
         <div class="vcv2-actions">
-          <a href="https://www.youtube.com/france24arabic/live" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
+          <a href="https://www.youtube.com/@France24Arabic/live" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
           <a href="https://www.france24.com/ar/" target="_blank" class="vcv2-site">🌐 الموقع</a>
         </div>
       </div>
@@ -1238,7 +1243,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
           <span class="video-source-badge">● مباشر</span>
         </div>
         <div class="vcv2-actions">
-          <a href="https://www.youtube.com/skynewsarabia/live" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
+          <a href="https://www.youtube.com/@skynewsarabia/live" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
           <a href="https://www.skynewsarabia.com/middle-east" target="_blank" class="vcv2-site">🌐 الموقع</a>
         </div>
       </div>
@@ -1257,7 +1262,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
           <span class="video-source-badge">● مباشر</span>
         </div>
         <div class="vcv2-actions">
-          <a href="https://www.youtube.com/alarabiya/live" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
+          <a href="https://www.youtube.com/@AlArabiya/live" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
           <a href="https://www.alarabiya.net/arab-and-world" target="_blank" class="vcv2-site">🌐 الموقع</a>
         </div>
       </div>
@@ -1276,7 +1281,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
           <span class="video-source-badge">● مباشر</span>
         </div>
         <div class="vcv2-actions">
-          <a href="https://www.youtube.com/dwarabic/live" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
+          <a href="https://www.youtube.com/@dwarabic/live" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
           <a href="https://www.dw.com/ar/%D8%A7%D9%84%D8%B4%D8%B1%D9%82-%D8%A7%D9%84%D8%A3%D9%88%D8%B3%D8%B7" target="_blank" class="vcv2-site">🌐 الموقع</a>
         </div>
       </div>
@@ -1523,14 +1528,18 @@ function updateFAB(){
 function doRefresh(){
   const b=document.getElementById('luBtn'),ic=document.getElementById('luIcon');
   ic.style.animation='spin .7s linear';b.disabled=true;
-  setTimeout(()=>{ic.style.animation='';b.disabled=false;rem=60;updateFAB();updateTime();
+  // Delegate to full news fetch so all content refreshes
+  fetchNewsNow().finally(()=>{
+    ic.style.animation='';b.disabled=false;rem=60;updateFAB();updateTime();
     document.querySelectorAll('.sa-bar').forEach(bar=>{const c=parseFloat(bar.style.width)||50;bar.style.width=Math.min(100,Math.max(10,c+(Math.random()*10-5)))+'%';});
-  },800);
+  });
 }
 function togglePause(e){e.stopPropagation();paused=!paused;updateFAB();}
 function startTimer(){if(timer)clearInterval(timer);timer=setInterval(()=>{if(paused)return;rem--;updateFAB();if(rem<=0){rem=60;doRefresh();}},1000);}
 function updateTime(){const n=new Date(),c=new Date(n.toLocaleString('en-US',{timeZone:'Africa/Cairo'}));const h=String(c.getHours()).padStart(2,'0'),m=String(c.getMinutes()).padStart(2,'0'),s=String(c.getSeconds()).padStart(2,'0');document.getElementById('luTime').textContent=`${h}:${m}:${s} بتوقيت القاهرة`;document.title=`${h}:${m} — نظرة للذكاء الإخباري`;}
 setInterval(updateTime,1000);updateTime();startTimer();updateFAB();
+// Set digest date immediately on load (not waiting for RSS fetch)
+(function(){const d=document.getElementById('briefDate');if(d) d.textContent=new Date().toLocaleDateString('ar-EG',{weekday:'long',year:'numeric',month:'long',day:'numeric'});})();
 
 // SMOOTH SCROLL
 document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'});}});});
@@ -2050,14 +2059,24 @@ function parseRawXML(text, feed){
                (linkEl.nextSibling && linkEl.nextSibling.nodeValue && linkEl.nextSibling.nodeValue.trim()) ||
                linkEl.textContent.trim();
       }
+      // Ensure link is absolute and actually leads to an article (not the feed homepage)
+      let finalLink = link || '';
+      if(finalLink && !finalLink.startsWith('http')){
+        // Relative URL → make absolute using feed domain
+        try { finalLink = new URL(finalLink, feed.link).href; } catch(e){ finalLink = ''; }
+      }
+      // If link is the feed homepage itself, or empty, fall back to sourceLink
+      if(!finalLink || finalLink === feed.link || finalLink === feed.url){
+        finalLink = feed.link;
+      }
       return {
         title: txt('title'),
-        link:  link || feed.link,
+        link:  finalLink,
         date:  new Date(txt('pubDate') || txt('updated') || Date.now()),
         source: feed.name,
         sourceLink: feed.link
       };
-    }).filter(it => it.title && it.title.length > 5);
+    }).filter(it => it.title && it.title.length > 5 && it.link);
   } catch(e){ return []; }
 }
 
@@ -2105,12 +2124,18 @@ async function fetchFeed(feed, proxyIdx = 0){
       if(res.ok){
         const data = await res.json();
         if(data.status === 'ok' && Array.isArray(data.items) && data.items.length){
-          return data.items.slice(0,10).map(it => ({
-            title: (it.title||'').replace(/<[^>]+>/g,'').trim(),
-            link:  it.link || it.url || feed.link,
-            date:  it.pubDate ? new Date(it.pubDate) : new Date(),
-            source: feed.name, sourceLink: feed.link
-          })).filter(it => it.title && it.title.length > 5);
+          return data.items.slice(0,10).map(it => {
+            const rawLink = it.link || it.url || '';
+            // Prefer article-specific link; fallback to feed homepage only if nothing else
+            const articleLink = (rawLink && rawLink.startsWith('http') && rawLink !== feed.url && rawLink !== feed.link)
+              ? rawLink : feed.link;
+            return {
+              title: (it.title||'').replace(/<[^>]+>/g,'').trim(),
+              link:  articleLink,
+              date:  it.pubDate ? new Date(it.pubDate) : new Date(),
+              source: feed.name, sourceLink: feed.link
+            };
+          }).filter(it => it.title && it.title.length > 5);
         }
       }
     } catch(e){}
@@ -2215,7 +2240,8 @@ function updateLiveBadge(success){
 
 /* ── helper: time ago in Arabic ── */
 function timeAgoAr(date){
-  const mins = Math.round((Date.now() - (date instanceof Date ? date : new Date(date))) / 60000);
+  const d = date instanceof Date ? date : new Date(date);
+  const mins = Math.round((Date.now() - d) / 60000);
   if(mins < 1) return 'الآن';
   if(mins < 60) return `منذ ${mins} دقيقة`;
   const hrs = Math.floor(mins / 60);
@@ -2223,7 +2249,78 @@ function timeAgoAr(date){
   return `منذ ${Math.floor(hrs/24)} يوم`;
 }
 
-/* ── build a stable image seed from title ── */
+/* ── exact time + relative (shown on cards) ── */
+function timeFullAr(date){
+  const d = date instanceof Date ? date : new Date(date);
+  const exact = d.toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'});
+  const rel   = timeAgoAr(d);
+  return `<span class="live-card-exact-time">${exact}</span><span class="live-card-rel-time">${rel}</span>`;
+}
+
+/* ── Arabic date for digest header ── */
+function arabicDateNow(){
+  return new Date().toLocaleDateString('ar-EG', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+}
+
+/* ── Arabic numerals mapping ── */
+const AR_NUMS = ['١','٢','٣','٤','٥','٦','٧','٨','٩','١٠'];
+
+/* ── detect news topic from Arabic title → English keyword for images ── */
+function detectImageKeyword(title){
+  const t = title || '';
+  if (/إيران|هجوم|ضربة|صاروخ|عسكر|حرب|قصف|مسيّر|قوات|معركة|سلاح/.test(t)) return 'military,conflict,war';
+  if (/نفط|طاقة|بترول|غاز|برميل/.test(t)) return 'oil,energy,petroleum';
+  if (/اقتصاد|بنك|مال|سوق|أسهم|ذهب|دولار|تضخم|ميزانية|فائدة/.test(t)) return 'finance,economy,market';
+  if (/غزة|فلسطين|الضفة|رفح|حماس|الأقصى/.test(t)) return 'politics,middle-east,conflict';
+  if (/دبلوماسي|مفاوض|اتفاق|قمة|اجتماع|مبعوث|معاهدة/.test(t)) return 'diplomacy,meeting,politics';
+  if (/أمم متحدة|مجلس الأمن|أممي/.test(t)) return 'united-nations,diplomacy';
+  if (/رئيس|حكومة|وزير|برلمان|انتخاب|سياسة/.test(t)) return 'politics,government';
+  if (/كورونا|وباء|صحة|مرض|لقاح|مستشفى/.test(t)) return 'health,medicine';
+  if (/مناخ|بيئة|فيضان|زلزال|طقس|كارثة/.test(t)) return 'nature,environment,disaster';
+  if (/تكنولوجيا|ذكاء اصطناعي|رقمي|إنترنت|فضاء/.test(t)) return 'technology,innovation';
+  if (/رياضة|كرة|بطولة|ملعب|لاعب/.test(t)) return 'sports,football';
+  if (/سوريا|لبنان|العراق|اليمن|ليبيا|السودان/.test(t)) return 'middle-east,crisis,politics';
+  return 'news,world,global';
+}
+
+/* ── contextual image URL from loremflickr (keyword-matched) ── */
+function newsImageUrl(title, w, h){
+  const kw  = detectImageKeyword(title);
+  // stable seed per unique title so same article always gets same image
+  const seed = Math.abs([...String(title||'').slice(0,20)].reduce((a,c)=>a*31+c.charCodeAt(0)|0,0)) % 9999;
+  return `https://loremflickr.com/${w}/${h}/${kw}?lock=${seed}`;
+}
+
+/* ── fallback image if loremflickr fails ── */
+function fallbackImg(title, w, h){
+  const seed = encodeURIComponent((title||'').replace(/\s+/g,' ').slice(0,15));
+  return `https://picsum.photos/seed/${seed}/${w}/${h}`;
+}
+
+/* ── update daily digest from live items ── */
+function updateDailyDigest(){
+  const dateEl = document.getElementById('briefDate');
+  const bodyEl = document.getElementById('briefBody');
+  if(dateEl) dateEl.textContent = arabicDateNow();
+  if(!bodyEl || !liveItems.length) return;
+
+  // Pick top 5 distinct headlines from different sources if possible
+  const seen = new Set();
+  const top5 = [];
+  for(const item of liveItems){
+    if(top5.length >= 5) break;
+    const key = (item.title||'').slice(0,30);
+    if(!seen.has(key)){ seen.add(key); top5.push(item); }
+  }
+  bodyEl.innerHTML = top5.map((item, i) => `
+    <div class="brief-item">
+      <span class="brief-num">${AR_NUMS[i]||String(i+1)}</span>
+      <a href="${item.link}" target="_blank" rel="noopener" class="brief-text"
+         style="text-decoration:none;color:inherit;flex:1">${item.title}</a>
+    </div>`).join('');
+}
+
+/* ── build a stable image seed from title (legacy, kept for fallback) ── */
 function imgSeed(title){ return encodeURIComponent((title||'').replace(/\s+/g,' ').slice(0,15)); }
 
 /* ── render live news grid from liveItems ── */
@@ -2251,8 +2348,8 @@ function updateNewsGrid(){
     heroEl.innerHTML = `
       <a class="hero-main" href="${top.link}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
         <div class="hero-img">
-          <img src="https://picsum.photos/seed/${imgSeed(top.title)}/900/400" alt="" loading="lazy"
-               onerror="this.src='https://picsum.photos/seed/nazranews/900/400'">
+          <img src="${newsImageUrl(top.title,900,400)}" alt="${top.source}" loading="lazy"
+               onerror="this.src='${fallbackImg(top.title,900,400)}'">
           <div class="img-overlay"></div>
           <span class="img-cat">${top.source}</span>
           <span class="img-time">🕐 ${timeAgoAr(top.date)}</span>
@@ -2260,6 +2357,7 @@ function updateNewsGrid(){
         <div class="hero-body">
           <div class="hero-meta">
             <span class="new-badge">● حديث</span>
+            <span style="font-size:11px;color:var(--mid);margin-inline-start:auto">${(top.date instanceof Date ? top.date : new Date(top.date)).toLocaleString('ar-EG',{dateStyle:'short',timeStyle:'short'})}</span>
           </div>
           <h1 class="hero-title">${top.title}</h1>
           <div class="hero-footer">
@@ -2272,13 +2370,14 @@ function updateNewsGrid(){
       ${[s1,s2].filter(Boolean).map(item => `
         <a class="side-card" href="${item.link}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
           <div class="side-card-img">
-            <img src="https://picsum.photos/seed/${imgSeed(item.title)}/400/300" alt="" loading="lazy"
-                 onerror="this.src='https://picsum.photos/seed/nazraside/400/300'">
+            <img src="${newsImageUrl(item.title,400,300)}" alt="${item.source}" loading="lazy"
+                 onerror="this.src='${fallbackImg(item.title,400,300)}'">
           </div>
           <div class="side-card-body">
             <div class="side-card-meta"><span class="badge badge-developing"><span class="pulse"></span>حديث</span></div>
             <div class="side-card-title">${item.title}</div>
             <div class="side-card-time">🕐 ${timeAgoAr(item.date)} · ${item.source}</div>
+            <div style="font-size:10px;color:var(--mid);direction:ltr">${(item.date instanceof Date ? item.date : new Date(item.date)).toLocaleString('ar-EG',{dateStyle:'short',timeStyle:'short'})}</div>
           ${item.cred != null ? credBarHTML(item.cred) : ''}
           </div>
         </a>
@@ -2289,13 +2388,15 @@ function updateNewsGrid(){
       <a class="live-card" href="${item.link}" target="_blank" rel="noopener"
          style="animation-delay:${i * 0.04}s">
         <div class="live-card-img">
-          <img src="https://picsum.photos/seed/${imgSeed(item.title)}/400/220" alt="" loading="lazy"
-               onerror="this.src='https://picsum.photos/seed/nazra${i}/400/220'">
+          <img src="${newsImageUrl(item.title,400,220)}" alt="${item.source}" loading="lazy"
+               onerror="this.src='${fallbackImg(item.title,400,220)}'">
         </div>
         <div class="live-card-body">
           <div class="live-card-src">${item.source}</div>
           <div class="live-card-title">${item.title}</div>
-          <div class="live-card-time">🕐 ${timeAgoAr(item.date)}</div>
+          <div class="time-block">
+            ${timeFullAr(item.date)}
+          </div>
           ${credBarHTML(item.cred)}
         </div>
       </a>`).join('');
@@ -2346,7 +2447,8 @@ window._nazraFetchAll = async function() {
     updateTicker();
     updateBreakingBanner();
     updateLiveBadge(true);
-    updateNewsGrid();   // ← تحديث بطاقات الأخبار الرئيسية
+    updateNewsGrid();        // ← تحديث بطاقات الأخبار الرئيسية
+    updateDailyDigest();     // ← تحديث الموجز اليومي بأخبار حية
     return { loaded: liveItems.length, sources: successCount, total: allFeeds.length };
   } else {
     updateLiveBadge(false);
@@ -2380,11 +2482,19 @@ async function fetchNewsNow() {
   const prog  = document.getElementById('ncbProgress');
   if(!btn) return;
 
+  // Visual: show loading state immediately
   btn.classList.add('loading');
-  icon.classList.add('spin');
+  if(icon) icon.classList.add('spin');
   stat.className = 'ncb-status';
   stat.textContent = 'جارٍ جلب الأخبار من جميع المصادر...';
-  prog.classList.add('active');
+  if(prog) prog.classList.add('active');
+
+  // Briefly grey out the live grid to signal refresh is happening
+  const liveGrid = document.getElementById('liveNewsGrid');
+  const liveHero = document.getElementById('liveNewsHero');
+  const liveCards = document.getElementById('liveNewsCards');
+  if(liveHero) liveHero.style.opacity = '0.35';
+  if(liveCards) liveCards.style.opacity = '0.35';
 
   try {
     const info = await window._nazraFetchAll();
@@ -2392,15 +2502,29 @@ async function fetchNewsNow() {
     const t = now.toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'});
     stat.className = 'ncb-status live';
     stat.textContent = `✓ تم التحديث في ${t} — ${info.loaded} خبر من ${info.sources} مصادر`;
+
+    // Restore opacity (updateNewsGrid already rebuilt the DOM)
+    if(liveHero) liveHero.style.opacity = '';
+    if(liveCards) liveCards.style.opacity = '';
+
+    // Also update the luTime bar
+    const luTime = document.getElementById('luTime');
+    if(luTime) luTime.textContent = now.toLocaleString('ar-EG', {dateStyle:'short', timeStyle:'short'});
+
+    // Scroll smoothly to top so user sees new content
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
     updateSrcCount();
   } catch(e) {
+    if(liveHero) liveHero.style.opacity = '';
+    if(liveCards) liveCards.style.opacity = '';
     stat.className = 'ncb-status error';
     stat.textContent = '⚠ لم يُمكن الوصول للمصادر — تأكد من اتصالك بالإنترنت';
   }
 
   btn.classList.remove('loading');
-  icon.classList.remove('spin');
-  prog.classList.remove('active');
+  if(icon) icon.classList.remove('spin');
+  if(prog) prog.classList.remove('active');
 }
 
 function updateSrcCount() {
