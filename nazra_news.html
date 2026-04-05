@@ -535,6 +535,21 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
 /* Day/Night legend */
 .map-legend{display:flex;align-items:center;gap:10px;position:absolute;bottom:10px;left:12px;font-size:10px;color:rgba(255,255,255,.5);background:rgba(0,0,0,.4);padding:5px 10px;border-radius:5px;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
 .map-legend-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+/* ── Map Tooltip ── */
+.map-tooltip{position:fixed;background:rgba(6,16,36,.96);border:1px solid rgba(100,180,255,.25);border-radius:10px;padding:10px 14px;pointer-events:none;z-index:9999;max-width:230px;min-width:170px;direction:rtl;font-family:'Cairo',sans-serif;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 6px 28px rgba(0,0,0,.7);transition:opacity .15s}
+.mtt-head{display:flex;align-items:center;gap:7px;margin-bottom:5px}
+.mtt-flag{font-size:20px;line-height:1}
+.mtt-name{font-size:14px;font-weight:800;color:#fff}
+.mtt-badges{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:5px}
+.mtt-badge{font-size:10px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:2px 7px;color:rgba(255,255,255,.78)}
+.mtt-count{font-size:11px;color:#E9C46A;font-weight:800;margin-bottom:4px}
+.mtt-line{font-size:11px;color:rgba(255,255,255,.65);line-height:1.55;border-top:1px solid rgba(255,255,255,.08);padding-top:5px;margin-top:2px}
+.mtt-hint{font-size:9px;color:rgba(255,255,255,.3);margin-top:4px;text-align:center}
+/* ── Arc animation ── */
+@keyframes arcFlow{from{stroke-dashoffset:20}to{stroke-dashoffset:0}}
+/* ── Map event type legend ── */
+.map-type-legend{position:absolute;bottom:10px;right:12px;display:flex;flex-direction:column;gap:3px;font-size:9px;color:rgba(255,255,255,.45);background:rgba(0,0,0,.4);padding:6px 10px;border-radius:5px;backdrop-filter:blur(3px);direction:rtl}
+.mtl-item{display:flex;align-items:center;gap:5px}
 /* Country popup */
 .country-news-popup{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:14px;padding:0;width:min(420px,92vw);box-shadow:0 20px 60px rgba(0,0,0,.4);z-index:3000;overflow:hidden;animation:scaleIn .25s ease}
 .country-news-popup.open{display:block}
@@ -805,8 +820,15 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
       <div class="map-legend">
         <span class="map-legend-dot" style="background:#1e3149;border:1px solid rgba(255,255,255,.3)"></span>نهار
         <span class="map-legend-dot" style="background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.15)"></span>ليل
-        <span class="map-legend-dot" style="background:#EF5350"></span>أعلى تغطية
-        <span class="map-legend-dot" style="background:#E9C46A"></span>تغطية عادية
+        <span class="map-legend-dot" style="background:#EF5350"></span>عاجل
+        <span class="map-legend-dot" style="background:#E9C46A"></span>مهم
+      </div>
+      <!-- Event type legend -->
+      <div class="map-type-legend">
+        <div class="mtl-item"><span style="font-size:10px">⚔️</span> أمني / نزاع</div>
+        <div class="mtl-item"><span style="font-size:10px">🤝</span> دبلوماسي</div>
+        <div class="mtl-item"><span style="font-size:10px">💰</span> اقتصادي</div>
+        <div class="mtl-item" style="margin-top:3px;border-top:1px solid rgba(255,255,255,.1);padding-top:3px"><span style="font-size:10px">⚡</span> عاجل للغاية</div>
       </div>
     </div>
     <!-- Country strip -->
@@ -1769,282 +1791,353 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLogin();});
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
 <script>
-/* ─── WORLD MAP ─── */
+/* ─── WORLD MAP v2 — Interactive News Events ─── */
 (function(){
+
+/* ════ بيانات الأحداث الإخبارية مع نوع الحدث وعجله ════ */
 const NEWS_MARKERS = [
-  {key:'iran',     lon:53.7,  lat:32.4,  count:17, color:'#EF5350', r:13, label:'إيران'},
-  {key:'palestine',lon:34.5,  lat:31.9,  count:11, color:'#66BB6A', r:11, label:'فلسطين'},
-  {key:'egypt',    lon:30.8,  lat:26.8,  count:6,  color:'#E9C46A', r:9,  label:'مصر'},
-  {key:'saudi',    lon:45.1,  lat:23.9,  count:4,  color:'#42A5F5', r:8,  label:'السعودية'},
-  {key:'uae',      lon:54.4,  lat:24.5,  count:3,  color:'#CE93D8', r:7,  label:'الإمارات'},
-  {key:'jordan',   lon:36.2,  lat:30.6,  count:2,  color:'#FF8A65', r:7,  label:'الأردن'},
-  {key:'kuwait',   lon:47.5,  lat:29.3,  count:2,  color:'#4DB6AC', r:7,  label:'الكويت'},
-  {key:'un',       lon:-74.0, lat:40.7,  count:3,  color:'#90A4AE', r:8,  label:'نيويورك'}
+  {key:'iran',     lon:53.7,  lat:32.4,  count:17, color:'#EF5350', r:13, label:'إيران',     flag:'🇮🇷', type:'conflict',  urgency:'high',   headline:'التطورات الأمنية وتداعيات الملف النووي الإيراني'},
+  {key:'palestine',lon:34.5,  lat:31.9,  count:11, color:'#66BB6A', r:11, label:'فلسطين',    flag:'🇵🇸', type:'conflict',  urgency:'high',   headline:'مفاوضات الهدنة في غزة تدخل مرحلة حاسمة والقاهرة تحتضن الجولة'},
+  {key:'egypt',    lon:30.8,  lat:26.8,  count:6,  color:'#E9C46A', r:9,  label:'مصر',       flag:'🇪🇬', type:'diplomacy', urgency:'medium', headline:'القاهرة تستضيف جولة مفاوضات جديدة بحضور قطر والأمم المتحدة'},
+  {key:'saudi',    lon:45.1,  lat:23.9,  count:4,  color:'#42A5F5', r:8,  label:'السعودية',  flag:'🇸🇦', type:'economy',   urgency:'medium', headline:'قرارات أوبك+ وتأثيرها على أسعار النفط العالمية'},
+  {key:'uae',      lon:54.4,  lat:24.5,  count:3,  color:'#CE93D8', r:7,  label:'الإمارات',  flag:'🇦🇪', type:'diplomacy', urgency:'low',    headline:'الإمارات تدعو إلى التهدئة وتؤكد دعمها للحل الدبلوماسي'},
+  {key:'jordan',   lon:36.2,  lat:30.6,  count:2,  color:'#FF8A65', r:7,  label:'الأردن',    flag:'🇯🇴', type:'diplomacy', urgency:'low',    headline:'الأردن يستضيف مباحثات إقليمية لدعم وقف إطلاق النار'},
+  {key:'kuwait',   lon:47.5,  lat:29.3,  count:2,  color:'#4DB6AC', r:7,  label:'الكويت',    flag:'🇰🇼', type:'economy',   urgency:'low',    headline:'الكويت تؤكد التزامها بقرارات أوبك+ بشأن الإنتاج النفطي'},
+  {key:'un',       lon:-74.0, lat:40.7,  count:3,  color:'#90A4AE', r:8,  label:'نيويورك',   flag:'🇺🇳', type:'diplomacy', urgency:'medium', headline:'مجلس الأمن يعقد جلسة طارئة حول الأوضاع في المنطقة'}
 ];
 
-// ISO numeric IDs for news countries
-const NEWS_IDS = new Set([818,364,275,682,784,400,414,840,376]);
-const ID_KEY   = {818:'egypt',364:'iran',275:'palestine',682:'saudi',784:'uae',400:'jordan',414:'kuwait',840:'un',376:'palestine'};
+/* ════ خطوط الاتصال بين الدول ذات العلاقة ════ */
+const CONNECTIONS = [
+  {from:'iran',    to:'palestine', color:'#EF5350', opacity:0.45, dashLen:5},
+  {from:'egypt',   to:'palestine', color:'#E9C46A', opacity:0.50, dashLen:4},
+  {from:'egypt',   to:'un',        color:'#90A4AE', opacity:0.35, dashLen:6},
+  {from:'saudi',   to:'uae',       color:'#42A5F5', opacity:0.38, dashLen:5},
+  {from:'jordan',  to:'palestine', color:'#FF8A65', opacity:0.40, dashLen:4},
+];
+
+/* ════ معرّفات ISO للدول الإخبارية ════ */
+const ID_KEY = {818:'egypt',364:'iran',275:'palestine',682:'saudi',784:'uae',400:'jordan',414:'kuwait',840:'un',376:'palestine'};
 
 const W = 1100, H = 560;
 const svg = d3.select('#worldMap').attr('viewBox',`0 0 ${W} ${H}`);
-
-// ── Projection — مقياس أكبر لوضوح أفضل للدول ──
 const projection = d3.geoNaturalEarth1().scale(185).translate([W/2, H/2+15]);
 const path = d3.geoPath().projection(projection);
 
-// ── Map group (for zoom/pan) ──
-const mapG = svg.append('g').attr('id','mapG');
-const oceanG    = mapG.append('g');
-const countriesG= mapG.append('g');
-const nightG    = mapG.append('g');
-const markersG  = mapG.append('g').attr('id','mapMarkers');
-const labelsG   = mapG.append('g').attr('id','mapLabels');
+/* ════ طبقات الخريطة ════ */
+const mapG       = svg.append('g').attr('id','mapG');
+const oceanG     = mapG.append('g');
+const countriesG = mapG.append('g');
+const nightG     = mapG.append('g');
+const arcsG      = mapG.append('g').attr('id','mapArcs');
+const markersG   = mapG.append('g').attr('id','mapMarkers');
+const labelsG    = mapG.append('g').attr('id','mapLabels');
 
-// ── D3 Zoom ──
+/* ════ تكبير / تصغير ════ */
 const zoomBehavior = d3.zoom()
-  .scaleExtent([1, 12])
-  .translateExtent([[0,0],[W,H]])
+  .scaleExtent([1, 12]).translateExtent([[0,0],[W,H]])
   .on('zoom', e => mapG.attr('transform', e.transform));
 svg.call(zoomBehavior).on('dblclick.zoom', null);
-
-// Expose zoom controls to window
 window.mapZoomIn    = () => svg.transition().duration(350).call(zoomBehavior.scaleBy, 1.6);
 window.mapZoomOut   = () => svg.transition().duration(350).call(zoomBehavior.scaleBy, 0.625);
 window.mapZoomReset = () => svg.transition().duration(500).call(zoomBehavior.transform, d3.zoomIdentity);
 
-// ── Defs ──
+/* ════ SVG Defs ════ */
 const defs = svg.append('defs');
-defs.append('filter').attr('id','mGlow')
-  .append('feGaussianBlur').attr('stdDeviation','3').attr('result','coloredBlur');
+defs.append('filter').attr('id','mGlow').append('feGaussianBlur').attr('stdDeviation','3').attr('result','coloredBlur');
 const merge = defs.select('filter').append('feMerge');
 merge.append('feMergeNode').attr('in','coloredBlur');
 merge.append('feMergeNode').attr('in','SourceGraphic');
-
-// Gradient for ocean — أكثر عمقاً وتباينًا مع اليابسة
-const oceanGrad = defs.append('radialGradient').attr('id','oceanGrad')
-  .attr('cx','50%').attr('cy','40%').attr('r','75%');
+const oceanGrad = defs.append('radialGradient').attr('id','oceanGrad').attr('cx','50%').attr('cy','40%').attr('r','75%');
 oceanGrad.append('stop').attr('offset','0%').attr('stop-color','#0d2545');
 oceanGrad.append('stop').attr('offset','60%').attr('stop-color','#071830');
 oceanGrad.append('stop').attr('offset','100%').attr('stop-color','#020c1b');
 
-// ── Load GeoJSON ──
+/* ════ Tooltip ════ */
+const tooltip = d3.select('body').append('div').attr('class','map-tooltip').style('opacity',0);
+
+function showTooltip(e, m){
+  const urgencyLabel = m.urgency==='high'?'🔴 عاجل':m.urgency==='medium'?'🟡 مهم':'🔵 متابعة';
+  const typeLabel    = m.type==='conflict'?'⚔️ أمني':m.type==='diplomacy'?'🤝 دبلوماسي':'💰 اقتصادي';
+  tooltip.style('opacity',1)
+    .html('<div class="mtt-head"><span class="mtt-flag">'+m.flag+'</span><span class="mtt-name">'+m.label+'</span></div>'+
+          '<div class="mtt-badges"><span class="mtt-badge">'+urgencyLabel+'</span><span class="mtt-badge">'+typeLabel+'</span></div>'+
+          '<div class="mtt-count">'+m.count+' خبر نشط</div>'+
+          '<div class="mtt-line">'+m.headline+'</div>'+
+          '<div class="mtt-hint">انقر للمزيد ←</div>')
+    .style('left',(e.pageX+16)+'px').style('top',(e.pageY-55)+'px');
+}
+function moveTooltip(e){ tooltip.style('left',(e.pageX+16)+'px').style('top',(e.pageY-55)+'px'); }
+function hideTooltip(){ tooltip.style('opacity',0); }
+
+/* ════ تحميل خريطة العالم ════ */
 d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(world => {
   const countries = topojson.feature(world, world.objects.countries);
   const borders   = topojson.mesh(world, world.objects.countries, (a,b) => a !== b);
 
-  // Ocean
   oceanG.append('rect').attr('width',W).attr('height',H).attr('fill','url(#oceanGrad)');
 
-  // ── بالوان للدول — تمييز واضح بين دول التغطية والأخرى ──
-  // نظام ألوان متعدد للدول العادية (شبيه بخريطة الأطلس)
-  const CONTINENT_COLORS = [
-    '#1a3a5c','#1e4060','#153450','#1b3b5e','#162f4a','#193858'
-  ];
-  // دول التغطية الإخبارية بألوان مميزة زاهية
+  const CONTINENT_COLORS = ['#1a3a5c','#1e4060','#153450','#1b3b5e','#162f4a','#193858'];
   const NEWS_COLOR_MAP = {
-    818:'#2563a8', // مصر — أزرق ملكي
-    364:'#b91c1c', // إيران — أحمر
-    275:'#15803d', // فلسطين — أخضر
-    682:'#c4830a', // السعودية — ذهبي
-    784:'#7c3aed', // الإمارات — بنفسجي
-    400:'#0d6e6e', // الأردن — تركوازي
-    414:'#1d6db5', // الكويت — أزرق فاتح
-    840:'#374151', // الولايات المتحدة — رمادي
-    376:'#15803d', // إسرائيل — أخضر مشترك مع فلسطين
+    818:'#2563a8', 364:'#b91c1c', 275:'#15803d', 682:'#c4830a',
+    784:'#7c3aed', 400:'#0d6e6e', 414:'#1d6db5', 840:'#374151', 376:'#15803d'
   };
 
   countriesG.selectAll('path.country')
-    .data(countries.features)
-    .join('path')
-      .attr('class','country')
-      .attr('d', path)
-      .attr('fill', d => {
-        const id = +d.id;
-        if(NEWS_COLOR_MAP[id]) return NEWS_COLOR_MAP[id];
-        // ألوان متعاقبة للدول العادية لتمييزها بصرياً
-        return CONTINENT_COLORS[id % CONTINENT_COLORS.length];
-      })
-      .attr('stroke','#0a1e38')
-      .attr('stroke-width', 0.6)
-      .style('cursor', d => ID_KEY[+d.id] ? 'pointer' : 'default')
-      .on('click', (e, d) => { const k=ID_KEY[+d.id]; if(k) showCountryNews(k); })
-      .on('mouseover', function(e,d){
-        const id = +d.id;
-        const base = NEWS_COLOR_MAP[id] || CONTINENT_COLORS[id % CONTINENT_COLORS.length];
-        d3.select(this)
-          .attr('fill', ID_KEY[id] ? '#38bdf8' : d3.color(base) ? d3.color(base).brighter(0.7) : '#2d5a8e')
-          .attr('stroke', ID_KEY[id] ? '#7dd3fc' : 'rgba(255,255,255,.4)')
-          .attr('stroke-width', ID_KEY[id] ? 1.5 : 0.8);
-      })
-      .on('mouseout', function(e,d){
-        const id = +d.id;
-        d3.select(this)
-          .attr('fill', NEWS_COLOR_MAP[id] || CONTINENT_COLORS[id % CONTINENT_COLORS.length])
-          .attr('stroke','#0a1e38')
-          .attr('stroke-width', 0.6);
-      });
+    .data(countries.features).join('path')
+    .attr('class','country').attr('d', path)
+    .attr('fill', d => NEWS_COLOR_MAP[+d.id] || CONTINENT_COLORS[+d.id % CONTINENT_COLORS.length])
+    .attr('stroke','#0a1e38').attr('stroke-width',0.6)
+    .style('cursor', d => ID_KEY[+d.id] ? 'pointer' : 'default')
+    .on('click', (e, d) => { const k=ID_KEY[+d.id]; if(k) showCountryNews(k); })
+    .on('mouseover', function(e, d){
+      const id = +d.id;
+      const base = NEWS_COLOR_MAP[id] || CONTINENT_COLORS[id % CONTINENT_COLORS.length];
+      d3.select(this)
+        .attr('fill', ID_KEY[id] ? '#38bdf8' : d3.color(base) ? d3.color(base).brighter(0.7) : '#2d5a8e')
+        .attr('stroke', ID_KEY[id] ? '#7dd3fc' : 'rgba(255,255,255,.4)')
+        .attr('stroke-width', ID_KEY[id] ? 1.5 : 0.8);
+      if(ID_KEY[id]){
+        const m = NEWS_MARKERS.find(x => x.key === ID_KEY[id]);
+        if(m) showTooltip(e, m);
+      }
+    })
+    .on('mousemove', moveTooltip)
+    .on('mouseout', function(e, d){
+      const id = +d.id;
+      d3.select(this)
+        .attr('fill', NEWS_COLOR_MAP[id] || CONTINENT_COLORS[id % CONTINENT_COLORS.length])
+        .attr('stroke','#0a1e38').attr('stroke-width',0.6);
+      hideTooltip();
+    });
 
-  // حدود الدول — أوضح وأعرض
   countriesG.append('path').datum(borders)
-    .attr('d',path).attr('fill','none')
-    .attr('stroke','rgba(255,255,255,.22)').attr('stroke-width',0.7);
-
-  // خطوط الطول والعرض (graticule) — خفيفة
-  const gratLine = d3.geoGraticule()();
-  countriesG.append('path').datum(gratLine)
-    .attr('d',path).attr('fill','none')
-    .attr('stroke','rgba(255,255,255,.06)').attr('stroke-width',0.3);
-
-  // الحدود الخارجية للكرة
+    .attr('d',path).attr('fill','none').attr('stroke','rgba(255,255,255,.22)').attr('stroke-width',0.7);
+  countriesG.append('path').datum(d3.geoGraticule()())
+    .attr('d',path).attr('fill','none').attr('stroke','rgba(255,255,255,.06)').attr('stroke-width',0.3);
   countriesG.append('path').datum({type:'Sphere'})
-    .attr('d',path).attr('fill','none')
-    .attr('stroke','rgba(100,180,255,.3)').attr('stroke-width',1.5);
+    .attr('d',path).attr('fill','none').attr('stroke','rgba(100,180,255,.3)').attr('stroke-width',1.5);
 
-  // Day/Night
   drawNight();
+  drawArcs();
 
-  // ── تسميات القارات على الخريطة ──
-  const CONTINENT_LABELS = [
-    {name:'أفريقيا',      lon:20,   lat:2,    size:11},
-    {name:'أوروبا',       lon:15,   lat:54,   size:10},
-    {name:'آسيا',         lon:90,   lat:45,   size:12},
-    {name:'أمريكا الشمالية', lon:-100, lat:48, size:10},
-    {name:'أمريكا الجنوبية', lon:-60,  lat:-15, size:10},
-    {name:'أستراليا',     lon:134,  lat:-25,  size:10},
-    {name:'روسيا',        lon:65,   lat:62,   size:10},
-  ];
-  CONTINENT_LABELS.forEach(cl => {
+  [{name:'أفريقيا',lon:20,lat:2,size:11},{name:'أوروبا',lon:15,lat:54,size:10},
+   {name:'آسيا',lon:90,lat:45,size:12},{name:'أمريكا الشمالية',lon:-100,lat:48,size:10},
+   {name:'أمريكا الجنوبية',lon:-60,lat:-15,size:10},{name:'أستراليا',lon:134,lat:-25,size:10},
+   {name:'روسيا',lon:65,lat:62,size:10}
+  ].forEach(cl => {
     const pos = projection([cl.lon, cl.lat]);
     if(!pos) return;
     labelsG.append('text')
-      .attr('x', pos[0]).attr('y', pos[1])
-      .attr('text-anchor','middle')
-      .attr('font-size', cl.size)
-      .attr('font-family','Cairo,sans-serif')
-      .attr('font-weight','600')
-      .attr('fill','rgba(255,255,255,.28)')
-      .attr('pointer-events','none')
-      .attr('letter-spacing','0.5')
-      .text(cl.name);
+      .attr('x',pos[0]).attr('y',pos[1]).attr('text-anchor','middle')
+      .attr('font-size',cl.size).attr('font-family','Cairo,sans-serif')
+      .attr('font-weight','600').attr('fill','rgba(255,255,255,.22)')
+      .attr('pointer-events','none').text(cl.name);
   });
 
-  // Markers
   drawMarkers();
 
 }).catch(() => {
-  // Fallback plain background
   oceanG.append('rect').attr('width',W).attr('height',H).attr('fill','url(#oceanGrad)');
-  countriesG.append('text')
-    .attr('x',W/2).attr('y',H/2).attr('text-anchor','middle')
-    .attr('fill','rgba(255,255,255,.3)').attr('font-size',13)
-    .text('جارٍ تحميل الخريطة...');
   drawMarkers();
 });
 
+/* ════ ليل / نهار ════ */
 function drawNight(){
   const utcH = new Date().getUTCHours() + new Date().getUTCMinutes()/60;
   const sunLon = (12 - utcH)*15;
-  const sunLat = -10; // approximate April declination
   const antipodeLon = sunLon > 0 ? sunLon-180 : sunLon+180;
-  const antipodeLat = -sunLat;
   try {
-    const nightCircle = d3.geoCircle().center([antipodeLon, antipodeLat]).radius(90)();
-    nightG.append('path').datum(nightCircle)
-      .attr('d', path)
-      .attr('fill','rgba(0,0,20,.52)')
-      .attr('pointer-events','none');
-  } catch(err){}
+    nightG.append('path').datum(d3.geoCircle().center([antipodeLon, 10]).radius(90)())
+      .attr('d',path).attr('fill','rgba(0,0,20,.50)').attr('pointer-events','none');
+  } catch(e){}
 }
 
+/* ════ خطوط الاتصال المتحركة بين الدول ════ */
+function drawArcs(){
+  const mmap = {};
+  NEWS_MARKERS.forEach(m => { mmap[m.key] = m; });
+
+  CONNECTIONS.forEach((conn, i) => {
+    const fr = mmap[conn.from], to = mmap[conn.to];
+    if(!fr || !to) return;
+    const p0 = projection([fr.lon, fr.lat]);
+    const p1 = projection([to.lon, to.lat]);
+    if(!p0 || !p1) return;
+
+    /* نقطة التحكم Bezier — قوس صاعد بين الدولتين */
+    const mx = (p0[0]+p1[0])/2;
+    const my = (p0[1]+p1[1])/2 - Math.max(40, Math.abs(p1[0]-p0[0])*0.32);
+    const arcD = 'M'+p0[0]+','+p0[1]+' Q'+mx+','+my+' '+p1[0]+','+p1[1];
+    const arcId = 'arcref-'+i;
+
+    /* مسار مرجعي بدون مرئي في defs */
+    defs.append('path').attr('id',arcId).attr('d',arcD);
+
+    /* الخط المتقطع المرئي مع تدفق لوني */
+    arcsG.append('path')
+      .attr('d', arcD).attr('fill','none')
+      .attr('stroke', conn.color).attr('stroke-width',1.4)
+      .attr('stroke-opacity', conn.opacity)
+      .attr('stroke-dasharray', conn.dashLen+' '+(conn.dashLen-1))
+      .attr('pointer-events','none')
+      .style('animation', 'arcFlow '+(2.5+i*0.4)+'s linear infinite');
+
+    /* نقطة متحركة على المسار */
+    const dot = arcsG.append('circle')
+      .attr('r', 2.8).attr('fill', conn.color)
+      .attr('fill-opacity', 0.95).attr('pointer-events','none');
+
+    const am = dot.append('animateMotion')
+      .attr('dur', (3.8+i*0.6)+'s')
+      .attr('repeatCount','indefinite')
+      .attr('begin', (i*0.5)+'s')
+      .attr('calcMode','spline')
+      .attr('keySplines','0.4 0 0.6 1');
+    am.append('mpath').attr('href','#'+arcId);
+  });
+}
+
+/* ════ رسم نقاط الأحداث الإخبارية ════ */
 function drawMarkers(){
   NEWS_MARKERS.forEach((m, i) => {
     const pos = projection([m.lon, m.lat]);
     if(!pos) return;
     const [x, y] = pos;
-    const delay = i * 0.3;
+    const delay = i * 0.28;
+    const pulseSpeed = m.urgency==='high' ? 1.1 : m.urgency==='medium' ? 2.0 : 3.2;
 
-    // Outer animated ring
+    /* حلقة نبض خارجية */
     markersG.append('circle')
-      .attr('cx',x).attr('cy',y)
-      .attr('r', m.r+5)
-      .attr('fill','none')
-      .attr('stroke', m.color)
-      .attr('stroke-width',1.5)
-      .attr('stroke-opacity',0)
+      .attr('cx',x).attr('cy',y).attr('r',m.r+7)
+      .attr('fill','none').attr('stroke',m.color)
+      .attr('stroke-width',1.5).attr('stroke-opacity',0)
       .attr('pointer-events','none')
       .append('animate')
-        .attr('attributeName','stroke-opacity')
-        .attr('values','0.8;0')
-        .attr('dur', `${2+i*0.15}s`)
-        .attr('begin', `${delay}s`)
-        .attr('repeatCount','indefinite');
+        .attr('attributeName','stroke-opacity').attr('values','0.85;0')
+        .attr('dur',pulseSpeed+'s').attr('begin',delay+'s').attr('repeatCount','indefinite');
 
+    /* حلقة توسع */
     markersG.append('circle')
-      .attr('cx',x).attr('cy',y)
-      .attr('r', m.r+5)
-      .attr('fill','none')
-      .attr('stroke', m.color)
-      .attr('stroke-width',1)
-      .attr('stroke-opacity',0)
+      .attr('cx',x).attr('cy',y).attr('r',m.r+5)
+      .attr('fill','none').attr('stroke',m.color)
+      .attr('stroke-width',0.9).attr('stroke-opacity',0)
       .attr('pointer-events','none')
       .append('animateTransform')
-        .attr('attributeName','transform')
-        .attr('type','scale')
-        .attr('from','1').attr('to','1.8')
-        .attr('dur',`${2+i*0.15}s`)
-        .attr('begin',`${delay}s`)
-        .attr('additive','sum')
-        .attr('calcMode','spline')
-        .attr('keySplines','0.2 0 0.8 1')
-        .attr('repeatCount','indefinite');
+        .attr('attributeName','transform').attr('type','scale')
+        .attr('from','1').attr('to','2.0')
+        .attr('dur',pulseSpeed+'s').attr('begin',delay+'s')
+        .attr('additive','sum').attr('calcMode','spline')
+        .attr('keySplines','0.2 0 0.8 1').attr('repeatCount','indefinite');
 
-    // Main dot
+    /* حلقة نوع الحدث */
+    const typeRingColor = m.type==='conflict'?'#dc2626':m.type==='diplomacy'?'#3b82f6':'#f59e0b';
     markersG.append('circle')
-      .attr('cx',x).attr('cy',y)
-      .attr('r', m.r)
-      .attr('fill', m.color)
-      .attr('filter','url(#mGlow)')
-      .style('cursor','pointer')
+      .attr('cx',x).attr('cy',y).attr('r',m.r+1.5)
+      .attr('fill','none').attr('stroke',typeRingColor)
+      .attr('stroke-width',1.8).attr('stroke-opacity',0.55)
+      .attr('pointer-events','none');
+
+    /* النقطة الرئيسية */
+    markersG.append('circle')
+      .attr('cx',x).attr('cy',y).attr('r',m.r)
+      .attr('fill',m.color).attr('fill-opacity',0.92)
+      .attr('filter','url(#mGlow)').style('cursor','pointer')
       .on('click', () => showCountryNews(m.key))
-      .on('mouseover', function(){
-        d3.select(this).attr('r', m.r+3).attr('fill-opacity',1);
-        // Highlight matching country in strip
-        document.querySelectorAll('.gcountry').forEach(el=>el.classList.remove('active'));
-        const strip = document.querySelector(`.gcountry[onclick*="${m.key}"]`);
+      .on('mouseover', function(e){
+        d3.select(this).attr('r',m.r+4).attr('fill-opacity',1);
+        document.querySelectorAll('.gcountry').forEach(el => el.classList.remove('active'));
+        const strip = document.querySelector('.gcountry[onclick*="'+m.key+'"]');
         if(strip) strip.classList.add('active');
+        showTooltip(e, m);
       })
+      .on('mousemove', moveTooltip)
       .on('mouseout', function(){
-        d3.select(this).attr('r', m.r).attr('fill-opacity',0.92);
+        d3.select(this).attr('r',m.r).attr('fill-opacity',0.92);
+        hideTooltip();
       });
 
-    // Count text
+    /* رقم الأخبار */
     markersG.append('text')
       .attr('x',x).attr('y',y+0.5)
-      .attr('text-anchor','middle')
-      .attr('dominant-baseline','middle')
-      .attr('fill','#fff')
-      .attr('font-size', m.r < 8 ? 8 : 9)
-      .attr('font-weight',900)
-      .attr('font-family','Cairo,sans-serif')
-      .attr('pointer-events','none')
-      .text(m.count);
+      .attr('text-anchor','middle').attr('dominant-baseline','middle')
+      .attr('fill','#fff').attr('font-size',m.r<8?8:9)
+      .attr('font-weight',900).attr('font-family','Cairo,sans-serif')
+      .attr('pointer-events','none').text(m.count);
 
-    // Label for larger markers
+    /* أيقونة عاجل ⚡ للأحداث عالية الخطورة */
+    if(m.urgency === 'high'){
+      markersG.append('text')
+        .attr('x',x+m.r-1).attr('y',y-m.r+1)
+        .attr('font-size',9).attr('pointer-events','none').text('⚡');
+    }
+
+    /* تسمية الدولة مع علم للماركرات الكبيرة */
     if(m.r >= 9){
       labelsG.append('text')
-        .attr('x', x).attr('y', y + m.r + 12)
+        .attr('x',x).attr('y',y+m.r+13)
         .attr('text-anchor','middle')
-        .attr('fill','rgba(255,255,255,.8)')
-        .attr('font-size', 10)
-        .attr('font-weight',700)
-        .attr('font-family','Cairo,sans-serif')
-        .attr('pointer-events','none')
-        .attr('filter','url(#mGlow)')
-        .text(m.label);
+        .attr('fill','rgba(255,255,255,.88)').attr('font-size',10)
+        .attr('font-weight',700).attr('font-family','Cairo,sans-serif')
+        .attr('pointer-events','none').attr('filter','url(#mGlow)')
+        .text(m.flag+' '+m.label);
     }
   });
 }
+
+/* ════ تحديث الخريطة من أخبار RSS الحية ════ */
+window._updateMapMarkers = function(liveItems){
+  if(!liveItems || !liveItems.length) return;
+
+  const KEYWORDS = {
+    iran:     ['إيران','طهران','الحرس الثوري','خامنئي','روحاني','مرشد'],
+    palestine:['غزة','فلسطين','حماس','رفح','الضفة','الأقصى','القسام'],
+    egypt:    ['مصر','القاهرة','السيسي','النيل','الأزهر'],
+    saudi:    ['السعودية','الرياض','بن سلمان','أرامكو','أوبك'],
+    uae:      ['الإمارات','دبي','أبوظبي','محمد بن زايد'],
+    jordan:   ['الأردن','عمان','الملك عبدالله'],
+    kuwait:   ['الكويت','مجلس الأمة الكويتي'],
+    un:       ['الأمم المتحدة','مجلس الأمن','غوتيريش','اليونيسف'],
+  };
+
+  const counts = {}, headlines = {};
+  liveItems.forEach(item => {
+    const title = item.title || '';
+    Object.keys(KEYWORDS).forEach(key => {
+      if(KEYWORDS[key].some(kw => title.includes(kw))){
+        counts[key] = (counts[key]||0) + 1;
+        if(!headlines[key]) headlines[key] = title;
+      }
+    });
+  });
+
+  NEWS_MARKERS.forEach(m => {
+    if(counts[m.key]){
+      m.count = counts[m.key];
+      if(headlines[m.key]) m.headline = headlines[m.key];
+      m.urgency = counts[m.key] >= 8 ? 'high' : counts[m.key] >= 4 ? 'medium' : 'low';
+      m.r = Math.min(16, 6 + Math.round(Math.sqrt(counts[m.key]) * 2.5));
+    }
+  });
+
+  /* إعادة رسم نقاط الأحداث */
+  markersG.selectAll('*').remove();
+  labelsG.selectAll('text').remove();
+  drawMarkers();
+
+  /* تحديث شريط الدول */
+  document.querySelectorAll('.gcountry').forEach(el => {
+    const match = (el.getAttribute('onclick')||'').match(/showCountryNews\('([^']+)'\)/);
+    if(match && counts[match[1]]){
+      const cEl = el.querySelector('.gcountry-count');
+      if(cEl) cEl.textContent = counts[match[1]];
+    }
+  });
+
+  /* تحديث الشارة */
+  const badge = document.getElementById('mapLiveText');
+  if(badge) badge.textContent = liveItems.length + ' خبر مباشر';
+};
+
 })();
 
 /* ─── RSS LIVE NEWS FETCHER ─── */
@@ -2477,6 +2570,7 @@ window._nazraFetchAll = async function() {
     updateLiveBadge(true);
     updateNewsGrid();        // ← تحديث بطاقات الأخبار الرئيسية
     updateDailyDigest();     // ← تحديث الموجز اليومي بأخبار حية
+    if(typeof window._updateMapMarkers === 'function') window._updateMapMarkers(liveItems); // ← تحديث الخريطة التفاعلية
     return { loaded: liveItems.length, sources: successCount, total: allFeeds.length };
   } else {
     updateLiveBadge(false);
