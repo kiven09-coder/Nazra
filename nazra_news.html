@@ -376,6 +376,15 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
 .live-card-src{font-size:11px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.5px}
 .live-card-title{font-size:14px;font-weight:700;line-height:1.55;color:var(--navy);flex:1;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .live-card-time{font-size:11px;color:var(--mid);margin-top:4px}
+.cred-wrap{margin-top:6px;padding-top:6px;border-top:1px solid #f0f0f0}
+.cred-label{font-size:10px;color:var(--mid);display:flex;justify-content:space-between;align-items:center;margin-bottom:3px}
+.cred-pct{font-weight:700;font-size:10px}
+.cred-pct.high{color:#16a34a}.cred-pct.med{color:#d97706}.cred-pct.low{color:#dc2626}
+.cred-bar{height:3px;border-radius:2px;background:#e8e8e8;overflow:hidden}
+.cred-fill{height:100%;border-radius:2px;transition:width .6s ease}
+.cred-fill.high{background:linear-gradient(90deg,#22c55e,#16a34a)}
+.cred-fill.med{background:linear-gradient(90deg,#f59e0b,#d97706)}
+.cred-fill.low{background:linear-gradient(90deg,#ef4444,#dc2626)}
 /* Live hero card */
 .live-hero-link{display:contents;text-decoration:none;color:inherit}
 /* New badge flash */
@@ -2054,69 +2063,107 @@ function parseRawXML(text, feed){
 
 const FETCH_OPTS = { mode:'cors', cache:'no-cache' };
 
-async function fetchFeed(feed){
-  // ── Strategy 1: rss2json (JSON response) ──
-  try {
-    const ctrl = new AbortController();
-    const t = setTimeout(() => ctrl.abort(), 8000);
-    const res = await fetch(P_RSS2JSON(feed.url), {...FETCH_OPTS, signal: ctrl.signal});
-    clearTimeout(t);
-    if(res.ok){
-      const data = await res.json();
-      if(data.status === 'ok' && Array.isArray(data.items) && data.items.length){
-        return data.items.slice(0,10).map(it => ({
-          title: (it.title||'').replace(/<[^>]+>/g,'').trim(),
-          link:  it.link || it.url || feed.link,
-          date:  it.pubDate ? new Date(it.pubDate) : new Date(),
-          source: feed.name,
-          sourceLink: feed.link
-        })).filter(it => it.title && it.title.length > 5);
-      }
-    }
-  } catch(e){}
+/* ── Source credibility table ── */
+const SOURCE_TRUST = {
+  'بي بي سي': 92, 'الجزيرة': 88, 'فرانس 24': 87,
+  'سكاي نيوز': 80, 'RT عربي': 72
+};
 
-  // ── Strategy 2: allorigins.win (raw XML wrapped in JSON) ──
-  try {
-    const ctrl2 = new AbortController();
-    const t2 = setTimeout(() => ctrl2.abort(), 9000);
-    const res2 = await fetch(P_ALLORIGIN(feed.url), {...FETCH_OPTS, signal: ctrl2.signal});
-    clearTimeout(t2);
-    if(res2.ok){
-      const data2 = await res2.json();
-      if(data2.contents){
-        const items = parseRawXML(data2.contents, feed);
+function calcCredibility(item, allItems){
+  let score = SOURCE_TRUST[item.source] || 70;
+  // Cross-source verification bonus: +5 if ≥3 key words overlap with another source's headline
+  const words = (item.title||'').split(/\s+/).filter(w => w.length > 3);
+  const verified = allItems.some(other =>
+    other !== item && other.source !== item.source &&
+    words.filter(w => (other.title||'').includes(w)).length >= 3
+  );
+  if(verified) score = Math.min(99, score + 5);
+  return score;
+}
+
+function credClass(score){ return score >= 85 ? 'high' : score >= 75 ? 'med' : 'low'; }
+
+function credBarHTML(score){
+  if(score == null) return '';
+  const cls = credClass(score);
+  const label = score >= 85 ? 'موثوق' : score >= 75 ? 'معقول' : 'تحقق';
+  return `<div class="cred-wrap">
+    <div class="cred-label"><span>${label}</span><span class="cred-pct ${cls}">${score}%</span></div>
+    <div class="cred-bar"><div class="cred-fill ${cls}" style="width:${score}%"></div></div>
+  </div>`;
+}
+
+/* ── Fetch a single feed; proxyIdx rotates which proxy to try first ── */
+async function fetchFeed(feed, proxyIdx = 0){
+
+  async function tryRss2json(){
+    try {
+      const ctrl = new AbortController();
+      const t = setTimeout(() => ctrl.abort(), 8000);
+      const res = await fetch(P_RSS2JSON(feed.url), {...FETCH_OPTS, signal: ctrl.signal});
+      clearTimeout(t);
+      if(res.ok){
+        const data = await res.json();
+        if(data.status === 'ok' && Array.isArray(data.items) && data.items.length){
+          return data.items.slice(0,10).map(it => ({
+            title: (it.title||'').replace(/<[^>]+>/g,'').trim(),
+            link:  it.link || it.url || feed.link,
+            date:  it.pubDate ? new Date(it.pubDate) : new Date(),
+            source: feed.name, sourceLink: feed.link
+          })).filter(it => it.title && it.title.length > 5);
+        }
+      }
+    } catch(e){}
+    return null;
+  }
+
+  async function tryAllOrigins(){
+    try {
+      const ctrl = new AbortController();
+      const t = setTimeout(() => ctrl.abort(), 9000);
+      const res = await fetch(P_ALLORIGIN(feed.url), {...FETCH_OPTS, signal: ctrl.signal});
+      clearTimeout(t);
+      if(res.ok){
+        const data = await res.json();
+        if(data.contents){
+          const items = parseRawXML(data.contents, feed);
+          if(items.length) return items;
+        }
+      }
+    } catch(e){}
+    return null;
+  }
+
+  async function tryCorsproxy(){
+    try {
+      const ctrl = new AbortController();
+      const t = setTimeout(() => ctrl.abort(), 9000);
+      const res = await fetch(P_CORSPROXY(feed.url), {...FETCH_OPTS, signal: ctrl.signal});
+      clearTimeout(t);
+      if(res.ok){
+        const text = await res.text();
+        const items = parseRawXML(text, feed);
         if(items.length) return items;
       }
-    }
-  } catch(e){}
+    } catch(e){}
+    return null;
+  }
 
-  // ── Strategy 3: corsproxy.io (raw XML) ──
-  try {
-    const ctrl3 = new AbortController();
-    const t3 = setTimeout(() => ctrl3.abort(), 9000);
-    const res3 = await fetch(P_CORSPROXY(feed.url), {...FETCH_OPTS, signal: ctrl3.signal});
-    clearTimeout(t3);
-    if(res3.ok){
-      const text3 = await res3.text();
-      const items = parseRawXML(text3, feed);
-      if(items.length) return items;
-    }
-  } catch(e){}
+  // Rotate proxy order per feed to distribute load across services
+  const strategies = [tryRss2json, tryAllOrigins, tryCorsproxy];
+  const start = proxyIdx % 3;
+  const order = [start, (start+1)%3, (start+2)%3];
 
+  for(const idx of order){
+    const result = await strategies[idx]();
+    if(result && result.length) return result;
+  }
   return [];
 }
 
 async function loadAllFeeds(){
-  const results = await Promise.allSettled(FEEDS.map(f => fetchFeed(f)));
-  results.forEach(r => { if(r.status==='fulfilled') liveItems.push(...r.value); });
-  liveItems.sort((a,b) => b.date - a.date);
-  if(liveItems.length > 0){
-    updateTicker();
-    updateBreakingBanner();
-    updateLiveBadge(true);
-  } else {
-    updateLiveBadge(false);
-  }
+  // Use _nazraFetchAll for consistent staggered batching
+  await window._nazraFetchAll().catch(()=>{});
 }
 
 function updateTicker(){
@@ -2219,6 +2266,7 @@ function updateNewsGrid(){
             <span class="badge badge-confirmed" style="font-size:10px">✓ ${top.source}</span>
             <a href="${top.sourceLink}" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 الموقع</a>
           </div>
+          ${top.cred != null ? `<div style="margin-top:8px">${credBarHTML(top.cred)}</div>` : ''}
         </div>
       </a>
       ${[s1,s2].filter(Boolean).map(item => `
@@ -2231,6 +2279,7 @@ function updateNewsGrid(){
             <div class="side-card-meta"><span class="badge badge-developing"><span class="pulse"></span>حديث</span></div>
             <div class="side-card-title">${item.title}</div>
             <div class="side-card-time">🕐 ${timeAgoAr(item.date)} · ${item.source}</div>
+          ${item.cred != null ? credBarHTML(item.cred) : ''}
           </div>
         </a>
       `).join('')}`;
@@ -2247,6 +2296,7 @@ function updateNewsGrid(){
           <div class="live-card-src">${item.source}</div>
           <div class="live-card-title">${item.title}</div>
           <div class="live-card-time">🕐 ${timeAgoAr(item.date)}</div>
+          ${credBarHTML(item.cred)}
         </div>
       </a>`).join('');
 
@@ -2269,7 +2319,18 @@ window._nazraFetchAll = async function() {
   const allFeeds = [...FEEDS, ...customFeeds];
   liveItems = [];
   let successCount = 0;
-  const results = await Promise.allSettled(allFeeds.map(f => fetchFeed(f)));
+
+  // ── Batched staggered fetch: 2 feeds per batch, 550ms between batches ──
+  // Each feed gets a different proxyIdx so they use different primary proxies,
+  // distributing load and avoiding rss2json rate limits.
+  const results = [];
+  for(let i = 0; i < allFeeds.length; i += 2){
+    const batch = allFeeds.slice(i, i+2);
+    const batchRes = await Promise.allSettled(batch.map((f, j) => fetchFeed(f, i+j)));
+    results.push(...batchRes);
+    if(i + 2 < allFeeds.length) await new Promise(r => setTimeout(r, 550));
+  }
+
   results.forEach(r => {
     if(r.status==='fulfilled' && r.value.length){
       liveItems.push(...r.value);
@@ -2277,12 +2338,15 @@ window._nazraFetchAll = async function() {
     }
   });
   liveItems.sort((a,b) => b.date - a.date);
+
+  // ── Assign credibility scores after collecting all items ──
+  liveItems.forEach(item => { item.cred = calcCredibility(item, liveItems); });
+
   if(liveItems.length > 0){
     updateTicker();
     updateBreakingBanner();
     updateLiveBadge(true);
     updateNewsGrid();   // ← تحديث بطاقات الأخبار الرئيسية
-    // Return stats for UI
     return { loaded: liveItems.length, sources: successCount, total: allFeeds.length };
   } else {
     updateLiveBadge(false);
