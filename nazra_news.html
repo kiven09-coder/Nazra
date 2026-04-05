@@ -497,9 +497,9 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
 .gstat-val{color:var(--gold);font-size:16px;font-weight:900;display:inline}
 .gstat-label{color:rgba(255,255,255,.45);font-size:10px;margin-right:4px;display:inline}
 /* Map SVG container */
-.map-svg-wrap{position:relative;width:100%;background:#040e1d;border-radius:8px 8px 0 0;overflow:hidden;cursor:grab;min-height:300px}
+.map-svg-wrap{position:relative;width:100%;background:linear-gradient(180deg,#020c1b 0%,#040e1d 100%);border-radius:10px 10px 0 0;overflow:hidden;cursor:grab;min-height:380px;box-shadow:inset 0 0 60px rgba(0,0,0,.5)}
 .map-svg-wrap:active{cursor:grabbing}
-#worldMap{width:100%;height:auto;display:block}
+#worldMap{width:100%;height:auto;display:block;min-height:380px}
 /* Zoom controls */
 .map-zoom-ctrl{position:absolute;top:12px;left:12px;display:flex;flex-direction:column;gap:4px;z-index:10}
 .zoom-btn{width:32px;height:32px;border-radius:6px;border:1px solid rgba(255,255,255,.25);background:rgba(5,15,35,.75);color:#fff;font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);font-family:monospace;line-height:1}
@@ -1161,7 +1161,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
       <!-- 1. Al Jazeera -->
       <div class="video-card-v2">
         <div class="video-embed-wrap">
-          <iframe src="https://www.youtube.com/embed/coYwtjBjNRw?autoplay=0&controls=1" title="الجزيرة مباشر" loading="lazy" allowfullscreen allow="accelerometer;clipboard-write;encrypted-media;gyroscope;picture-in-picture" onerror="this.style.display='none'"></iframe>
+          <iframe src="https://www.youtube.com/embed/bNyUyrR0PHo?autoplay=0&controls=1" title="الجزيرة مباشر" loading="lazy" allowfullscreen allow="accelerometer;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
         </div>
         <div class="vcv2-body">
           <div class="vcv2-logo" style="background:#c8102e">ج</div>
@@ -1172,7 +1172,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
           <span class="video-source-badge">● مباشر</span>
         </div>
         <div class="vcv2-actions">
-          <a href="https://www.youtube.com/@aljazeeraarabic/streams" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
+          <a href="https://www.youtube.com/@aljazeera/live" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
           <a href="https://www.aljazeera.net/news/political/" target="_blank" class="vcv2-site">🌐 الموقع</a>
         </div>
       </div>
@@ -1180,7 +1180,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
       <!-- 2. BBC Arabic -->
       <div class="video-card-v2">
         <div class="video-embed-wrap">
-          <iframe src="https://www.youtube.com/embed/K6FpGEk9elQ?autoplay=0&controls=1" title="بي بي سي عربي" loading="lazy" allowfullscreen allow="accelerometer;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
+          <iframe src="https://www.youtube.com/embed/O1pGmVtj2Y8?autoplay=0&controls=1" title="بي بي سي عربي مباشر" loading="lazy" allowfullscreen allow="accelerometer;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
         </div>
         <div class="vcv2-body">
           <div class="vcv2-logo" style="background:#bb1919">ب</div>
@@ -1191,15 +1191,15 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
           <span class="video-source-badge">● مباشر</span>
         </div>
         <div class="vcv2-actions">
-          <a href="https://www.youtube.com/@BBCArabic/streams" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
-          <a href="https://www.bbc.com/arabic/middleeast" target="_blank" class="vcv2-site">🌐 الموقع</a>
+          <a href="https://www.youtube.com/bbcarabic/live" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
+          <a href="https://www.bbc.com/arabic" target="_blank" class="vcv2-site">🌐 الموقع</a>
         </div>
       </div>
 
       <!-- 3. France 24 -->
       <div class="video-card-v2">
         <div class="video-embed-wrap">
-          <iframe src="https://www.youtube.com/embed/l_1ZKiAhUbI?autoplay=0&controls=1" title="فرانس 24 عربي" loading="lazy" allowfullscreen allow="accelerometer;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
+          <iframe src="https://www.youtube.com/embed/3ursYA8HMeo?autoplay=0&controls=1" title="فرانس 24 عربي مباشر" loading="lazy" allowfullscreen allow="accelerometer;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
         </div>
         <div class="vcv2-body">
           <div class="vcv2-logo" style="background:#003F8A">ف</div>
@@ -1210,15 +1210,15 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
           <span class="video-source-badge">● مباشر</span>
         </div>
         <div class="vcv2-actions">
-          <a href="https://www.youtube.com/@France24Arabic/streams" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
-          <a href="https://www.france24.com/ar/%D8%A7%D9%84%D8%B4%D8%B1%D9%82-%D8%A7%D9%84%D8%A3%D9%88%D8%B3%D8%B7" target="_blank" class="vcv2-site">🌐 الموقع</a>
+          <a href="https://www.youtube.com/france24arabic/live" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
+          <a href="https://www.france24.com/ar/" target="_blank" class="vcv2-site">🌐 الموقع</a>
         </div>
       </div>
 
       <!-- 4. Sky News Arabia -->
       <div class="video-card-v2">
         <div class="video-embed-wrap">
-          <iframe src="https://www.youtube.com/embed/mHFNpLKjvJY?autoplay=0&controls=1" title="سكاي نيوز عربية" loading="lazy" allowfullscreen allow="accelerometer;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
+          <iframe src="https://www.youtube.com/embed/U--OjmpjF5o?autoplay=0&controls=1" title="سكاي نيوز عربية مباشر" loading="lazy" allowfullscreen allow="accelerometer;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
         </div>
         <div class="vcv2-body">
           <div class="vcv2-logo" style="background:#e8173a">س</div>
@@ -1229,7 +1229,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
           <span class="video-source-badge">● مباشر</span>
         </div>
         <div class="vcv2-actions">
-          <a href="https://www.youtube.com/@SkyNewsArabia/streams" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
+          <a href="https://www.youtube.com/skynewsarabia/live" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
           <a href="https://www.skynewsarabia.com/middle-east" target="_blank" class="vcv2-site">🌐 الموقع</a>
         </div>
       </div>
@@ -1237,7 +1237,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
       <!-- 5. Al Arabiya -->
       <div class="video-card-v2">
         <div class="video-embed-wrap">
-          <iframe src="https://www.youtube.com/embed/vAQHGjEKmqs?autoplay=0&controls=1" title="العربية" loading="lazy" allowfullscreen allow="accelerometer;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
+          <iframe src="https://www.youtube.com/embed/n7eQejkXbnM?autoplay=0&controls=1" title="العربية مباشر" loading="lazy" allowfullscreen allow="accelerometer;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
         </div>
         <div class="vcv2-body">
           <div class="vcv2-logo" style="background:#1a56a0">ع</div>
@@ -1248,7 +1248,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
           <span class="video-source-badge">● مباشر</span>
         </div>
         <div class="vcv2-actions">
-          <a href="https://www.youtube.com/@AlArabiya/streams" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
+          <a href="https://www.youtube.com/alarabiya/live" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
           <a href="https://www.alarabiya.net/arab-and-world" target="_blank" class="vcv2-site">🌐 الموقع</a>
         </div>
       </div>
@@ -1256,7 +1256,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
       <!-- 6. DW Arabic -->
       <div class="video-card-v2">
         <div class="video-embed-wrap">
-          <iframe src="https://www.youtube.com/embed/tCkBq5iAVPY?autoplay=0&controls=1" title="دي دبليو عربي" loading="lazy" allowfullscreen allow="accelerometer;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
+          <iframe src="https://www.youtube.com/embed/AGkp2AL8e7o?autoplay=0&controls=1" title="DW عربي مباشر" loading="lazy" allowfullscreen allow="accelerometer;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
         </div>
         <div class="vcv2-body">
           <div class="vcv2-logo" style="background:#00629A">د</div>
@@ -1267,7 +1267,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
           <span class="video-source-badge">● مباشر</span>
         </div>
         <div class="vcv2-actions">
-          <a href="https://www.youtube.com/@dwarabic/streams" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
+          <a href="https://www.youtube.com/dwarabic/live" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
           <a href="https://www.dw.com/ar/%D8%A7%D9%84%D8%B4%D8%B1%D9%82-%D8%A7%D9%84%D8%A3%D9%88%D8%B3%D8%B7" target="_blank" class="vcv2-site">🌐 الموقع</a>
         </div>
       </div>
@@ -1740,11 +1740,11 @@ const NEWS_MARKERS = [
 const NEWS_IDS = new Set([818,364,275,682,784,400,414,840,376]);
 const ID_KEY   = {818:'egypt',364:'iran',275:'palestine',682:'saudi',784:'uae',400:'jordan',414:'kuwait',840:'un',376:'palestine'};
 
-const W = 960, H = 500;
-const svg = d3.select('#worldMap');
+const W = 1100, H = 560;
+const svg = d3.select('#worldMap').attr('viewBox',`0 0 ${W} ${H}`);
 
-// ── Projection (larger scale for clarity) ──
-const projection = d3.geoNaturalEarth1().scale(160).translate([W/2, H/2+10]);
+// ── Projection — مقياس أكبر لوضوح أفضل للدول ──
+const projection = d3.geoNaturalEarth1().scale(185).translate([W/2, H/2+15]);
 const path = d3.geoPath().projection(projection);
 
 // ── Map group (for zoom/pan) ──
@@ -1775,11 +1775,12 @@ const merge = defs.select('filter').append('feMerge');
 merge.append('feMergeNode').attr('in','coloredBlur');
 merge.append('feMergeNode').attr('in','SourceGraphic');
 
-// Gradient for ocean
+// Gradient for ocean — أكثر عمقاً وتباينًا مع اليابسة
 const oceanGrad = defs.append('radialGradient').attr('id','oceanGrad')
-  .attr('cx','50%').attr('cy','50%').attr('r','70%');
-oceanGrad.append('stop').attr('offset','0%').attr('stop-color','#0a1e3a');
-oceanGrad.append('stop').attr('offset','100%').attr('stop-color','#040e1d');
+  .attr('cx','50%').attr('cy','40%').attr('r','75%');
+oceanGrad.append('stop').attr('offset','0%').attr('stop-color','#0d2545');
+oceanGrad.append('stop').attr('offset','60%').attr('stop-color','#071830');
+oceanGrad.append('stop').attr('offset','100%').attr('stop-color','#020c1b');
 
 // ── Load GeoJSON ──
 d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(world => {
@@ -1789,46 +1790,98 @@ d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(w
   // Ocean
   oceanG.append('rect').attr('width',W).attr('height',H).attr('fill','url(#oceanGrad)');
 
-  // Countries
+  // ── بالوان للدول — تمييز واضح بين دول التغطية والأخرى ──
+  // نظام ألوان متعدد للدول العادية (شبيه بخريطة الأطلس)
+  const CONTINENT_COLORS = [
+    '#1a3a5c','#1e4060','#153450','#1b3b5e','#162f4a','#193858'
+  ];
+  // دول التغطية الإخبارية بألوان مميزة زاهية
+  const NEWS_COLOR_MAP = {
+    818:'#2563a8', // مصر — أزرق ملكي
+    364:'#b91c1c', // إيران — أحمر
+    275:'#15803d', // فلسطين — أخضر
+    682:'#c4830a', // السعودية — ذهبي
+    784:'#7c3aed', // الإمارات — بنفسجي
+    400:'#0d6e6e', // الأردن — تركوازي
+    414:'#1d6db5', // الكويت — أزرق فاتح
+    840:'#374151', // الولايات المتحدة — رمادي
+    376:'#15803d', // إسرائيل — أخضر مشترك مع فلسطين
+  };
+
   countriesG.selectAll('path.country')
     .data(countries.features)
     .join('path')
       .attr('class','country')
       .attr('d', path)
       .attr('fill', d => {
-        if(NEWS_IDS.has(+d.id)) return '#1c3f66';
-        return '#0e2035';
+        const id = +d.id;
+        if(NEWS_COLOR_MAP[id]) return NEWS_COLOR_MAP[id];
+        // ألوان متعاقبة للدول العادية لتمييزها بصرياً
+        return CONTINENT_COLORS[id % CONTINENT_COLORS.length];
       })
-      .attr('stroke','#071628')
-      .attr('stroke-width', 0.35)
+      .attr('stroke','#0a1e38')
+      .attr('stroke-width', 0.6)
       .style('cursor', d => ID_KEY[+d.id] ? 'pointer' : 'default')
       .on('click', (e, d) => { const k=ID_KEY[+d.id]; if(k) showCountryNews(k); })
       .on('mouseover', function(e,d){
-        if(NEWS_IDS.has(+d.id)) d3.select(this).attr('fill','#2a5a8c').attr('stroke','#3a7abf').attr('stroke-width',0.8);
+        const id = +d.id;
+        const base = NEWS_COLOR_MAP[id] || CONTINENT_COLORS[id % CONTINENT_COLORS.length];
+        d3.select(this)
+          .attr('fill', ID_KEY[id] ? '#38bdf8' : d3.color(base) ? d3.color(base).brighter(0.7) : '#2d5a8e')
+          .attr('stroke', ID_KEY[id] ? '#7dd3fc' : 'rgba(255,255,255,.4)')
+          .attr('stroke-width', ID_KEY[id] ? 1.5 : 0.8);
       })
       .on('mouseout', function(e,d){
-        const fill = NEWS_IDS.has(+d.id) ? '#1c3f66' : '#0e2035';
-        d3.select(this).attr('fill',fill).attr('stroke','#071628').attr('stroke-width',0.35);
+        const id = +d.id;
+        d3.select(this)
+          .attr('fill', NEWS_COLOR_MAP[id] || CONTINENT_COLORS[id % CONTINENT_COLORS.length])
+          .attr('stroke','#0a1e38')
+          .attr('stroke-width', 0.6);
       });
 
-  // Country borders
+  // حدود الدول — أوضح وأعرض
   countriesG.append('path').datum(borders)
     .attr('d',path).attr('fill','none')
-    .attr('stroke','rgba(255,255,255,.06)').attr('stroke-width',0.5);
+    .attr('stroke','rgba(255,255,255,.22)').attr('stroke-width',0.7);
 
-  // Graticule (lat/lon grid)
+  // خطوط الطول والعرض (graticule) — خفيفة
   const gratLine = d3.geoGraticule()();
   countriesG.append('path').datum(gratLine)
     .attr('d',path).attr('fill','none')
-    .attr('stroke','rgba(255,255,255,.04)').attr('stroke-width',0.4);
+    .attr('stroke','rgba(255,255,255,.06)').attr('stroke-width',0.3);
 
-  // Sphere outline
+  // الحدود الخارجية للكرة
   countriesG.append('path').datum({type:'Sphere'})
     .attr('d',path).attr('fill','none')
-    .attr('stroke','rgba(255,255,255,.12)').attr('stroke-width',1);
+    .attr('stroke','rgba(100,180,255,.3)').attr('stroke-width',1.5);
 
   // Day/Night
   drawNight();
+
+  // ── تسميات القارات على الخريطة ──
+  const CONTINENT_LABELS = [
+    {name:'أفريقيا',      lon:20,   lat:2,    size:11},
+    {name:'أوروبا',       lon:15,   lat:54,   size:10},
+    {name:'آسيا',         lon:90,   lat:45,   size:12},
+    {name:'أمريكا الشمالية', lon:-100, lat:48, size:10},
+    {name:'أمريكا الجنوبية', lon:-60,  lat:-15, size:10},
+    {name:'أستراليا',     lon:134,  lat:-25,  size:10},
+    {name:'روسيا',        lon:65,   lat:62,   size:10},
+  ];
+  CONTINENT_LABELS.forEach(cl => {
+    const pos = projection([cl.lon, cl.lat]);
+    if(!pos) return;
+    labelsG.append('text')
+      .attr('x', pos[0]).attr('y', pos[1])
+      .attr('text-anchor','middle')
+      .attr('font-size', cl.size)
+      .attr('font-family','Cairo,sans-serif')
+      .attr('font-weight','600')
+      .attr('fill','rgba(255,255,255,.28)')
+      .attr('pointer-events','none')
+      .attr('letter-spacing','0.5')
+      .text(cl.name);
+  });
 
   // Markers
   drawMarkers();
