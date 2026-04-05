@@ -955,7 +955,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
         <div class="price-row"><span class="price-label">ذهب 21 قيراط</span><span class="price-val up" id="gold21">3,549 ج</span></div>
         <div class="price-row"><span class="price-label">ذهب 18 قيراط</span><span class="price-val up" id="gold18">3,042 ج</span></div>
         <div class="price-row"><span class="price-label">الأونصة (دولار)</span><span class="price-val up" id="goldOz">$2,847 ▲2.3٪</span></div>
-        <div class="price-source">المصدر: <a href="https://www.cbe.org.eg/ar/monetary-policy/press-releases" target="_blank" class="src-link">البنك المركزي المصري</a> · تحديث: منذ 8 دقائق</div>
+        <div class="price-source">المصدر: <a href="https://www.cbe.org.eg/ar/monetary-policy/press-releases" target="_blank" class="src-link">البنك المركزي المصري</a> · <span id="goldUpdateTime">جارٍ التحديث...</span></div>
       </div>
       <div class="price-card" style="border-top-color:#1565C0">
         <div class="price-card-title" style="border-top-color:#1565C0">💱 أسعار العملات — مقابل الجنيه المصري</div>
@@ -965,7 +965,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
         <div class="price-row"><span class="price-label">🇦🇪 درهم إماراتي</span><span class="price-val" id="aed">13.57</span></div>
         <div class="price-row"><span class="price-label">🇰🇼 دينار كويتي</span><span class="price-val up" id="kwd">162.15 ▲0.2٪</span></div>
         <div class="price-row"><span class="price-label">🇶🇦 ريال قطري</span><span class="price-val" id="qar">13.69</span></div>
-        <div class="price-source">المصدر: <a href="https://www.cbe.org.eg/ar/monetary-policy/press-releases/market-data/exchange-rates" target="_blank" class="src-link">CBE</a> · <a href="https://www.bloomberg.com/middleeast" target="_blank" class="src-link">بلومبرغ</a> · تحديث: منذ 12 دقيقة</div>
+        <div class="price-source">المصدر: <a href="https://www.cbe.org.eg/ar/monetary-policy/press-releases/market-data/exchange-rates" target="_blank" class="src-link">CBE</a> · <a href="https://www.bloomberg.com/middleeast" target="_blank" class="src-link">بلومبرغ</a> · <span id="fxUpdateTime">جارٍ التحديث...</span></div>
       </div>
     </div>
 
@@ -1143,9 +1143,9 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
       <div>
         <div class="sec-header"><div class="sec-line"></div><span class="sec-title">📈 الاقتصاد</span><a href="https://www.bloomberg.com/middleeast" target="_blank" class="sec-more">بلومبرغ الشرق الأوسط ←</a></div>
         <div class="econ-cards">
-          <div class="econ-indicator"><div class="ei-label">دولار / جنيه مصري</div><div class="ei-value">49.85</div><div class="ei-change down">▼ 0.8٪ اليوم</div></div>
-          <div class="econ-indicator" style="border-top-color:var(--gold)"><div class="ei-label">الذهب (غ / جنيه)</div><div class="ei-value">3,421</div><div class="ei-change up">▲ 2.1٪ اليوم</div></div>
-          <div class="econ-indicator" style="border-top-color:var(--red)"><div class="ei-label">خام برنت ($/برميل)</div><div class="ei-value">$94.2</div><div class="ei-change down">▲ 4.2٪</div></div>
+          <div class="econ-indicator" id="ei-usd"><div class="ei-label">دولار / جنيه مصري</div><div class="ei-value" id="ei-usd-val">—</div><div class="ei-change" id="ei-usd-chg">جارٍ التحديث...</div></div>
+          <div class="econ-indicator" id="ei-gold" style="border-top-color:var(--gold)"><div class="ei-label">الذهب (غرام / جنيه)</div><div class="ei-value" id="ei-gold-val">—</div><div class="ei-change" id="ei-gold-chg">جارٍ التحديث...</div></div>
+          <div class="econ-indicator" id="ei-oil" style="border-top-color:var(--red)"><div class="ei-label">خام برنت ($/برميل)</div><div class="ei-value" id="ei-oil-val">—</div><div class="ei-change" id="ei-oil-chg">جارٍ التحديث...</div></div>
         </div>
         <div class="econ-event-list">
           <div class="econ-event" onclick="openModal('egypt-economy')"><div class="econ-event-icon">🏦</div><div><div class="econ-event-title">البنك المركزي يرفع الفائدة 150 نقطة أساس بقرار استثنائي</div><div class="econ-event-meta"><span class="badge badge-confirmed" style="font-size:10px">✓</span>·<a href="https://www.cbe.org.eg/ar/monetary-policy/press-releases" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 CBE</a><a href="https://www.reuters.com/world/middle-east/" target="_blank" class="src-link" onclick="event.stopPropagation()">🔗 رويترز</a></div></div></div>
@@ -2745,6 +2745,224 @@ document.addEventListener('keydown', e => {
   }
 });
 
+/* ══════════════════════════════════════════════
+   LIVE MARKET DATA — أسعار العملات والذهب والنفط
+   Sources: open.er-api.com (FX) · goldprice.org (gold) · Yahoo Finance v8 (oil)
+   Multi-fallback with visible error states
+   ══════════════════════════════════════════════ */
+(function(){
+
+  function setText(id, val){ const el=document.getElementById(id); if(el&&val!=null) el.textContent=val; }
+  function fmt(n, d=2){ return n!=null ? n.toLocaleString('ar-EG',{minimumFractionDigits:d,maximumFractionDigits:d}) : null; }
+  function nowAr(){ return new Date().toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'}); }
+
+  function setChange(id, pct){
+    const el=document.getElementById(id);
+    if(!el||pct==null) return;
+    const sign=pct>=0?'▲':'▼', cls=pct>=0?'up':'down';
+    el.textContent=sign+' '+Math.abs(pct).toFixed(2)+'\u066A اليوم';
+    el.className='ei-change '+cls;
+  }
+
+  function setErr(id, msg){
+    const el=document.getElementById(id);
+    if(el && (el.textContent==='\u2014' || el.textContent.includes('التحديث'))) el.textContent=msg||'—';
+  }
+
+  async function safeFetch(url, timeoutMs){
+    const ctrl=new AbortController();
+    const t=setTimeout(()=>ctrl.abort(), timeoutMs||9000);
+    try{
+      const r=await fetch(url, {cache:'no-cache', signal:ctrl.signal});
+      clearTimeout(t);
+      return r;
+    } catch(e){ clearTimeout(t); return null; }
+  }
+
+  /* helper: try JSON fetch via CORS proxy wrappers (allorigins returns {contents:"..."}) */
+  async function proxyJSON(targetUrl, timeoutMs){
+    const proxies = [
+      'https://api.allorigins.win/get?url='+encodeURIComponent(targetUrl),
+      'https://corsproxy.io/?'+encodeURIComponent(targetUrl)
+    ];
+    for(const pUrl of proxies){
+      try{
+        const r = await safeFetch(pUrl, timeoutMs||11000);
+        if(!r||!r.ok) continue;
+        const d = await r.json();
+        // allorigins wraps in {contents:"..."}, corsproxy returns raw
+        const raw = d.contents ?? d;
+        return typeof raw === 'string' ? JSON.parse(raw) : raw;
+      } catch(e){ continue; }
+    }
+    return null;
+  }
+
+  async function fetchMarketData(){
+    console.log('[NAZRA] fetchMarketData() started at', new Date().toLocaleTimeString());
+
+    // ═══════════════════════════════════════════════════════════
+    // 1. EXCHANGE RATES — open.er-api.com (free, CORS, no key)
+    // ═══════════════════════════════════════════════════════════
+    let rates = null;
+    try {
+      const r = await safeFetch('https://open.er-api.com/v6/latest/USD', 10000);
+      if(r && r.ok){
+        const d = await r.json();
+        if(d && d.result==='success' && d.rates) rates = d.rates;
+      }
+    } catch(e){ console.warn('[NAZRA] FX fetch error:', e); }
+
+    if(rates){
+      const usdEgp = rates.EGP;
+      const eurEgp = rates.EGP / rates.EUR;
+      const sarEgp = rates.EGP / rates.SAR;
+      const aedEgp = rates.EGP / rates.AED;
+      const kwdEgp = rates.EGP / rates.KWD;
+      const qarEgp = rates.EGP / rates.QAR;
+
+      if(usdEgp) setText('usd',  fmt(usdEgp,2)+' ج');
+      if(eurEgp) setText('eur',  fmt(eurEgp,2)+' ج');
+      if(sarEgp) setText('sar',  fmt(sarEgp,2)+' ج');
+      if(aedEgp) setText('aed',  fmt(aedEgp,2)+' ج');
+      if(kwdEgp) setText('kwd',  fmt(kwdEgp,2)+' ج');
+      if(qarEgp) setText('qar',  fmt(qarEgp,2)+' ج');
+
+      if(usdEgp){
+        setText('ei-usd-val', fmt(usdEgp,2));
+        setText('ei-usd-chg', 'سعر السوق الرسمي');
+        setText('fxUpdateTime', 'تحديث: '+nowAr());
+      }
+      window._usdEgp = usdEgp;
+      console.log('[NAZRA] FX ✓ USD/EGP =', usdEgp);
+    } else {
+      console.warn('[NAZRA] FX ✗ open.er-api failed');
+      setErr('ei-usd-chg', 'تعذر التحديث');
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // 2. GOLD — multi-fallback:
+    //    A) goldprice.org internal API (xauPrice + pcXau change %)
+    //    B) Yahoo Finance GC=F via CORS proxies
+    //    C) metals.live /v1/spot
+    // ═══════════════════════════════════════════════════════════
+    let goldOzUsd = null, goldChgPct = null;
+
+    // --- 2A. goldprice.org ---
+    try {
+      const r = await safeFetch('https://data-asg.goldprice.org/dbXRates/USD', 9000);
+      if(r && r.ok){
+        const d = await r.json();
+        const item = d && d.items && d.items[0];
+        if(item && item.xauPrice){
+          goldOzUsd = item.xauPrice;
+          if(typeof item.pcXau === 'number') goldChgPct = item.pcXau;
+          console.log('[NAZRA] Gold ✓ goldprice.org: $'+goldOzUsd, goldChgPct+'%');
+        }
+      }
+    } catch(e){ console.warn('[NAZRA] Gold goldprice.org error:', e); }
+
+    // --- 2B. Yahoo Finance GC=F via CORS proxies ---
+    if(goldOzUsd == null){
+      try {
+        const gcUrl = 'https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?interval=1d&range=2d';
+        const d = await proxyJSON(gcUrl, 11000);
+        if(d){
+          const meta = d.chart && d.chart.result && d.chart.result[0] && d.chart.result[0].meta;
+          if(meta && meta.regularMarketPrice){
+            goldOzUsd = meta.regularMarketPrice;
+            const prev = meta.previousClose || meta.chartPreviousClose;
+            if(prev && prev > 0) goldChgPct = ((goldOzUsd - prev) / prev) * 100;
+            console.log('[NAZRA] Gold ✓ Yahoo GC=F: $'+goldOzUsd);
+          }
+        }
+      } catch(e){ console.warn('[NAZRA] Gold Yahoo error:', e); }
+    }
+
+    // --- 2C. metals.live fallback ---
+    if(goldOzUsd == null){
+      try {
+        const r = await safeFetch('https://api.metals.live/v1/spot', 8000);
+        if(r && r.ok){
+          const data = await r.json();
+          if(Array.isArray(data)){
+            const g = data.find(function(x){ return x.gold !== undefined; });
+            if(g) goldOzUsd = g.gold;
+          } else if(data && typeof data.gold === 'number'){
+            goldOzUsd = data.gold;
+          }
+          if(goldOzUsd) console.log('[NAZRA] Gold ✓ metals.live: $'+goldOzUsd);
+        }
+      } catch(e){}
+    }
+
+    if(!goldOzUsd) console.warn('[NAZRA] Gold ✗ All sources failed');
+
+    // ═══════════════════════════════════════════════════════════
+    // 3. BRENT CRUDE — Yahoo Finance BZ=F via CORS proxies
+    // ═══════════════════════════════════════════════════════════
+    let brentUsd = null, oilChgPct = null;
+    try {
+      const bzUrl = 'https://query1.finance.yahoo.com/v8/finance/chart/BZ%3DF?interval=1d&range=2d';
+      const d = await proxyJSON(bzUrl, 12000);
+      if(d){
+        const meta = d.chart && d.chart.result && d.chart.result[0] && d.chart.result[0].meta;
+        if(meta && meta.regularMarketPrice){
+          brentUsd = meta.regularMarketPrice;
+          const prev = meta.previousClose || meta.chartPreviousClose;
+          if(prev && prev > 0) oilChgPct = ((brentUsd - prev) / prev) * 100;
+          console.log('[NAZRA] Oil ✓ Yahoo BZ=F: $'+brentUsd);
+        }
+      }
+    } catch(e){ console.warn('[NAZRA] Oil error:', e); }
+
+    if(!brentUsd) console.warn('[NAZRA] Oil ✗ All sources failed');
+
+    // ═══════════════════════════════════════════════════════════
+    // 4. UPDATE GOLD DISPLAY
+    // ═══════════════════════════════════════════════════════════
+    const usdEgp = window._usdEgp || (rates && rates.EGP) || 50.5;
+    if(goldOzUsd){
+      const gold24gEgp = (goldOzUsd / 31.1035) * usdEgp;
+      const gold21gEgp = gold24gEgp * (21/24);
+      const gold18gEgp = gold24gEgp * (18/24);
+
+      setText('gold21', Math.round(gold21gEgp).toLocaleString('ar-EG')+' ج');
+      setText('gold18', Math.round(gold18gEgp).toLocaleString('ar-EG')+' ج');
+      setText('goldOz', '$'+Math.round(goldOzUsd).toLocaleString('ar-EG'));
+      setText('ei-gold-val', Math.round(gold24gEgp).toLocaleString('ar-EG'));
+      setText('goldUpdateTime', 'تحديث: '+nowAr());
+
+      if(goldChgPct != null){
+        setChange('ei-gold-chg', goldChgPct);
+      } else {
+        setText('ei-gold-chg', 'أسعار لحظية');
+      }
+    } else {
+      setErr('ei-gold-val', 'تعذر التحديث');
+      setErr('ei-gold-chg', 'أعد المحاولة');
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // 5. UPDATE OIL DISPLAY
+    // ═══════════════════════════════════════════════════════════
+    if(brentUsd){
+      setText('ei-oil-val', '$'+fmt(brentUsd,1));
+      setChange('ei-oil-chg', oilChgPct);
+    } else {
+      setErr('ei-oil-val', 'تعذر التحديث');
+      setErr('ei-oil-chg', 'أعد المحاولة');
+    }
+
+    console.log('[NAZRA] fetchMarketData() done. FX:',!!rates, ' Gold:',goldOzUsd, ' Oil:',brentUsd);
+  }
+
+  // ── Initial load + auto-refresh every 5 minutes ──
+  fetchMarketData();
+  setInterval(fetchMarketData, 5 * 60 * 1000);
+
+})();
+
 </script>
 
 <!-- ══════════════════════════════════════════════════════════
@@ -2809,3 +3027,4 @@ document.addEventListener('keydown', e => {
   </div>
 </div>
 </body>
+</html>
