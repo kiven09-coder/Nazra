@@ -478,23 +478,30 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
 .gstat-val{color:var(--gold);font-size:16px;font-weight:900;display:inline}
 .gstat-label{color:rgba(255,255,255,.45);font-size:10px;margin-right:4px;display:inline}
 /* Map SVG container */
-.map-svg-wrap{position:relative;width:100%;background:#071628;border-radius:8px 8px 0 0;overflow:hidden;cursor:default}
-#worldMap{width:100%;display:block}
+.map-svg-wrap{position:relative;width:100%;background:#040e1d;border-radius:8px 8px 0 0;overflow:hidden;cursor:grab;min-height:300px}
+.map-svg-wrap:active{cursor:grabbing}
+#worldMap{width:100%;height:auto;display:block}
+/* Zoom controls */
+.map-zoom-ctrl{position:absolute;top:12px;left:12px;display:flex;flex-direction:column;gap:4px;z-index:10}
+.zoom-btn{width:32px;height:32px;border-radius:6px;border:1px solid rgba(255,255,255,.25);background:rgba(5,15,35,.75);color:#fff;font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;backdrop-filter:blur(4px);font-family:monospace;line-height:1}
+.zoom-btn:hover{background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.5)}
+/* Live news badge */
+.map-live-badge{position:absolute;top:12px;right:12px;background:rgba(193,18,31,.85);color:#fff;font-size:10px;font-weight:800;padding:4px 10px;border-radius:4px;display:flex;align-items:center;gap:5px;backdrop-filter:blur(4px)}
+.map-live-dot{width:6px;height:6px;border-radius:50%;background:#fff;animation:pulse 1s infinite}
 /* Pulsing markers on map */
-.map-marker-pulse{animation:mapPulse 2s ease-in-out infinite}
-@keyframes mapPulse{0%,100%{opacity:.3;r:10}50%{opacity:.7;r:14}}
+@keyframes mapPulse{0%,100%{opacity:.3}50%{opacity:.8}}
 /* Country strip below map */
-.country-strip{display:flex;gap:0;border-top:1px solid rgba(255,255,255,.08);overflow-x:auto;scrollbar-width:none;background:rgba(0,0,0,.3)}
+.country-strip{display:flex;gap:0;border-top:2px solid rgba(255,255,255,.06);overflow-x:auto;scrollbar-width:none;background:rgba(0,0,0,.4)}
 .country-strip::-webkit-scrollbar{display:none}
-.gcountry{display:flex;align-items:center;gap:8px;padding:10px 16px;cursor:pointer;transition:.2s;border-inline-end:1px solid rgba(255,255,255,.07);white-space:nowrap;flex-shrink:0}
-.gcountry:hover{background:rgba(255,255,255,.08)}
-.gcountry.active{background:rgba(255,255,255,.12)}
-.gcountry-flag{font-size:16px;flex-shrink:0}
+.gcountry{display:flex;align-items:center;gap:8px;padding:11px 18px;cursor:pointer;transition:.2s;border-inline-end:1px solid rgba(255,255,255,.06);white-space:nowrap;flex-shrink:0}
+.gcountry:hover{background:rgba(255,255,255,.1)}
+.gcountry.active{background:rgba(255,255,255,.14)}
+.gcountry-flag{font-size:17px;flex-shrink:0}
 .gcountry-name{color:rgba(255,255,255,.75);font-size:12px;font-weight:600}
-.gcountry-count{background:var(--red);color:#fff;border-radius:20px;font-size:10px;font-weight:800;padding:1px 7px;margin-right:2px}
+.gcountry-count{background:var(--red);color:#fff;border-radius:20px;font-size:10px;font-weight:800;padding:2px 8px;margin-right:2px}
 /* Day/Night legend */
-.map-legend{display:flex;align-items:center;gap:12px;position:absolute;bottom:8px;left:12px;font-size:10px;color:rgba(255,255,255,.45)}
-.map-legend-dot{width:8px;height:8px;border-radius:50%}
+.map-legend{display:flex;align-items:center;gap:10px;position:absolute;bottom:10px;left:12px;font-size:10px;color:rgba(255,255,255,.5);background:rgba(0,0,0,.4);padding:5px 10px;border-radius:5px;backdrop-filter:blur(3px)}
+.map-legend-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
 /* Country popup */
 .country-news-popup{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:14px;padding:0;width:min(420px,92vw);box-shadow:0 20px 60px rgba(0,0,0,.4);z-index:3000;overflow:hidden;animation:scaleIn .25s ease}
 .country-news-popup.open{display:block}
@@ -565,7 +572,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
 
 <!-- TICKER -->
 <div class="ticker-bar">
-  <span class="ticker-label">الأخبار</span>
+  <span class="ticker-label" id="tickerLabel">● الأخبار</span>
   <div class="ticker-track">
     <a class="ticker-item" href="https://gate.ahram.org.eg/Economy.aspx" target="_blank">البرلمان المصري يناقش مشروع قانون الضريبة على الدخل الجديد</a>
     <a class="ticker-item" href="https://arabic.reuters.com/world" target="_blank">الرياض تستدعي سفير طهران احتجاجاً على التصريحات الأخيرة</a>
@@ -641,6 +648,17 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
       </div>
     </div>
     <div class="map-svg-wrap" id="mapWrap">
+      <!-- Zoom Controls -->
+      <div class="map-zoom-ctrl">
+        <button class="zoom-btn" onclick="mapZoomIn()" title="تكبير">+</button>
+        <button class="zoom-btn" onclick="mapZoomOut()" title="تصغير">−</button>
+        <button class="zoom-btn" onclick="mapZoomReset()" title="إعادة الحجم" style="font-size:12px">⊡</button>
+      </div>
+      <!-- Live Badge -->
+      <div class="map-live-badge" id="mapLiveBadge">
+        <span class="map-live-dot"></span>
+        <span id="mapLiveText">مباشر</span>
+      </div>
       <svg id="worldMap" viewBox="0 0 960 500" preserveAspectRatio="xMidYMid meet">
         <defs>
           <radialGradient id="markerGlow" cx="50%" cy="50%" r="50%">
@@ -1029,7 +1047,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
       <!-- 1. Al Jazeera -->
       <div class="video-card-v2">
         <div class="video-embed-wrap">
-          <iframe src="https://www.youtube.com/embed/live_stream?channel=UCNye-wNBqNL5ZzHSJj3l8Bg&autoplay=0" title="الجزيرة مباشر" loading="lazy" allowfullscreen allow="accelerometer;clipboard-write;encrypted-media;gyroscope;picture-in-picture" onerror="this.style.display='none'"></iframe>
+          <iframe src="https://www.youtube.com/embed/coYwtjBjNRw?autoplay=0&controls=1" title="الجزيرة مباشر" loading="lazy" allowfullscreen allow="accelerometer;clipboard-write;encrypted-media;gyroscope;picture-in-picture" onerror="this.style.display='none'"></iframe>
         </div>
         <div class="vcv2-body">
           <div class="vcv2-logo" style="background:#c8102e">ج</div>
@@ -1040,7 +1058,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
           <span class="video-source-badge">● مباشر</span>
         </div>
         <div class="vcv2-actions">
-          <a href="https://www.youtube.com/@aljazeeraarabic/live" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
+          <a href="https://www.youtube.com/@aljazeeraarabic/streams" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
           <a href="https://www.aljazeera.net/news/political/" target="_blank" class="vcv2-site">🌐 الموقع</a>
         </div>
       </div>
@@ -1048,7 +1066,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
       <!-- 2. BBC Arabic -->
       <div class="video-card-v2">
         <div class="video-embed-wrap">
-          <iframe src="https://www.youtube.com/embed/live_stream?channel=UCVGazpCBRFBJGb9FJbdJZzA&autoplay=0" title="بي بي سي عربي" loading="lazy" allowfullscreen allow="accelerometer;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
+          <iframe src="https://www.youtube.com/embed/K6FpGEk9elQ?autoplay=0&controls=1" title="بي بي سي عربي" loading="lazy" allowfullscreen allow="accelerometer;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
         </div>
         <div class="vcv2-body">
           <div class="vcv2-logo" style="background:#bb1919">ب</div>
@@ -1059,7 +1077,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
           <span class="video-source-badge">● مباشر</span>
         </div>
         <div class="vcv2-actions">
-          <a href="https://www.youtube.com/@BBCArabic/live" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
+          <a href="https://www.youtube.com/@BBCArabic/streams" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
           <a href="https://www.bbc.com/arabic/middleeast" target="_blank" class="vcv2-site">🌐 الموقع</a>
         </div>
       </div>
@@ -1067,7 +1085,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
       <!-- 3. France 24 -->
       <div class="video-card-v2">
         <div class="video-embed-wrap">
-          <iframe src="https://www.youtube.com/embed/live_stream?channel=UCmqhalEoYfOGaGjD2p_MFHA&autoplay=0" title="فرانس 24 عربي" loading="lazy" allowfullscreen allow="accelerometer;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
+          <iframe src="https://www.youtube.com/embed/l_1ZKiAhUbI?autoplay=0&controls=1" title="فرانس 24 عربي" loading="lazy" allowfullscreen allow="accelerometer;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
         </div>
         <div class="vcv2-body">
           <div class="vcv2-logo" style="background:#003F8A">ف</div>
@@ -1078,7 +1096,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
           <span class="video-source-badge">● مباشر</span>
         </div>
         <div class="vcv2-actions">
-          <a href="https://www.youtube.com/@France24Arabic/live" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
+          <a href="https://www.youtube.com/@France24Arabic/streams" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
           <a href="https://www.france24.com/ar/%D8%A7%D9%84%D8%B4%D8%B1%D9%82-%D8%A7%D9%84%D8%A3%D9%88%D8%B3%D8%B7" target="_blank" class="vcv2-site">🌐 الموقع</a>
         </div>
       </div>
@@ -1086,7 +1104,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
       <!-- 4. Sky News Arabia -->
       <div class="video-card-v2">
         <div class="video-embed-wrap">
-          <iframe src="https://www.youtube.com/embed/live_stream?channel=UCzOT9jCwHHFAHZaKi_KmM7w&autoplay=0" title="سكاي نيوز عربية" loading="lazy" allowfullscreen allow="accelerometer;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
+          <iframe src="https://www.youtube.com/embed/mHFNpLKjvJY?autoplay=0&controls=1" title="سكاي نيوز عربية" loading="lazy" allowfullscreen allow="accelerometer;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
         </div>
         <div class="vcv2-body">
           <div class="vcv2-logo" style="background:#e8173a">س</div>
@@ -1097,7 +1115,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
           <span class="video-source-badge">● مباشر</span>
         </div>
         <div class="vcv2-actions">
-          <a href="https://www.youtube.com/@SkyNewsArabia/live" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
+          <a href="https://www.youtube.com/@SkyNewsArabia/streams" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
           <a href="https://www.skynewsarabia.com/middle-east" target="_blank" class="vcv2-site">🌐 الموقع</a>
         </div>
       </div>
@@ -1105,7 +1123,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
       <!-- 5. Al Arabiya -->
       <div class="video-card-v2">
         <div class="video-embed-wrap">
-          <iframe src="https://www.youtube.com/embed/live_stream?channel=UC6OiblJFJNRyVnhGRlrklAg&autoplay=0" title="العربية" loading="lazy" allowfullscreen allow="accelerometer;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
+          <iframe src="https://www.youtube.com/embed/vAQHGjEKmqs?autoplay=0&controls=1" title="العربية" loading="lazy" allowfullscreen allow="accelerometer;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
         </div>
         <div class="vcv2-body">
           <div class="vcv2-logo" style="background:#1a56a0">ع</div>
@@ -1116,7 +1134,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
           <span class="video-source-badge">● مباشر</span>
         </div>
         <div class="vcv2-actions">
-          <a href="https://www.youtube.com/@AlArabiya/live" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
+          <a href="https://www.youtube.com/@AlArabiya/streams" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
           <a href="https://www.alarabiya.net/arab-and-world/middle-east" target="_blank" class="vcv2-site">🌐 الموقع</a>
         </div>
       </div>
@@ -1124,7 +1142,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
       <!-- 6. DW Arabic -->
       <div class="video-card-v2">
         <div class="video-embed-wrap">
-          <iframe src="https://www.youtube.com/embed/live_stream?channel=UCNje4uO5UF8lDHB0Dc2xgvg&autoplay=0" title="دي دبليو عربي" loading="lazy" allowfullscreen allow="accelerometer;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
+          <iframe src="https://www.youtube.com/embed/tCkBq5iAVPY?autoplay=0&controls=1" title="دي دبليو عربي" loading="lazy" allowfullscreen allow="accelerometer;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
         </div>
         <div class="vcv2-body">
           <div class="vcv2-logo" style="background:#00629A">د</div>
@@ -1135,7 +1153,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
           <span class="video-source-badge">● مباشر</span>
         </div>
         <div class="vcv2-actions">
-          <a href="https://www.youtube.com/@dwarabic/live" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
+          <a href="https://www.youtube.com/@dwarabic/streams" target="_blank" class="vcv2-watch">▶ شاهد على يوتيوب</a>
           <a href="https://www.dw.com/ar/%D8%A7%D9%84%D8%B4%D8%B1%D9%82-%D8%A7%D9%84%D8%A3%D9%88%D8%B3%D8%B7" target="_blank" class="vcv2-site">🌐 الموقع</a>
         </div>
       </div>
@@ -1581,202 +1599,331 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLogin();});
 </script>
 
 
-<!-- D3 WORLD MAP -->
+<!-- D3 WORLD MAP + RSS LIVE NEWS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
 <script>
+/* ─── WORLD MAP ─── */
 (function(){
-
 const NEWS_MARKERS = [
-  {key:'iran',     lon:53.7,  lat:32.4,  count:17, color:'#EF5350', r:11, label:'إيران'},
-  {key:'palestine',lon:34.4,  lat:31.5,  count:11, color:'#66BB6A', r:9,  label:'فلسطين'},
-  {key:'egypt',    lon:30.8,  lat:26.8,  count:6,  color:'#E9C46A', r:8,  label:'مصر'},
-  {key:'saudi',    lon:45.1,  lat:23.9,  count:4,  color:'#42A5F5', r:7,  label:'السعودية'},
-  {key:'uae',      lon:54.4,  lat:24.5,  count:3,  color:'#CE93D8', r:6,  label:'الإمارات'},
-  {key:'jordan',   lon:36.2,  lat:30.6,  count:2,  color:'#FF8A65', r:6,  label:'الأردن'},
-  {key:'kuwait',   lon:47.5,  lat:29.3,  count:2,  color:'#4DB6AC', r:6,  label:'الكويت'},
-  {key:'un',       lon:-74.0, lat:40.7,  count:3,  color:'#90A4AE', r:7,  label:'الأمم المتحدة'}
+  {key:'iran',     lon:53.7,  lat:32.4,  count:17, color:'#EF5350', r:13, label:'إيران'},
+  {key:'palestine',lon:34.5,  lat:31.9,  count:11, color:'#66BB6A', r:11, label:'فلسطين'},
+  {key:'egypt',    lon:30.8,  lat:26.8,  count:6,  color:'#E9C46A', r:9,  label:'مصر'},
+  {key:'saudi',    lon:45.1,  lat:23.9,  count:4,  color:'#42A5F5', r:8,  label:'السعودية'},
+  {key:'uae',      lon:54.4,  lat:24.5,  count:3,  color:'#CE93D8', r:7,  label:'الإمارات'},
+  {key:'jordan',   lon:36.2,  lat:30.6,  count:2,  color:'#FF8A65', r:7,  label:'الأردن'},
+  {key:'kuwait',   lon:47.5,  lat:29.3,  count:2,  color:'#4DB6AC', r:7,  label:'الكويت'},
+  {key:'un',       lon:-74.0, lat:40.7,  count:3,  color:'#90A4AE', r:8,  label:'نيويورك'}
 ];
 
-// Highlighted country ISO numeric codes for news countries
-const NEWS_COUNTRY_IDS = new Set([818,364,275,682,784,400,414,840]);
-// 818=Egypt, 364=Iran, 275=Palestine, 682=Saudi, 784=UAE, 400=Jordan, 414=Kuwait, 840=USA(for UN)
+// ISO numeric IDs for news countries
+const NEWS_IDS = new Set([818,364,275,682,784,400,414,840,376]);
+const ID_KEY   = {818:'egypt',364:'iran',275:'palestine',682:'saudi',784:'uae',400:'jordan',414:'kuwait',840:'un',376:'palestine'};
 
-const svg = d3.select('#worldMap');
 const W = 960, H = 500;
+const svg = d3.select('#worldMap');
 
-// Natural Earth projection
-const projection = d3.geoNaturalEarth1()
-  .scale(153)
-  .translate([W/2, H/2]);
-
+// ── Projection (larger scale for clarity) ──
+const projection = d3.geoNaturalEarth1().scale(160).translate([W/2, H/2+10]);
 const path = d3.geoPath().projection(projection);
 
-// Load world topojson
-d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
-  .then(world => {
-    const countries = topojson.feature(world, world.objects.countries);
+// ── Map group (for zoom/pan) ──
+const mapG = svg.append('g').attr('id','mapG');
+const oceanG    = mapG.append('g');
+const countriesG= mapG.append('g');
+const nightG    = mapG.append('g');
+const markersG  = mapG.append('g').attr('id','mapMarkers');
+const labelsG   = mapG.append('g').attr('id','mapLabels');
 
-    // Ocean background
-    d3.select('#mapOcean').append('rect')
-      .attr('width', W).attr('height', H)
-      .attr('fill', '#071a30');
+// ── D3 Zoom ──
+const zoomBehavior = d3.zoom()
+  .scaleExtent([1, 12])
+  .translateExtent([[0,0],[W,H]])
+  .on('zoom', e => mapG.attr('transform', e.transform));
+svg.call(zoomBehavior).on('dblclick.zoom', null);
 
-    // Country paths
-    d3.select('#mapCountries').selectAll('path')
-      .data(countries.features)
-      .join('path')
-        .attr('d', path)
-        .attr('fill', d => NEWS_COUNTRY_IDS.has(+d.id) ? '#1a3a5c' : '#112236')
-        .attr('stroke', '#0a1628')
-        .attr('stroke-width', 0.4)
-        .style('cursor', d => {
-          const key = idToKey(+d.id);
-          return key ? 'pointer' : 'default';
-        })
-        .on('click', function(event, d) {
-          const key = idToKey(+d.id);
-          if(key) showCountryNews(key);
-        })
-        .on('mouseover', function(event, d) {
-          const key = idToKey(+d.id);
-          if(key) d3.select(this).attr('fill', '#243f61');
-        })
-        .on('mouseout', function(event, d) {
-          const isNews = NEWS_COUNTRY_IDS.has(+d.id);
-          d3.select(this).attr('fill', isNews ? '#1a3a5c' : '#112236');
-        });
+// Expose zoom controls to window
+window.mapZoomIn    = () => svg.transition().duration(350).call(zoomBehavior.scaleBy, 1.6);
+window.mapZoomOut   = () => svg.transition().duration(350).call(zoomBehavior.scaleBy, 0.625);
+window.mapZoomReset = () => svg.transition().duration(500).call(zoomBehavior.transform, d3.zoomIdentity);
 
-    // Graticule (grid lines)
-    const graticule = d3.geoGraticule()();
-    d3.select('#mapCountries').append('path')
-      .datum(graticule)
+// ── Defs ──
+const defs = svg.append('defs');
+defs.append('filter').attr('id','mGlow')
+  .append('feGaussianBlur').attr('stdDeviation','3').attr('result','coloredBlur');
+const merge = defs.select('filter').append('feMerge');
+merge.append('feMergeNode').attr('in','coloredBlur');
+merge.append('feMergeNode').attr('in','SourceGraphic');
+
+// Gradient for ocean
+const oceanGrad = defs.append('radialGradient').attr('id','oceanGrad')
+  .attr('cx','50%').attr('cy','50%').attr('r','70%');
+oceanGrad.append('stop').attr('offset','0%').attr('stop-color','#0a1e3a');
+oceanGrad.append('stop').attr('offset','100%').attr('stop-color','#040e1d');
+
+// ── Load GeoJSON ──
+d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(world => {
+  const countries = topojson.feature(world, world.objects.countries);
+  const borders   = topojson.mesh(world, world.objects.countries, (a,b) => a !== b);
+
+  // Ocean
+  oceanG.append('rect').attr('width',W).attr('height',H).attr('fill','url(#oceanGrad)');
+
+  // Countries
+  countriesG.selectAll('path.country')
+    .data(countries.features)
+    .join('path')
+      .attr('class','country')
       .attr('d', path)
-      .attr('fill', 'none')
-      .attr('stroke', 'rgba(255,255,255,.05)')
-      .attr('stroke-width', 0.5);
+      .attr('fill', d => {
+        if(NEWS_IDS.has(+d.id)) return '#1c3f66';
+        return '#0e2035';
+      })
+      .attr('stroke','#071628')
+      .attr('stroke-width', 0.35)
+      .style('cursor', d => ID_KEY[+d.id] ? 'pointer' : 'default')
+      .on('click', (e, d) => { const k=ID_KEY[+d.id]; if(k) showCountryNews(k); })
+      .on('mouseover', function(e,d){
+        if(NEWS_IDS.has(+d.id)) d3.select(this).attr('fill','#2a5a8c').attr('stroke','#3a7abf').attr('stroke-width',0.8);
+      })
+      .on('mouseout', function(e,d){
+        const fill = NEWS_IDS.has(+d.id) ? '#1c3f66' : '#0e2035';
+        d3.select(this).attr('fill',fill).attr('stroke','#071628').attr('stroke-width',0.35);
+      });
 
-    // Day/Night overlay
-    drawDayNight();
+  // Country borders
+  countriesG.append('path').datum(borders)
+    .attr('d',path).attr('fill','none')
+    .attr('stroke','rgba(255,255,255,.06)').attr('stroke-width',0.5);
 
-    // Animated markers
-    drawMarkers();
+  // Graticule (lat/lon grid)
+  const gratLine = d3.geoGraticule()();
+  countriesG.append('path').datum(gratLine)
+    .attr('d',path).attr('fill','none')
+    .attr('stroke','rgba(255,255,255,.04)').attr('stroke-width',0.4);
 
-  }).catch(() => {
-    // Fallback: simple ocean + land background
-    d3.select('#mapOcean').append('rect')
-      .attr('width', W).attr('height', H)
-      .attr('fill', '#071a30');
-    d3.select('#mapCountries').append('rect')
-      .attr('width', W).attr('height', H)
-      .attr('rx', 4)
-      .attr('fill', '#112236');
-    drawMarkers();
-  });
+  // Sphere outline
+  countriesG.append('path').datum({type:'Sphere'})
+    .attr('d',path).attr('fill','none')
+    .attr('stroke','rgba(255,255,255,.12)').attr('stroke-width',1);
 
-function idToKey(id) {
-  const map = {818:'egypt',364:'iran',275:'palestine',682:'saudi',784:'uae',400:'jordan',414:'kuwait',840:'un'};
-  return map[id] || null;
-}
+  // Day/Night
+  drawNight();
 
-function drawDayNight() {
-  const now = new Date();
-  const utcH = now.getUTCHours() + now.getUTCMinutes()/60;
-  // Sun longitude: at 12 UTC, sun is at 0°. Moves 15°/hr west
-  const sunLon = (12 - utcH) * 15;
-  // Approximate declination (simplified: 0 for equinox)
-  const sunLat = -20; // rough declination for April
-  // Night = circle around antisolar point with radius 90°
-  const nightCenter = [sunLon < 0 ? sunLon + 180 : sunLon - 180, -sunLat];
+  // Markers
+  drawMarkers();
+
+}).catch(() => {
+  // Fallback plain background
+  oceanG.append('rect').attr('width',W).attr('height',H).attr('fill','url(#oceanGrad)');
+  countriesG.append('text')
+    .attr('x',W/2).attr('y',H/2).attr('text-anchor','middle')
+    .attr('fill','rgba(255,255,255,.3)').attr('font-size',13)
+    .text('جارٍ تحميل الخريطة...');
+  drawMarkers();
+});
+
+function drawNight(){
+  const utcH = new Date().getUTCHours() + new Date().getUTCMinutes()/60;
+  const sunLon = (12 - utcH)*15;
+  const sunLat = -10; // approximate April declination
+  const antipodeLon = sunLon > 0 ? sunLon-180 : sunLon+180;
+  const antipodeLat = -sunLat;
   try {
-    const nightCircle = d3.geoCircle().center(nightCenter).radius(90)();
-    d3.select('#mapNight').append('path')
-      .datum(nightCircle)
+    const nightCircle = d3.geoCircle().center([antipodeLon, antipodeLat]).radius(90)();
+    nightG.append('path').datum(nightCircle)
       .attr('d', path)
-      .attr('fill', 'rgba(0,0,20,.45)')
-      .attr('pointer-events', 'none');
-  } catch(e) {}
+      .attr('fill','rgba(0,0,20,.52)')
+      .attr('pointer-events','none');
+  } catch(err){}
 }
 
-function drawMarkers() {
-  const g = d3.select('#mapMarkers');
-  const gl = d3.select('#mapLabels');
-
+function drawMarkers(){
   NEWS_MARKERS.forEach((m, i) => {
     const pos = projection([m.lon, m.lat]);
     if(!pos) return;
     const [x, y] = pos;
+    const delay = i * 0.3;
 
-    // Outer pulse ring
-    g.append('circle')
-      .attr('cx', x).attr('cy', y)
-      .attr('r', m.r + 5)
-      .attr('fill', m.color)
-      .attr('fill-opacity', 0)
+    // Outer animated ring
+    markersG.append('circle')
+      .attr('cx',x).attr('cy',y)
+      .attr('r', m.r+5)
+      .attr('fill','none')
       .attr('stroke', m.color)
-      .attr('stroke-opacity', 0.5)
-      .attr('stroke-width', 1.5)
-      .style('animation', `mapPulseRing ${1.8 + i*0.2}s ease-out infinite`)
-      .attr('pointer-events', 'none');
+      .attr('stroke-width',1.5)
+      .attr('stroke-opacity',0)
+      .attr('pointer-events','none')
+      .append('animate')
+        .attr('attributeName','stroke-opacity')
+        .attr('values','0.8;0')
+        .attr('dur', `${2+i*0.15}s`)
+        .attr('begin', `${delay}s`)
+        .attr('repeatCount','indefinite');
 
-    // Inner dot
-    g.append('circle')
-      .attr('cx', x).attr('cy', y)
+    markersG.append('circle')
+      .attr('cx',x).attr('cy',y)
+      .attr('r', m.r+5)
+      .attr('fill','none')
+      .attr('stroke', m.color)
+      .attr('stroke-width',1)
+      .attr('stroke-opacity',0)
+      .attr('pointer-events','none')
+      .append('animateTransform')
+        .attr('attributeName','transform')
+        .attr('type','scale')
+        .attr('from','1').attr('to','1.8')
+        .attr('dur',`${2+i*0.15}s`)
+        .attr('begin',`${delay}s`)
+        .attr('additive','sum')
+        .attr('calcMode','spline')
+        .attr('keySplines','0.2 0 0.8 1')
+        .attr('repeatCount','indefinite');
+
+    // Main dot
+    markersG.append('circle')
+      .attr('cx',x).attr('cy',y)
       .attr('r', m.r)
       .attr('fill', m.color)
-      .attr('filter', 'url(#glow)')
-      .style('cursor', 'pointer')
+      .attr('filter','url(#mGlow)')
+      .style('cursor','pointer')
       .on('click', () => showCountryNews(m.key))
-      .on('mouseover', function() {
-        d3.select(this).attr('r', m.r + 2).attr('fill-opacity', 1);
+      .on('mouseover', function(){
+        d3.select(this).attr('r', m.r+3).attr('fill-opacity',1);
+        // Highlight matching country in strip
+        document.querySelectorAll('.gcountry').forEach(el=>el.classList.remove('active'));
+        const strip = document.querySelector(`.gcountry[onclick*="${m.key}"]`);
+        if(strip) strip.classList.add('active');
       })
-      .on('mouseout', function() {
-        d3.select(this).attr('r', m.r).attr('fill-opacity', 0.92);
+      .on('mouseout', function(){
+        d3.select(this).attr('r', m.r).attr('fill-opacity',0.92);
       });
 
-    // Count badge
-    g.append('text')
-      .attr('x', x).attr('y', y + 1)
-      .attr('text-anchor', 'middle')
-      .attr('dominant-baseline', 'middle')
-      .attr('fill', '#fff')
-      .attr('font-size', m.r < 7 ? 7 : 8)
-      .attr('font-weight', 900)
-      .attr('font-family', 'Cairo, sans-serif')
-      .attr('pointer-events', 'none')
+    // Count text
+    markersG.append('text')
+      .attr('x',x).attr('y',y+0.5)
+      .attr('text-anchor','middle')
+      .attr('dominant-baseline','middle')
+      .attr('fill','#fff')
+      .attr('font-size', m.r < 8 ? 8 : 9)
+      .attr('font-weight',900)
+      .attr('font-family','Cairo,sans-serif')
+      .attr('pointer-events','none')
       .text(m.count);
 
-    // Label (show for larger markers)
-    if(m.r >= 8) {
-      gl.append('text')
-        .attr('x', x)
-        .attr('y', y + m.r + 10)
-        .attr('text-anchor', 'middle')
-        .attr('fill', 'rgba(255,255,255,.75)')
-        .attr('font-size', 9)
-        .attr('font-weight', 700)
-        .attr('font-family', 'Cairo, sans-serif')
-        .attr('pointer-events', 'none')
+    // Label for larger markers
+    if(m.r >= 9){
+      labelsG.append('text')
+        .attr('x', x).attr('y', y + m.r + 12)
+        .attr('text-anchor','middle')
+        .attr('fill','rgba(255,255,255,.8)')
+        .attr('font-size', 10)
+        .attr('font-weight',700)
+        .attr('font-family','Cairo,sans-serif')
+        .attr('pointer-events','none')
+        .attr('filter','url(#mGlow)')
         .text(m.label);
     }
   });
+}
+})();
 
-  // Add keyframe animation for pulse rings
-  if(!document.getElementById('mapKeyframes')) {
-    const style = document.createElement('style');
-    style.id = 'mapKeyframes';
-    style.textContent = `
-      @keyframes mapPulseRing {
-        0%   { stroke-opacity: 0.7; transform: scale(1); }
-        100% { stroke-opacity: 0; transform: scale(2.2); }
-      }
-      #mapMarkers circle { transform-box: fill-box; transform-origin: center; }
-    `;
-    document.head.appendChild(style);
+/* ─── RSS LIVE NEWS FETCHER ─── */
+(function(){
+
+// Arabic RSS feeds via rss2json (CORS-friendly)
+const FEEDS = [
+  {url:'https://www.aljazeera.net/xmlfeatures/rss_all/arabic.xml',   name:'الجزيرة',  link:'https://www.aljazeera.net/news/political/'},
+  {url:'https://feeds.bbci.co.uk/arabic/rss.xml',                    name:'بي بي سي', link:'https://www.bbc.com/arabic/middleeast'},
+  {url:'https://arabic.rt.com/rss/',                                  name:'RT عربي',  link:'https://arabic.rt.com/news/'},
+  {url:'https://www.skynewsarabia.com/mep/rss.xml',                  name:'سكاي نيوز',link:'https://www.skynewsarabia.com/middle-east'},
+];
+const PROXY = 'https://api.rss2json.com/v1/api.json?count=12&rss_url=';
+
+let liveItems = [];
+let loadedCount = 0;
+
+async function fetchFeed(feed){
+  try {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 7000);
+    const res = await fetch(PROXY + encodeURIComponent(feed.url), {signal: ctrl.signal});
+    clearTimeout(timer);
+    const data = await res.json();
+    if(data.status === 'ok' && Array.isArray(data.items)){
+      return data.items.slice(0,10).map(it => ({
+        title: (it.title||'').replace(/<[^>]+>/g,'').trim(),
+        link:  it.link || it.url || feed.link,
+        date:  it.pubDate ? new Date(it.pubDate) : new Date(),
+        source: feed.name,
+        sourceLink: feed.link
+      })).filter(it => it.title && it.title.length > 5);
+    }
+  } catch(e){}
+  return [];
+}
+
+async function loadAllFeeds(){
+  const results = await Promise.allSettled(FEEDS.map(f => fetchFeed(f)));
+  results.forEach(r => { if(r.status==='fulfilled') liveItems.push(...r.value); });
+  liveItems.sort((a,b) => b.date - a.date);
+  if(liveItems.length > 0){
+    updateTicker();
+    updateBreakingBanner();
+    updateLiveBadge(true);
+  } else {
+    updateLiveBadge(false);
   }
 }
+
+function updateTicker(){
+  if(!liveItems.length) return;
+  const track = document.querySelector('.ticker-track');
+  if(!track) return;
+  const items = liveItems.slice(0,16);
+  const html = items.map(it =>
+    `<a class="ticker-item" href="${it.link}" target="_blank" rel="noopener">${it.title}</a>`
+  ).join('');
+  track.innerHTML = html + html; // duplicate for seamless loop
+  // Restart animation
+  track.style.animation = 'none';
+  requestAnimationFrame(() => {
+    track.style.animation = '';
+  });
+}
+
+function updateBreakingBanner(){
+  if(!liveItems.length) return;
+  const top = liveItems[0];
+  const bbText = document.querySelector('.bb-text');
+  const bbLink = document.querySelector('.bb-link');
+  if(bbText) bbText.textContent = top.title;
+  if(bbLink){ bbLink.href = top.link; bbLink.textContent = `${top.source} ←`; }
+  // Show banner if it was hidden
+  const bb = document.getElementById('bb');
+  if(bb && bb.style.display === 'none') bb.style.display = '';
+}
+
+function updateLiveBadge(success){
+  const badge = document.getElementById('mapLiveBadge');
+  const txt   = document.getElementById('mapLiveText');
+  const label = document.getElementById('tickerLabel');
+  const now = new Date();
+  const hh = String(now.getHours()).padStart(2,'0');
+  const mm = String(now.getMinutes()).padStart(2,'0');
+  if(success){
+    if(txt) txt.textContent = `مباشر · ${hh}:${mm}`;
+    if(label) label.textContent = `● أخبار حية`;
+  } else {
+    if(badge) badge.style.background = 'rgba(80,80,80,.7)';
+    if(txt) txt.textContent = 'محتوى محلي';
+  }
+}
+
+// Initial load + auto-refresh every 5 minutes
+loadAllFeeds();
+setInterval(loadAllFeeds, 5 * 60 * 1000);
 
 })();
 </script>
 </body>
-</html>
