@@ -578,7 +578,14 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
 .price-val{font-weight:800;color:var(--navy)}
 .price-val.up{color:var(--green)}
 .price-val.down{color:var(--red)}
-.price-source{font-size:10px;color:var(--mid);margin-top:8px;text-align:left}
+.price-source{font-size:10px;color:var(--mid);margin-top:8px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.price-refresh-btn{background:none;border:1px solid var(--border);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:700;color:var(--mid);cursor:pointer;display:inline-flex;align-items:center;gap:4px;transition:.2s;white-space:nowrap;font-family:var(--font);margin-inline-start:auto}
+.price-refresh-btn:hover{background:var(--light-bg);color:var(--navy);border-color:var(--navy)}
+.price-refresh-btn:disabled{opacity:.5;cursor:not-allowed}
+.price-refresh-btn .spin-icon{display:inline-block;transition:.2s}
+.price-refresh-btn.spinning .spin-icon{animation:spin .7s linear infinite}
+.price-card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.price-card-title{font-size:12px;font-weight:800;color:var(--mid);display:flex;align-items:center;gap:6px}
 
 @media(max-width:900px){
   .prices-grid{grid-template-columns:1fr}
@@ -949,23 +956,44 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
 
     <!-- CURRENCY & GOLD PRICES -->
     <div class="prices-grid" style="margin-top:20px">
+      <!-- ═══ بطاقة أسعار الذهب ═══ -->
       <div class="price-card">
-        <div class="price-card-title" style="border-top-color:#FFD700">🥇 أسعار الذهب — بالجنيه المصري (للجرام)</div>
+        <div class="price-card-head">
+          <div class="price-card-title"><span style="color:#FFD700;font-size:15px">🥇</span> أسعار الذهب — جنيه / جرام</div>
+          <button class="price-refresh-btn" id="goldRefreshBtn" onclick="nazraRefreshPrices(this)" title="تحديث أسعار الذهب والعملات">
+            <span class="spin-icon">🔄</span> تحديث
+          </button>
+        </div>
         <div class="price-row"><span class="price-label">ذهب 24 قيراط</span><span class="price-val up" id="gold24">4,056 ج</span></div>
         <div class="price-row"><span class="price-label">ذهب 21 قيراط</span><span class="price-val up" id="gold21">3,549 ج</span></div>
         <div class="price-row"><span class="price-label">ذهب 18 قيراط</span><span class="price-val up" id="gold18">3,042 ج</span></div>
-        <div class="price-row"><span class="price-label">الأونصة (دولار)</span><span class="price-val up" id="goldOz">$2,847 ▲2.3٪</span></div>
-        <div class="price-source">المصدر: <a href="https://www.cbe.org.eg/ar/monetary-policy/press-releases" target="_blank" class="src-link">البنك المركزي المصري</a> · <span id="goldUpdateTime">جارٍ التحديث...</span></div>
+        <div class="price-row"><span class="price-label">الأونصة (دولار)</span><span class="price-val up" id="goldOz">$2,847</span></div>
+        <div class="price-source">
+          <a href="https://market.isagha.com/prices" target="_blank" rel="noopener" class="src-link" title="دهب الصاغه — أسعار الذهب لحظة بلحظة">💛 دهب الصاغه</a>
+          <a href="https://www.cbe.org.eg/ar/monetary-policy/press-releases" target="_blank" class="src-link">البنك المركزي</a>
+          <span id="goldUpdateTime" style="color:var(--mid)">جارٍ التحديث...</span>
+        </div>
       </div>
+
+      <!-- ═══ بطاقة أسعار العملات ═══ -->
       <div class="price-card" style="border-top-color:#1565C0">
-        <div class="price-card-title" style="border-top-color:#1565C0">💱 أسعار العملات — مقابل الجنيه المصري</div>
-        <div class="price-row"><span class="price-label">🇺🇸 دولار أمريكي</span><span class="price-val down" id="usd">49.85 ▼0.8٪</span></div>
-        <div class="price-row"><span class="price-label">🇪🇺 يورو أوروبي</span><span class="price-val down" id="eur">54.20 ▼0.5٪</span></div>
+        <div class="price-card-head">
+          <div class="price-card-title"><span style="color:#1565C0;font-size:15px">💱</span> أسعار العملات — مقابل الجنيه</div>
+          <button class="price-refresh-btn" id="fxRefreshBtn" onclick="nazraRefreshPrices(this)" title="تحديث أسعار العملات والذهب">
+            <span class="spin-icon">🔄</span> تحديث
+          </button>
+        </div>
+        <div class="price-row"><span class="price-label">🇺🇸 دولار أمريكي</span><span class="price-val down" id="usd">49.85</span></div>
+        <div class="price-row"><span class="price-label">🇪🇺 يورو أوروبي</span><span class="price-val down" id="eur">54.20</span></div>
         <div class="price-row"><span class="price-label">🇸🇦 ريال سعودي</span><span class="price-val" id="sar">13.28</span></div>
         <div class="price-row"><span class="price-label">🇦🇪 درهم إماراتي</span><span class="price-val" id="aed">13.57</span></div>
-        <div class="price-row"><span class="price-label">🇰🇼 دينار كويتي</span><span class="price-val up" id="kwd">162.15 ▲0.2٪</span></div>
+        <div class="price-row"><span class="price-label">🇰🇼 دينار كويتي</span><span class="price-val up" id="kwd">162.15</span></div>
         <div class="price-row"><span class="price-label">🇶🇦 ريال قطري</span><span class="price-val" id="qar">13.69</span></div>
-        <div class="price-source">المصدر: <a href="https://www.cbe.org.eg/ar/monetary-policy/press-releases/market-data/exchange-rates" target="_blank" class="src-link">CBE</a> · <a href="https://www.bloomberg.com/middleeast" target="_blank" class="src-link">بلومبرغ</a> · <span id="fxUpdateTime">جارٍ التحديث...</span></div>
+        <div class="price-source">
+          <a href="https://www.cbe.org.eg/ar/monetary-policy/press-releases/market-data/exchange-rates" target="_blank" class="src-link">CBE</a>
+          <a href="https://open.er-api.com" target="_blank" class="src-link">ExchangeRate API</a>
+          <span id="fxUpdateTime" style="color:var(--mid)">جارٍ التحديث...</span>
+        </div>
       </div>
     </div>
 
@@ -2927,6 +2955,7 @@ document.addEventListener('keydown', e => {
       const gold21gEgp = gold24gEgp * (21/24);
       const gold18gEgp = gold24gEgp * (18/24);
 
+      setText('gold24', Math.round(gold24gEgp).toLocaleString('ar-EG')+' ج');
       setText('gold21', Math.round(gold21gEgp).toLocaleString('ar-EG')+' ج');
       setText('gold18', Math.round(gold18gEgp).toLocaleString('ar-EG')+' ج');
       setText('goldOz', '$'+Math.round(goldOzUsd).toLocaleString('ar-EG'));
@@ -2957,11 +2986,28 @@ document.addEventListener('keydown', e => {
     console.log('[NAZRA] fetchMarketData() done. FX:',!!rates, ' Gold:',goldOzUsd, ' Oil:',brentUsd);
   }
 
+  // ── Expose globally for manual refresh button ──
+  window._nazraFetchMarket = fetchMarketData;
+
   // ── Initial load + auto-refresh every 5 minutes ──
   fetchMarketData();
   setInterval(fetchMarketData, 5 * 60 * 1000);
 
 })();
+
+/* ── Manual refresh for price buttons ── */
+function nazraRefreshPrices(triggerBtn){
+  // Spin & disable both refresh buttons
+  var btns = [document.getElementById('goldRefreshBtn'), document.getElementById('fxRefreshBtn')];
+  btns.forEach(function(b){ if(b){ b.classList.add('spinning'); b.disabled=true; } });
+
+  var p = window._nazraFetchMarket ? window._nazraFetchMarket() : Promise.resolve();
+  (p && p.then ? p : Promise.resolve()).then(function(){
+    btns.forEach(function(b){ if(b){ b.classList.remove('spinning'); b.disabled=false; } });
+  }).catch(function(){
+    btns.forEach(function(b){ if(b){ b.classList.remove('spinning'); b.disabled=false; } });
+  });
+}
 
 </script>
 
