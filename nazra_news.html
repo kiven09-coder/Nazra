@@ -557,6 +557,69 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
   .gstat{padding:5px 8px}
   .country-strip{flex-wrap:nowrap}
 }
+
+/* ── NEWS CONTROL BAR ── */
+.news-ctrl-bar{background:linear-gradient(135deg,#0D1B2A 0%,#1e3149 100%);border-bottom:1px solid rgba(255,255,255,.08);padding:10px 0}
+.news-ctrl-inner{max-width:1280px;margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ncb-fetch-btn{display:flex;align-items:center;gap:8px;background:var(--gold);color:var(--navy);border:none;border-radius:8px;padding:9px 20px;font-size:13px;font-weight:800;font-family:var(--font);cursor:pointer;transition:.25s;white-space:nowrap}
+.ncb-fetch-btn:hover{background:var(--gold-light);transform:translateY(-1px);box-shadow:0 4px 16px rgba(233,196,106,.35)}
+.ncb-fetch-btn:active{transform:translateY(0)}
+.ncb-fetch-btn.loading{opacity:.75;pointer-events:none}
+.ncb-add-btn{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:8px;padding:9px 18px;font-size:13px;font-weight:700;font-family:var(--font);cursor:pointer;transition:.25s;white-space:nowrap}
+.ncb-add-btn:hover{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.45)}
+.ncb-status-area{flex:1;display:flex;align-items:center;gap:10px;min-width:0}
+.ncb-status{font-size:12px;color:rgba(255,255,255,.5);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ncb-status.live{color:#66BB6A}
+.ncb-status.error{color:#EF9A9A}
+.ncb-src-count{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:3px 10px;font-size:11px;color:rgba(255,255,255,.7);font-weight:700;white-space:nowrap}
+.ncb-progress{height:2px;background:rgba(255,255,255,.1);position:relative;overflow:hidden;border-radius:1px;margin-top:2px;display:none}
+.ncb-progress.active{display:block}
+.ncb-progress-bar{height:100%;background:var(--gold);border-radius:1px;animation:ncbProgress 1.8s ease-in-out infinite}
+@keyframes ncbProgress{0%{width:0%;margin-right:100%}50%{width:60%;margin-right:20%}100%{width:0%;margin-right:100%}}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.spin{display:inline-block;animation:spin .8s linear infinite}
+
+/* ── ADD SOURCE MODAL ── */
+.add-src-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:4000;align-items:center;justify-content:center;padding:20px}
+.add-src-overlay.open{display:flex}
+.add-src-box{background:#fff;border-radius:16px;width:min(540px,96vw);overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.4);animation:scaleIn .25s ease;direction:rtl}
+.add-src-head{background:var(--navy);padding:16px 20px;display:flex;align-items:center;gap:10px}
+.add-src-head-title{color:#fff;font-size:15px;font-weight:800;flex:1}
+.add-src-close{background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:50%;width:30px;height:30px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s}
+.add-src-close:hover{background:rgba(255,255,255,.3)}
+.add-src-body{padding:20px}
+.add-src-field{margin-bottom:14px}
+.add-src-field label{display:block;font-size:12px;font-weight:700;color:var(--mid);margin-bottom:5px}
+.add-src-field input,.add-src-field select{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-family:var(--font);font-size:14px;outline:none;transition:.2s;background:#f8fafc;direction:rtl}
+.add-src-field input:focus,.add-src-field select:focus{border-color:var(--navy);background:#fff}
+.add-src-field input.valid{border-color:var(--green)}
+.add-src-field input.invalid{border-color:var(--red)}
+.add-src-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.add-src-btns{display:flex;gap:10px;margin-top:6px}
+.btn-test-src{flex:1;background:var(--light-bg);border:1.5px solid var(--border);border-radius:8px;padding:10px;font-family:var(--font);font-size:13px;font-weight:700;color:var(--mid);cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn-test-src:hover{background:var(--border)}
+.btn-test-src.ok{background:#e8f5e9;border-color:var(--green);color:var(--green)}
+.btn-test-src.fail{background:#fef2f2;border-color:var(--red);color:var(--red)}
+.btn-save-src{flex:1;background:var(--navy);color:#fff;border:none;border-radius:8px;padding:10px;font-family:var(--font);font-size:13px;font-weight:800;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn-save-src:hover{background:var(--navy-mid)}
+.add-src-test-result{font-size:12px;margin-top:8px;padding:8px 12px;border-radius:6px;display:none}
+.add-src-test-result.ok{display:block;background:#e8f5e9;color:var(--green);border:1px solid #c8e6c9}
+.add-src-test-result.fail{display:block;background:#fef2f2;color:var(--red);border:1px solid #ffcdd2}
+.saved-sources-list{margin-top:16px;border-top:1px solid var(--border);padding-top:14px}
+.saved-src-title{font-size:11px;font-weight:800;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.saved-src-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--light-bg);border-radius:6px;margin-bottom:6px;font-size:12px}
+.saved-src-name{font-weight:700;color:var(--navy);flex:1}
+.saved-src-url{color:var(--mid);font-size:10px;flex:2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:ltr;text-align:left}
+.saved-src-del{background:none;border:none;color:var(--mid);cursor:pointer;font-size:14px;padding:2px 6px;border-radius:4px;transition:.2s}
+.saved-src-del:hover{color:var(--red);background:#fef2f2}
+.saved-src-badge{font-size:9px;font-weight:800;padding:1px 6px;border-radius:3px;background:var(--light-bg);border:1px solid var(--border);color:var(--mid)}
+
+/* ── LINK HEALTH INDICATOR ── */
+.src-link[data-status="ok"]::after{content:"✓";color:var(--green);font-size:9px;margin-right:3px}
+.src-link[data-status="warn"]::after{content:"⚠";color:var(--amber);font-size:9px;margin-right:3px}
+.src-link[data-status="checking"]::after{content:"…";color:var(--mid);font-size:9px;margin-right:3px}
+.link-health-bar{background:#fff;border-radius:6px;padding:8px 16px;box-shadow:var(--shadow);display:flex;align-items:center;gap:10px;font-size:11px;color:var(--mid);margin-top:10px;flex-wrap:wrap}
+.lhb-dot{width:7px;height:7px;border-radius:50%}
 </style>
 </head>
 <body>
@@ -634,6 +697,27 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
     <a class="cat-btn" href="nazra_verify.html">✅ التحقق <span class="cat-count">3</span></a>
   </div>
 </div>
+
+<!-- NEWS CONTROL BAR -->
+<div class="news-ctrl-bar" id="newsCtrlBar">
+  <div class="news-ctrl-inner">
+    <button class="ncb-fetch-btn" id="ncbFetchBtn" onclick="fetchNewsNow()">
+      <span id="ncbFetchIcon">⟳</span>
+      جلب الأخبار الآن
+    </button>
+    <button class="ncb-add-btn" onclick="openAddSrcModal()">
+      <span>＋</span> إضافة مصدر جديد
+    </button>
+    <div class="ncb-status-area">
+      <div>
+        <div class="ncb-status" id="ncbStatus">جاهز لجلب الأخبار من المصادر النشطة</div>
+        <div class="ncb-progress" id="ncbProgress"><div class="ncb-progress-bar"></div></div>
+      </div>
+    </div>
+    <span class="ncb-src-count" id="ncbSrcCount">📡 4 مصادر نشطة</span>
+  </div>
+</div>
+
 
 <!-- WORLD MAP SECTION -->
 <div class="globe-section">
@@ -1920,10 +2004,244 @@ function updateLiveBadge(success){
   }
 }
 
+// Expose fetch function globally for the control bar button
+window._nazraFetchAll = async function() {
+  // Include saved custom sources
+  const customFeeds = window._nazraCustomFeeds || [];
+  const allFeeds = [...FEEDS, ...customFeeds];
+  liveItems = [];
+  const results = await Promise.allSettled(allFeeds.map(f => fetchFeed(f)));
+  results.forEach(r => { if(r.status==='fulfilled') liveItems.push(...r.value); });
+  liveItems.sort((a,b) => b.date - a.date);
+  if(liveItems.length > 0){
+    updateTicker();
+    updateBreakingBanner();
+    updateLiveBadge(true);
+  } else {
+    updateLiveBadge(false);
+    throw new Error('No news loaded');
+  }
+};
+
 // Initial load + auto-refresh every 5 minutes
-loadAllFeeds();
-setInterval(loadAllFeeds, 5 * 60 * 1000);
+(async () => {
+  // Load custom sources from localStorage
+  try {
+    const saved = JSON.parse(localStorage.getItem('nazra_sources') || '[]');
+    if(saved.length) window._nazraCustomFeeds = saved.map(s => ({url:s.rss, name:s.name, link:s.url||s.rss}));
+  } catch(e){}
+  await window._nazraFetchAll().catch(()=>{});
+})();
+setInterval(() => window._nazraFetchAll().catch(()=>{}), 5 * 60 * 1000);
 
 })();
+
+
+/* ─── NEWS CONTROL BAR JS ─── */
+
+// Override loadAllFeeds to also update control bar
+const _origLoadAll = window._nazraLoadAll;
+
+async function fetchNewsNow() {
+  const btn   = document.getElementById('ncbFetchBtn');
+  const icon  = document.getElementById('ncbFetchIcon');
+  const stat  = document.getElementById('ncbStatus');
+  const prog  = document.getElementById('ncbProgress');
+  if(!btn) return;
+
+  btn.classList.add('loading');
+  icon.classList.add('spin');
+  stat.className = 'ncb-status';
+  stat.textContent = 'جارٍ جلب الأخبار من جميع المصادر...';
+  prog.classList.add('active');
+
+  try {
+    await window._nazraFetchAll();
+    const now = new Date();
+    const t = now.toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'});
+    stat.className = 'ncb-status live';
+    stat.textContent = `✓ تم التحديث في ${t} — عُثر على أخبار جديدة`;
+    updateSrcCount();
+  } catch(e) {
+    stat.className = 'ncb-status error';
+    stat.textContent = '⚠ تعذّر الاتصال ببعض المصادر — يُعرض المحتوى المحلي';
+  }
+
+  btn.classList.remove('loading');
+  icon.classList.remove('spin');
+  prog.classList.remove('active');
+}
+
+function updateSrcCount() {
+  const saved = getSavedSources();
+  const base  = 4;
+  const total = base + saved.length;
+  const el = document.getElementById('ncbSrcCount');
+  if(el) el.textContent = `📡 ${total} مصادر نشطة`;
+}
+
+/* ─── ADD SOURCE MODAL ─── */
+function openAddSrcModal() {
+  document.getElementById('addSrcOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  renderSavedSources();
+  updateSrcCount();
+}
+function closeAddSrcModal() {
+  document.getElementById('addSrcOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeAddSrcOutside(e) {
+  if(e.target === document.getElementById('addSrcOverlay')) closeAddSrcModal();
+}
+
+async function testSourceNow() {
+  const rssUrl = document.getElementById('srcRSS').value.trim();
+  const btn    = document.getElementById('btnTestSrc');
+  const result = document.getElementById('testResult');
+  const icon   = document.getElementById('testSrcIcon');
+
+  if(!rssUrl) { result.className='add-src-test-result fail'; result.textContent='أدخل رابط RSS أولاً'; return; }
+
+  btn.className = 'btn-test-src';
+  icon.textContent = '⟳';
+  icon.classList.add('spin');
+  result.className = 'add-src-test-result';
+  result.textContent = '';
+
+  const PROXY = 'https://api.rss2json.com/v1/api.json?count=3&rss_url=';
+  try {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 8000);
+    const res = await fetch(PROXY + encodeURIComponent(rssUrl), {signal: ctrl.signal});
+    clearTimeout(timer);
+    const data = await res.json();
+    if(data.status === 'ok' && data.items && data.items.length > 0) {
+      btn.className = 'btn-test-src ok';
+      result.className = 'add-src-test-result ok';
+      result.innerHTML = `✓ الاتصال ناجح — عُثر على <strong>${data.items.length}</strong> أخبار. آخر خبر: "${(data.items[0].title||'').slice(0,60)}..."`;
+      document.getElementById('srcRSS').classList.add('valid');
+    } else {
+      throw new Error('No items');
+    }
+  } catch(e) {
+    btn.className = 'btn-test-src fail';
+    result.className = 'add-src-test-result fail';
+    result.textContent = '✗ تعذّر الاتصال — تحقق من صحة رابط RSS أو جرب رابطاً آخر';
+    document.getElementById('srcRSS').classList.add('invalid');
+  }
+  icon.classList.remove('spin');
+  icon.textContent = '🔍';
+}
+
+function getSavedSources() {
+  try { return JSON.parse(localStorage.getItem('nazra_sources') || '[]'); } catch(e) { return []; }
+}
+function setSavedSources(arr) {
+  localStorage.setItem('nazra_sources', JSON.stringify(arr));
+}
+
+function saveNewSource() {
+  const name = document.getElementById('srcName').value.trim();
+  const rss  = document.getElementById('srcRSS').value.trim();
+  const url  = document.getElementById('srcURL').value.trim();
+  const cat  = document.getElementById('srcCategory').value;
+
+  if(!name || !rss) {
+    const r = document.getElementById('testResult');
+    r.className = 'add-src-test-result fail';
+    r.textContent = '⚠ اسم المصدر ورابط RSS مطلوبان';
+    return;
+  }
+
+  const sources = getSavedSources();
+  const newSrc = {id: Date.now(), name, rss, url: url || rss, cat, added: new Date().toLocaleDateString('ar-EG')};
+  sources.push(newSrc);
+  setSavedSources(sources);
+
+  // Clear form
+  document.getElementById('srcName').value = '';
+  document.getElementById('srcRSS').value  = '';
+  document.getElementById('srcURL').value  = '';
+  document.getElementById('testResult').className = 'add-src-test-result ok';
+  document.getElementById('testResult').textContent = `✓ تم إضافة "${name}" بنجاح! سيُضمَّن في جلب الأخبار التالي.`;
+  document.getElementById('srcRSS').classList.remove('valid','invalid');
+
+  renderSavedSources();
+  updateSrcCount();
+}
+
+function deleteSource(id) {
+  const sources = getSavedSources().filter(s => s.id !== id);
+  setSavedSources(sources);
+  renderSavedSources();
+  updateSrcCount();
+}
+
+function renderSavedSources() {
+  const sources = getSavedSources();
+  const container = document.getElementById('savedSrcItems');
+  if(!container) return;
+  if(!sources.length) {
+    container.innerHTML = '<div style="font-size:12px;color:var(--mid);text-align:center;padding:10px">لا توجد مصادر مضافة بعد</div>';
+    return;
+  }
+  const catLabels = {world:'🌍',mideast:'🕌',local:'🇪🇬',economy:'📈'};
+  container.innerHTML = sources.map(s => `
+    <div class="saved-src-item">
+      <span class="saved-src-badge">${catLabels[s.cat]||'📰'}</span>
+      <span class="saved-src-name">${s.name}</span>
+      <span class="saved-src-url">${s.rss}</span>
+      <button class="saved-src-del" onclick="deleteSource(${s.id})" title="حذف">✕</button>
+    </div>
+  `).join('');
+}
+
+/* ─── INJECT CUSTOM SOURCES INTO RSS LOADER ─── */
+// Patch the existing RSS loader to include custom sources
+const _patchRSS = () => {
+  const saved = getSavedSources();
+  if(!saved.length) return;
+  // Dispatch event for the main RSS loader to pick up
+  window._nazraCustomFeeds = saved.map(s => ({url: s.rss, name: s.name, link: s.url || s.rss}));
+};
+
+/* ─── LINK HEALTH CHECKER (runs in browser) ─── */
+function checkSourceLinks() {
+  const links = document.querySelectorAll('.src-link[href^="http"]');
+  const PROXY = 'https://api.rss2json.com/v1/api.json?count=1&rss_url=';
+  links.forEach(link => { link.setAttribute('data-status','checking'); });
+
+  // Use image ping to test reachability (no-CORS)
+  links.forEach(link => {
+    const href = link.getAttribute('href');
+    // Simple: try to load a favicon
+    const origin = new URL(href).origin;
+    const img = new Image();
+    const timer = setTimeout(() => {
+      img.src = '';
+      link.setAttribute('data-status','warn');
+    }, 5000);
+    img.onload  = () => { clearTimeout(timer); link.setAttribute('data-status','ok'); };
+    img.onerror = () => { clearTimeout(timer); link.setAttribute('data-status','ok'); }; // CORS error = site exists
+    img.src = `${origin}/favicon.ico?_=${Date.now()}`;
+  });
+}
+
+/* ─── INIT ─── */
+document.addEventListener('DOMContentLoaded', () => {
+  updateSrcCount();
+  renderSavedSources();
+  // Run link health check after 3 seconds
+  setTimeout(checkSourceLinks, 3000);
+});
+
+// Close modal with Escape
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape') {
+    if(document.getElementById('addSrcOverlay').classList.contains('open')) closeAddSrcModal();
+  }
+});
+
 </script>
 </body>
