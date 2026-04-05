@@ -511,9 +511,9 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);margin-top:60px;padding
 /* Map SVG container */
 .map-svg-wrap{position:relative;width:100%;background:linear-gradient(180deg,#020c1b 0%,#040e1d 100%);border-radius:10px 10px 0 0;overflow:hidden;cursor:grab;box-shadow:inset 0 0 60px rgba(0,0,0,.5)}
 .map-svg-wrap:active{cursor:grabbing}
-#worldMap{width:100%;height:auto;display:block;aspect-ratio:1100/560;min-height:260px;max-height:65vh}
-@media(max-width:768px){#worldMap{aspect-ratio:1100/600;min-height:200px}}
-@media(min-width:1600px){#worldMap{max-height:72vh}}
+#worldMap{width:100%;height:auto;display:block;aspect-ratio:1450/720;min-height:480px;max-height:93vh}
+@media(max-width:768px){#worldMap{aspect-ratio:1450/760;min-height:280px}}
+@media(min-width:1600px){#worldMap{max-height:86vh}}
 /* Zoom controls */
 .map-zoom-ctrl{position:absolute;top:12px;left:12px;display:flex;flex-direction:column;gap:4px;z-index:10}
 .zoom-btn{width:32px;height:32px;border-radius:6px;border:1px solid rgba(255,255,255,.25);background:rgba(5,15,35,.75);color:#fff;font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);font-family:monospace;line-height:1}
@@ -1796,31 +1796,80 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLogin();});
 
 /* ════ بيانات الأحداث الإخبارية مع نوع الحدث وعجله ════ */
 const NEWS_MARKERS = [
-  {key:'iran',     lon:53.7,  lat:32.4,  count:17, color:'#EF5350', r:13, label:'إيران',     flag:'🇮🇷', type:'conflict',  urgency:'high',   headline:'التطورات الأمنية وتداعيات الملف النووي الإيراني'},
-  {key:'palestine',lon:34.5,  lat:31.9,  count:11, color:'#66BB6A', r:11, label:'فلسطين',    flag:'🇵🇸', type:'conflict',  urgency:'high',   headline:'مفاوضات الهدنة في غزة تدخل مرحلة حاسمة والقاهرة تحتضن الجولة'},
-  {key:'egypt',    lon:30.8,  lat:26.8,  count:6,  color:'#E9C46A', r:9,  label:'مصر',       flag:'🇪🇬', type:'diplomacy', urgency:'medium', headline:'القاهرة تستضيف جولة مفاوضات جديدة بحضور قطر والأمم المتحدة'},
-  {key:'saudi',    lon:45.1,  lat:23.9,  count:4,  color:'#42A5F5', r:8,  label:'السعودية',  flag:'🇸🇦', type:'economy',   urgency:'medium', headline:'قرارات أوبك+ وتأثيرها على أسعار النفط العالمية'},
-  {key:'uae',      lon:54.4,  lat:24.5,  count:3,  color:'#CE93D8', r:7,  label:'الإمارات',  flag:'🇦🇪', type:'diplomacy', urgency:'low',    headline:'الإمارات تدعو إلى التهدئة وتؤكد دعمها للحل الدبلوماسي'},
-  {key:'jordan',   lon:36.2,  lat:30.6,  count:2,  color:'#FF8A65', r:7,  label:'الأردن',    flag:'🇯🇴', type:'diplomacy', urgency:'low',    headline:'الأردن يستضيف مباحثات إقليمية لدعم وقف إطلاق النار'},
-  {key:'kuwait',   lon:47.5,  lat:29.3,  count:2,  color:'#4DB6AC', r:7,  label:'الكويت',    flag:'🇰🇼', type:'economy',   urgency:'low',    headline:'الكويت تؤكد التزامها بقرارات أوبك+ بشأن الإنتاج النفطي'},
-  {key:'un',       lon:-74.0, lat:40.7,  count:3,  color:'#90A4AE', r:8,  label:'نيويورك',   flag:'🇺🇳', type:'diplomacy', urgency:'medium', headline:'مجلس الأمن يعقد جلسة طارئة حول الأوضاع في المنطقة'}
+  /* ── الشرق الأوسط وشمال أفريقيا ── */
+  {key:'palestine', lon:34.5,  lat:31.9,  count:14, color:'#66BB6A', r:7, label:'فلسطين',         flag:'🇵🇸', type:'conflict',  urgency:'high',   headline:'مفاوضات الهدنة في غزة تدخل مرحلة حاسمة'},
+  {key:'iran',      lon:53.7,  lat:32.4,  count:12, color:'#EF5350', r:7, label:'إيران',           flag:'🇮🇷', type:'conflict',  urgency:'high',   headline:'التطورات الأمنية وتداعيات الملف النووي الإيراني'},
+  {key:'yemen',     lon:47.6,  lat:15.4,  count:8,  color:'#FF7043', r:6, label:'اليمن',           flag:'🇾🇪', type:'conflict',  urgency:'high',   headline:'هجمات الحوثيين في البحر الأحمر وتداعياتها الدولية'},
+  {key:'syria',     lon:38.5,  lat:34.8,  count:6,  color:'#CE93D8', r:5, label:'سوريا',           flag:'🇸🇾', type:'conflict',  urgency:'medium', headline:'مرحلة ما بعد الصراع وإعادة الإعمار'},
+  {key:'iraq',      lon:44.4,  lat:33.3,  count:5,  color:'#FF8A65', r:5, label:'العراق',          flag:'🇮🇶', type:'conflict',  urgency:'medium', headline:'التوترات الأمنية والعمليات ضد الفصائل المسلحة'},
+  {key:'lebanon',   lon:35.5,  lat:33.9,  count:5,  color:'#4CAF50', r:5, label:'لبنان',           flag:'🇱🇧', type:'conflict',  urgency:'medium', headline:'إعادة الإعمار في جنوب لبنان بعد وقف إطلاق النار'},
+  {key:'egypt',     lon:30.8,  lat:26.8,  count:6,  color:'#E9C46A', r:5, label:'مصر',             flag:'🇪🇬', type:'diplomacy', urgency:'medium', headline:'القاهرة تستضيف جولة مفاوضات جديدة'},
+  {key:'saudi',     lon:45.1,  lat:23.9,  count:4,  color:'#42A5F5', r:5, label:'السعودية',        flag:'🇸🇦', type:'economy',   urgency:'medium', headline:'قرارات أوبك+ وتأثيرها على أسعار النفط'},
+  {key:'turkey',    lon:34.9,  lat:39.0,  count:5,  color:'#EF9A9A', r:5, label:'تركيا',           flag:'🇹🇷', type:'diplomacy', urgency:'medium', headline:'أنقرة تواصل دورها الوسيط في الصراعات الإقليمية'},
+  {key:'libya',     lon:17.2,  lat:27.0,  count:3,  color:'#CE93D8', r:4, label:'ليبيا',           flag:'🇱🇾', type:'conflict',  urgency:'medium', headline:'محادثات المصالحة الليبية تستأنف بوساطة أممية'},
+  {key:'jordan',    lon:36.2,  lat:31.0,  count:2,  color:'#FF8A65', r:4, label:'الأردن',          flag:'🇯🇴', type:'diplomacy', urgency:'low',    headline:'الأردن يستضيف مباحثات إقليمية'},
+  {key:'uae',       lon:54.4,  lat:24.5,  count:3,  color:'#CE93D8', r:4, label:'الإمارات',        flag:'🇦🇪', type:'diplomacy', urgency:'low',    headline:'الإمارات تؤكد دعمها للحل الدبلوماسي'},
+  {key:'kuwait',    lon:47.5,  lat:29.3,  count:2,  color:'#4DB6AC', r:4, label:'الكويت',          flag:'🇰🇼', type:'economy',   urgency:'low',    headline:'الكويت تؤكد التزامها بقرارات أوبك+'},
+  /* ── أفريقيا جنوب الصحراء ── */
+  {key:'sudan',     lon:30.2,  lat:15.6,  count:9,  color:'#FF7043', r:6, label:'السودان',         flag:'🇸🇩', type:'conflict',  urgency:'high',   headline:'الأزمة الإنسانية تتفاقم وسط الاقتتال المستمر'},
+  {key:'ethiopia',  lon:40.5,  lat:9.1,   count:4,  color:'#FF8A65', r:4, label:'إثيوبيا',         flag:'🇪🇹', type:'conflict',  urgency:'medium', headline:'أزمة إنسانية في أمهرة وتيغراي'},
+  {key:'somalia',   lon:45.3,  lat:5.2,   count:3,  color:'#EF5350', r:4, label:'الصومال',         flag:'🇸🇴', type:'conflict',  urgency:'medium', headline:'عمليات مكافحة حركة الشباب مستمرة'},
+  /* ── أوروبا وروسيا ── */
+  {key:'ukraine',   lon:32.0,  lat:49.0,  count:15, color:'#FFA726', r:7, label:'أوكرانيا',        flag:'🇺🇦', type:'conflict',  urgency:'high',   headline:'المعارك مستمرة في شرق أوكرانيا وجولة دبلوماسية جديدة'},
+  {key:'russia',    lon:60.0,  lat:55.8,  count:11, color:'#ef5350', r:6, label:'روسيا',           flag:'🇷🇺', type:'conflict',  urgency:'high',   headline:'موسكو تواصل عملياتها العسكرية وسط مفاوضات دولية'},
+  {key:'nato',      lon:4.4,   lat:50.9,  count:4,  color:'#5C6BC0', r:4, label:'بروكسل/ناتو',    flag:'🏛️', type:'diplomacy', urgency:'medium', headline:'الناتو يعقد اجتماعاً لمناقشة التطورات الأمنية'},
+  /* ── جنوب آسيا وشرق آسيا ── */
+  {key:'india',     lon:78.9,  lat:20.6,  count:5,  color:'#FF9800', r:5, label:'الهند',           flag:'🇮🇳', type:'conflict',  urgency:'medium', headline:'التوترات الحدودية مع باكستان تبلغ مستويات خطرة'},
+  {key:'pakistan',  lon:69.3,  lat:30.4,  count:3,  color:'#66BB6A', r:4, label:'باكستان',         flag:'🇵🇰', type:'conflict',  urgency:'medium', headline:'التوترات مع الهند وعمليات مكافحة الإرهاب'},
+  {key:'china',     lon:104.2, lat:35.9,  count:6,  color:'#EF5350', r:5, label:'الصين',           flag:'🇨🇳', type:'conflict',  urgency:'medium', headline:'التوترات حول تايوان وبحر الصين الجنوبي'},
+  {key:'taiwan',    lon:121.0, lat:23.7,  count:4,  color:'#42A5F5', r:4, label:'تايوان',          flag:'🇹🇼', type:'conflict',  urgency:'medium', headline:'تصاعد التوترات مع الصين والدعم الأمريكي المتواصل'},
+  {key:'nkorea',    lon:127.5, lat:40.3,  count:5,  color:'#EF5350', r:5, label:'كوريا الشمالية',  flag:'🇰🇵', type:'conflict',  urgency:'high',   headline:'تجارب صاروخية جديدة تثير قلق المجتمع الدولي'},
+  {key:'myanmar',   lon:95.9,  lat:19.8,  count:3,  color:'#FF7043', r:4, label:'ميانمار',         flag:'🇲🇲', type:'conflict',  urgency:'medium', headline:'الحرب الأهلية تتصاعد وأزمة إنسانية متفاقمة'},
+  /* ── أمريكا ── */
+  {key:'usa',       lon:-98.6, lat:39.5,  count:5,  color:'#42A5F5', r:5, label:'واشنطن',          flag:'🇺🇸', type:'diplomacy', urgency:'medium', headline:'واشنطن تضاعف دعمها العسكري والمالي لحلفائها'},
+  {key:'un',        lon:-74.0, lat:40.7,  count:3,  color:'#90A4AE', r:4, label:'نيويورك/أمم متحدة', flag:'🇺🇳', type:'diplomacy', urgency:'medium', headline:'مجلس الأمن يعقد جلسة طارئة حول الأوضاع'},
+  {key:'venezuela', lon:-66.6, lat:6.4,   count:3,  color:'#EF9A9A', r:4, label:'فنزويلا',         flag:'🇻🇪', type:'conflict',  urgency:'medium', headline:'الأزمة السياسية والاقتصادية تتواصل'}
 ];
 
 /* ════ خطوط الاتصال بين الدول ذات العلاقة ════ */
 const CONNECTIONS = [
-  {from:'iran',    to:'palestine', color:'#EF5350', opacity:0.45, dashLen:5},
-  {from:'egypt',   to:'palestine', color:'#E9C46A', opacity:0.50, dashLen:4},
-  {from:'egypt',   to:'un',        color:'#90A4AE', opacity:0.35, dashLen:6},
-  {from:'saudi',   to:'uae',       color:'#42A5F5', opacity:0.38, dashLen:5},
-  {from:'jordan',  to:'palestine', color:'#FF8A65', opacity:0.40, dashLen:4},
+  /* الشرق الأوسط */
+  {from:'iran',      to:'palestine', color:'#EF5350', opacity:0.45, dashLen:5},
+  {from:'iran',      to:'yemen',     color:'#FF7043', opacity:0.42, dashLen:4},
+  {from:'iran',      to:'iraq',      color:'#FF8A65', opacity:0.40, dashLen:4},
+  {from:'iran',      to:'lebanon',   color:'#66BB6A', opacity:0.40, dashLen:4},
+  {from:'egypt',     to:'palestine', color:'#E9C46A', opacity:0.50, dashLen:4},
+  {from:'egypt',     to:'un',        color:'#90A4AE', opacity:0.35, dashLen:6},
+  {from:'jordan',    to:'palestine', color:'#FF8A65', opacity:0.40, dashLen:4},
+  {from:'turkey',    to:'syria',     color:'#EF9A9A', opacity:0.38, dashLen:4},
+  {from:'saudi',     to:'yemen',     color:'#42A5F5', opacity:0.38, dashLen:5},
+  /* أوروبا */
+  {from:'russia',    to:'ukraine',   color:'#EF5350', opacity:0.55, dashLen:5},
+  {from:'nato',      to:'ukraine',   color:'#5C6BC0', opacity:0.45, dashLen:4},
+  {from:'usa',       to:'ukraine',   color:'#42A5F5', opacity:0.38, dashLen:6},
+  /* أمريكا / أمم متحدة */
+  {from:'usa',       to:'un',        color:'#90A4AE', opacity:0.30, dashLen:6},
+  {from:'usa',       to:'taiwan',    color:'#42A5F5', opacity:0.40, dashLen:5},
+  /* آسيا */
+  {from:'china',     to:'taiwan',    color:'#EF5350', opacity:0.52, dashLen:5},
+  {from:'nkorea',    to:'china',     color:'#EF5350', opacity:0.35, dashLen:5},
+  {from:'india',     to:'pakistan',  color:'#FF9800', opacity:0.42, dashLen:4},
 ];
 
 /* ════ معرّفات ISO للدول الإخبارية ════ */
-const ID_KEY = {818:'egypt',364:'iran',275:'palestine',682:'saudi',784:'uae',400:'jordan',414:'kuwait',840:'un',376:'palestine'};
+const ID_KEY = {
+  818:'egypt', 364:'iran',  275:'palestine', 376:'palestine',
+  682:'saudi', 784:'uae',   400:'jordan',    414:'kuwait',
+  887:'yemen', 760:'syria', 368:'iraq',      422:'lebanon',
+  434:'libya', 729:'sudan', 231:'ethiopia',  706:'somalia',
+  792:'turkey',804:'ukraine',643:'russia',
+  356:'india', 586:'pakistan',156:'china',   408:'nkorea',
+  104:'myanmar',862:'venezuela'
+};
 
-const W = 1100, H = 560;
+const W = 1450, H = 720;
 const svg = d3.select('#worldMap').attr('viewBox',`0 0 ${W} ${H}`);
-const projection = d3.geoNaturalEarth1().scale(185).translate([W/2, H/2+15]);
+const projection = d3.geoNaturalEarth1().scale(235).translate([W/2, H/2+18]);
 const path = d3.geoPath().projection(projection);
 
 /* ════ طبقات الخريطة ════ */
@@ -1878,8 +1927,13 @@ d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(w
 
   const CONTINENT_COLORS = ['#1a3a5c','#1e4060','#153450','#1b3b5e','#162f4a','#193858'];
   const NEWS_COLOR_MAP = {
-    818:'#2563a8', 364:'#b91c1c', 275:'#15803d', 682:'#c4830a',
-    784:'#7c3aed', 400:'#0d6e6e', 414:'#1d6db5', 840:'#374151', 376:'#15803d'
+    818:'#1e5fa3', 364:'#991b1b', 275:'#166534', 376:'#166534',
+    682:'#92610a', 784:'#5b21b6', 400:'#0d5e5e', 414:'#1558a0',
+    887:'#b45309', 760:'#7c1d1d', 368:'#9a3412', 422:'#14532d',
+    434:'#5b21b6', 729:'#c2410c', 231:'#92400e', 706:'#991b1b',
+    792:'#9b1c1c', 804:'#92400e', 643:'#991b1b',
+    356:'#9a3412', 586:'#166534', 156:'#991b1b', 408:'#7c1d1d',
+    104:'#9a3412', 862:'#9b1c1c'
   };
 
   countriesG.selectAll('path.country')
@@ -2089,14 +2143,33 @@ window._updateMapMarkers = function(liveItems){
   if(!liveItems || !liveItems.length) return;
 
   const KEYWORDS = {
-    iran:     ['إيران','طهران','الحرس الثوري','خامنئي','روحاني','مرشد'],
-    palestine:['غزة','فلسطين','حماس','رفح','الضفة','الأقصى','القسام'],
-    egypt:    ['مصر','القاهرة','السيسي','النيل','الأزهر'],
-    saudi:    ['السعودية','الرياض','بن سلمان','أرامكو','أوبك'],
-    uae:      ['الإمارات','دبي','أبوظبي','محمد بن زايد'],
-    jordan:   ['الأردن','عمان','الملك عبدالله'],
-    kuwait:   ['الكويت','مجلس الأمة الكويتي'],
-    un:       ['الأمم المتحدة','مجلس الأمن','غوتيريش','اليونيسف'],
+    iran:      ['إيران','طهران','الحرس الثوري','خامنئي','مرشد الثورة','النووي الإيراني'],
+    palestine: ['غزة','فلسطين','حماس','رفح','الضفة','الأقصى','القسام','الاحتلال'],
+    egypt:     ['مصر','القاهرة','السيسي','النيل','الأزهر'],
+    saudi:     ['السعودية','الرياض','بن سلمان','أرامكو','أوبك'],
+    uae:       ['الإمارات','دبي','أبوظبي','محمد بن زايد'],
+    jordan:    ['الأردن','عمان','الملك عبدالله'],
+    kuwait:    ['الكويت','مجلس الأمة الكويتي'],
+    un:        ['الأمم المتحدة','مجلس الأمن','غوتيريش','اليونيسف','نيويورك الأمم'],
+    yemen:     ['اليمن','الحوثي','صنعاء','عدن','البحر الأحمر','الحوثيين'],
+    syria:     ['سوريا','دمشق','حلب','الأسد','إدلب'],
+    iraq:      ['العراق','بغداد','الحشد','الفصائل العراقية'],
+    lebanon:   ['لبنان','بيروت','حزب الله','جنوب لبنان'],
+    libya:     ['ليبيا','طرابلس','بنغازي','حفتر'],
+    sudan:     ['السودان','الخرطوم','الدعم السريع','البرهان','دارفور'],
+    ethiopia:  ['إثيوبيا','أديس أبابا','تيغراي','أمهرة'],
+    somalia:   ['الصومال','مقديشو','حركة الشباب'],
+    ukraine:   ['أوكرانيا','كييف','زيلينسكي','الحرب الأوكرانية','دونباس'],
+    russia:    ['روسيا','موسكو','بوتين','الكرملين','العملية العسكرية'],
+    nato:      ['الناتو','بروكسل','حلف الأطلسي','ستولتنبرغ'],
+    india:     ['الهند','نيودلهي','مودي','كشمير'],
+    pakistan:  ['باكستان','إسلام آباد'],
+    china:     ['الصين','بكين','شي جين','تايوان','بحر الصين'],
+    taiwan:    ['تايوان','تايبيه'],
+    nkorea:    ['كوريا الشمالية','بيونغ يانغ','كيم جونغ'],
+    myanmar:   ['ميانمار','بورما','المجلس العسكري'],
+    usa:       ['واشنطن','البيت الأبيض','أمريكا','الولايات المتحدة','البنتاغون'],
+    venezuela: ['فنزويلا','كاراكاس','مادورو'],
   };
 
   const counts = {}, headlines = {};
@@ -2115,7 +2188,7 @@ window._updateMapMarkers = function(liveItems){
       m.count = counts[m.key];
       if(headlines[m.key]) m.headline = headlines[m.key];
       m.urgency = counts[m.key] >= 8 ? 'high' : counts[m.key] >= 4 ? 'medium' : 'low';
-      m.r = Math.min(16, 6 + Math.round(Math.sqrt(counts[m.key]) * 2.5));
+      m.r = Math.min(8, 3 + Math.round(Math.sqrt(counts[m.key]) * 1.4));
     }
   });
 
